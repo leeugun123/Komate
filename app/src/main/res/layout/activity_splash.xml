@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2196F3"
+    tools:context=".SplashActivity">
+
+
+    <!-- KKANBU -->
+    <TextView
+        android:id="@+id/kkanbu"
+        android:layout_width="73dp"
+        android:layout_height="24dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="150dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="323dp"
+        android:text="@string/kkanbu"
+        android:textAppearance="@style/kkanbu"
+        android:lineSpacingExtra="1sp"
+        android:gravity="center_horizontal|center_vertical"
+        />
+
+    <TextView
+        android:id="@+id/some_id"
+        android:layout_width="172dp"
+        android:layout_height="21dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="434dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:lineSpacingExtra="4sp"
+        android:text="외국인 유학생 필수정보 앱"
+        android:textAppearance="@style/some_id" />
+
+
+</LinearLayout>
