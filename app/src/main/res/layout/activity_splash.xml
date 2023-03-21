@@ -1,33 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/splash"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:clipToOutline="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/splash"
+    android:orientation="vertical"
     >
 
     <TextView
-        android:id="@+id/kkanbu"
-        android:layout_width="73dp"
-        android:layout_height="24dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="167dp"
-        android:layout_marginTop="323dp"
-        android:gravity="center_horizontal|center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="200dp"
         android:lineSpacingExtra="1sp"
         android:text="@string/kkanbu"
         android:textAppearance="@style/kkanbu" />
 
     <TextView
-        android:id="@+id/some_id"
-        android:layout_width="118dp"
-        android:layout_height="64dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="356dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
         android:elevation="4dp"
         android:text="깐 부"
         android:textColor="@color/white"
@@ -36,13 +30,10 @@
 
 
     <TextView
-        android:id="@+id/explain"
-        android:layout_width="180dp"
+        android:layout_width="wrap_content"
         android:layout_height="21dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="434dp"
-        android:gravity="center_horizontal|center_vertical"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
         android:lineSpacingExtra="4sp"
         android:text="외국인 유학생 필수정보 앱"
         android:textAppearance="@style/some_id" />
@@ -51,7 +42,7 @@
 
 
 
-</RelativeLayout>
+</LinearLayout>
 
 
 
