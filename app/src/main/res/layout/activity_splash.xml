@@ -8,10 +8,6 @@
     android:background="@drawable/splash"
     >
 
-
-
-
-
     <TextView
         android:id="@+id/kkanbu"
         android:layout_width="73dp"
