@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- drawable/mask.xml -->
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="48dp"
+    android:height="34.29dp"
+    android:viewportWidth="48"
+    android:viewportHeight="34.29"
+    >
+    <group>
+        <clip-path
+            android:pathData="M2 0H46C47.1046 0 48 0.895431 48 2V32.2857C48 33.3903 47.1046 34.2857 46 34.2857H2C0.895431 34.2857 0 33.3903 0 32.2857V2C0 0.895431 0.895431 0 2 0Z"
+            />
+        <path
+            android:pathData="M0 0V34.2857H48V0"
+            android:fillColor="#FFFFFF"
+            />
+        <path
+            android:pathData="M2 0H46C47.1046 0 48 0.895431 48 2V32.2857C48 33.3903 47.1046 34.2857 46 34.2857H2C0.895431 34.2857 0 33.3903 0 32.2857V2C0 0.895431 0.895431 0 2 0Z"
+            android:strokeWidth="1"
+            android:strokeColor="#F5F5F5"
+            />
+    </group>
+</vector>
