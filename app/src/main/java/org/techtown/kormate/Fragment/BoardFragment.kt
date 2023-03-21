@@ -10,7 +10,6 @@ import org.techtown.kormate.R
 
 class BoardFragment : Fragment() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
