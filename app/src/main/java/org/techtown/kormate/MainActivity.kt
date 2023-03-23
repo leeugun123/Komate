@@ -10,11 +10,16 @@ import com.google.android.material.navigation.NavigationView
 import org.techtown.kormate.Fragment.BoardFragment
 import org.techtown.kormate.Fragment.HomeFragment
 import org.techtown.kormate.Fragment.MyFragment
+import org.techtown.kormate.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItemSelectedListener{
+
+    private var binding : ActivityMainBinding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding!!.root)
 
         supportFragmentManager.beginTransaction().add(R.id.linearLayout,HomeFragment()).commit()
 
