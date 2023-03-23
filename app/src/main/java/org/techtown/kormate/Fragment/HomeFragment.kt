@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentHomeBinding
@@ -24,8 +25,13 @@ class HomeFragment : Fragment() {
         UserApiClient.instance.me { user, error ->
             "${user?.kakaoAccount?.profile?.nickname}".also { binding!!.userName.text = it + " 님" }
 
+             Glide.with(binding!!.userProfile).load(user?.kakaoAccount?.profile?.profileImageUrl).circleCrop().into(binding!!.userProfile)
 
-        }//카카오에서 닉네임 불러오기
+            user?.kakaoAccount?.profile?.profileImageUrl?.let { Log.e("TAG", it) }
+
+        }//viewModel를 통해 가져오는 것으로 수정
+
+
 
     }
 
