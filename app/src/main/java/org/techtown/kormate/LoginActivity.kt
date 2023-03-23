@@ -1,5 +1,6 @@
 package org.techtown.kormate
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,6 +28,9 @@ class LoginActivity : AppCompatActivity() {
 
         //----------------------카카오 로그인 api 관련 코드---------------------------------
 
+
+
+
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null) {
                 Toast.makeText(this, "카카오 로그인 실패", Toast.LENGTH_SHORT).show()
@@ -37,6 +41,7 @@ class LoginActivity : AppCompatActivity() {
 
             }
         }
+
 
 
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
@@ -84,6 +89,7 @@ class LoginActivity : AppCompatActivity() {
 
             if(UserApiClient.instance.isKakaoTalkLoginAvailable(this)){
                 UserApiClient.instance.loginWithKakaoTalk(this,callback = callback)
+
             }
             else{
                 UserApiClient.instance.loginWithKakaoAccount(this,callback = callback)
