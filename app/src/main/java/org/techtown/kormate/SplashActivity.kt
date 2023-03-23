@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
+import com.kakao.util.helper.Utility
 import org.techtown.kormate.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
@@ -15,6 +17,9 @@ class SplashActivity : AppCompatActivity() {
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
+
+        val keyHash = Utility.getKeyHash(this)
+        Log.e("Hash", keyHash)
 
 
         Handler().postDelayed({
