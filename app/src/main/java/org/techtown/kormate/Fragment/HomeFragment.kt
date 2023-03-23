@@ -22,9 +22,8 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(layoutInflater)
 
         UserApiClient.instance.me { user, error ->
-            "${user?.kakaoAccount?.profile?.nickname}".also { binding!!.userName.text = it }
+            "${user?.kakaoAccount?.profile?.nickname}".also { binding!!.userName.text = it + " 님" }
 
-            Log.e("TAG","${user?.kakaoAccount?.profile?.nickname}")
 
         }//카카오에서 닉네임 불러오기
 
