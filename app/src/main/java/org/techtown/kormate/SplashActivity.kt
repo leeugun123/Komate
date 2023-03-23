@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import com.kakao.util.helper.Utility
+import com.kakao.sdk.common.util.Utility
 import org.techtown.kormate.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {

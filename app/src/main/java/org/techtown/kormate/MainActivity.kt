@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
-import com.kakao.util.helper.Utility
 import org.techtown.kormate.Fragment.BoardFragment
 import org.techtown.kormate.Fragment.HomeFragment
 import org.techtown.kormate.Fragment.MyFragment

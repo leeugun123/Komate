@@ -7,11 +7,11 @@ import android.os.Handler
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
-import com.kakao.sdk.auth.LoginClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
+import com.kakao.sdk.user.UserApi
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.databinding.ActivityLoginBinding
 
@@ -29,7 +29,7 @@ class LoginActivity : AppCompatActivity() {
 
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null) {
-                //Toast.makeText(this, "카카오 로그인 실패", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "카카오 로그인 실패", Toast.LENGTH_SHORT).show()
             } else if (tokenInfo != null) {
                 Toast.makeText(this, "카카오 로그인", Toast.LENGTH_SHORT).show()
 
@@ -82,12 +82,11 @@ class LoginActivity : AppCompatActivity() {
 
         binding!!.kakaoLogin.setOnClickListener {
 
-            if (LoginClient.instance.isKakaoTalkLoginAvailable(this)) {
-                LoginClient.instance.loginWithKakaoTalk(this, callback = callback)
-
-
-            } else {
-                LoginClient.instance.loginWithKakaoAccount(this, callback = callback)
+            if(UserApiClient.instance.isKakaoTalkLoginAvailable(this)){
+                UserApiClient.instance.loginWithKakaoTalk(this,callback = callback)
+            }
+            else{
+                UserApiClient.instance.loginWithKakaoAccount(this,callback = callback)
             }
 
         }
