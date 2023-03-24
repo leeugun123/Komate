@@ -20,6 +20,9 @@ class BoardFragment : Fragment() {
 
 
 
+
+
+
     }
 
     override fun onCreateView(
