@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentBoardBinding
 
