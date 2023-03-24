@@ -1,5 +1,6 @@
 package org.techtown.kormate.Fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,7 +21,12 @@ class BoardFragment : Fragment() {
 
         binding = FragmentBoardBinding.inflate(layoutInflater)
 
+        binding!!.movePost.setOnClickListener {
 
+            val intent = Intent(activity,BoardPostActivity::class.java)
+            startActivity(intent)
+
+        }
 
 
 
