@@ -7,7 +7,6 @@
     tools:context=".Fragment.BoardFragment">
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -109,11 +108,10 @@
     </LinearLayout>
 
 
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/board"
+        android:id="@+id/boardRecyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="500dp"
         android:layout_marginTop="20dp"
         />
 

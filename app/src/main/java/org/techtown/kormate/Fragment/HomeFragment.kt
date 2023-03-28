@@ -28,7 +28,6 @@ class HomeFragment : Fragment() {
 
              Glide.with(binding!!.userProfile).load(user?.kakaoAccount?.profile?.profileImageUrl).circleCrop().into(binding!!.userProfile)
 
-            user?.kakaoAccount?.profile?.profileImageUrl?.let { Log.e("TAG", it) }
 
         }//viewModel를 통해 가져오는 것으로 수정
 
