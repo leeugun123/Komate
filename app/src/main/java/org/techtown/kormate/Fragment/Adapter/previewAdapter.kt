@@ -24,8 +24,16 @@ class previewAdapter(private val boardList : ArrayList<BoardPreview>) : Recycler
 
         holder.binding.date.text = list.date
         holder.binding.time.text = list.time
-        holder.binding.post.text = list.post
 
+        var concetPost : String? = null
+
+        if(list.post.toString().length > 105){
+            concetPost = list.post?.substring(0,110)+"..."
+        }
+        else
+            concetPost = list.post.toString()
+
+        holder.binding.post.text = concetPost
 
     }
 

@@ -24,9 +24,17 @@ class HomeFragment : Fragment() {
 
         UserApiClient.instance.me { user, error ->
 
-            "${user?.kakaoAccount?.profile?.nickname}".also { binding!!.userName.text = it + " 님" }
 
-             Glide.with(binding!!.userProfile).load(user?.kakaoAccount?.profile?.profileImageUrl).circleCrop().into(binding!!.userProfile)
+
+            "${user?.kakaoAccount?.profile?.nickname}".also {
+
+                if(it != null)
+                    binding!!.userName.text = it + " 님"
+
+            }
+
+            if(user?.kakaoAccount?.profile?.profileImageUrl != null)
+                Glide.with(binding!!.userProfile).load(user?.kakaoAccount?.profile?.profileImageUrl).circleCrop().into(binding!!.userProfile)
 
 
         }//viewModel를 통해 가져오는 것으로 수정

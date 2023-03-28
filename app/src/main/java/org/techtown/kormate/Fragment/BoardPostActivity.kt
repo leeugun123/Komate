@@ -92,7 +92,12 @@ class BoardPostActivity : AppCompatActivity() {
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
 
-        val timeString = "$hour:$minute"
+        var timeString : String? = null
+
+        if(minute.toString().length <= 1)
+            timeString = "$hour" +":"+ "0" +"$minute"
+        else
+            timeString = "$hour:$minute"
 
         return timeString
 
