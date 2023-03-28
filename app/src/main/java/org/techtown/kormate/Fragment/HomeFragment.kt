@@ -23,6 +23,7 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(layoutInflater)
 
         UserApiClient.instance.me { user, error ->
+
             "${user?.kakaoAccount?.profile?.nickname}".also { binding!!.userName.text = it + " 님" }
 
              Glide.with(binding!!.userProfile).load(user?.kakaoAccount?.profile?.profileImageUrl).circleCrop().into(binding!!.userProfile)
