@@ -2,7 +2,8 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
     android:orientation="vertical"
     >
 
@@ -41,15 +42,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
-        android:textSize="25sp"
-        android:textStyle="bold"
-
+        android:textSize="20sp"
         />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@drawable/rectangle_2"
+        android:layout_marginTop="10dp"
         android:alpha="0.3"
         />
 
