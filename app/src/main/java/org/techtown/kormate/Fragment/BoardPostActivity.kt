@@ -45,6 +45,14 @@ class BoardPostActivity : AppCompatActivity() {
 
         }//viewModel를 통해 가져오는 것으로 수정
 
+        binding!!.uploadImgButton.setOnClickListener {
+
+
+
+
+        }//사진 올리기
+
+
 
         binding!!.updateButton.setOnClickListener {
 
