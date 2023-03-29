@@ -1,5 +1,9 @@
 package org.techtown.kormate.Fragment
 
+import android.Manifest
+import android.content.Intent
+import android.icu.number.NumberFormatter.with
+import android.icu.number.NumberRangeFormatter.with
 import android.icu.util.Calendar
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -7,17 +11,25 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.bumptech.glide.Glide
+import com.bumptech.glide.GenericTransitionOptions.with
+import com.bumptech.glide.Glide.with
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.with
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.with
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.normal.TedPermission
+import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Data.BoardDetail
-import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 
 class BoardPostActivity : AppCompatActivity() {
 
     private var binding : ActivityBoardPostBinding? = null
+
+    private val REQUEST_CODE_PICK_IMAGE = 1
+    private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +59,23 @@ class BoardPostActivity : AppCompatActivity() {
 
         binding!!.uploadImgButton.setOnClickListener {
 
+            TedPermission.create()
+                .setPermissionListener(object : PermissionListener {
+
+                    override fun onPermissionGranted() {
+                        // 권한이 허용되면 갤러리에서 이미지를 선택합니다.
+                        val intent = Intent(Intent.ACTION_PICK)
+                        intent.type = "image/*"
+                        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
+                    }
+
+                    override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
+                        // 권한이 거부되면 처리합니다.
+                        // ...
+                    }
+                })
+                .setPermissions(PERMISSION_READ_EXTERNAL_STORAGE)
+                .check()
 
 
 
