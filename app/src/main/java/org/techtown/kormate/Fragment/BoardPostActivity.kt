@@ -1,6 +1,7 @@
 package org.techtown.kormate.Fragment
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.icu.number.NumberFormatter.with
 import android.icu.number.NumberRangeFormatter.with
@@ -8,6 +9,7 @@ import android.icu.util.Calendar
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -28,7 +30,7 @@ class BoardPostActivity : AppCompatActivity() {
 
     private var binding : ActivityBoardPostBinding? = null
 
-    private val REQUEST_CODE_PICK_IMAGE = 1
+    private val REQUEST_CODE_PICK_IMAGES = 1
     private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -64,9 +66,13 @@ class BoardPostActivity : AppCompatActivity() {
 
                     override fun onPermissionGranted() {
                         // 권한이 허용되면 갤러리에서 이미지를 선택합니다.
-                        val intent = Intent(Intent.ACTION_PICK)
+                        val intent = Intent(Intent.ACTION_GET_CONTENT)
                         intent.type = "image/*"
-                        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
+                        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                        startActivityForResult(Intent.createChooser(intent, "Select images"), REQUEST_CODE_PICK_IMAGES)
+                        
+
+
                     }
 
                     override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
@@ -139,6 +145,39 @@ class BoardPostActivity : AppCompatActivity() {
         return timeString
 
     }//현재 시간 가져오기
+
+
+    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?){
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
+
+            Log.e("TAG","응답됨")
+
+        /*
+            val imageUri = data?.data
+            if (imageUri != null) {
+                // 이미지를 Firebase Storage에 업로드합니다.
+                val imageRef = storageRef.child("my-image.jpg")
+                imageRef.putFile(imageUri)
+                    .addOnSuccessListener {
+                        // 업로드가 성공했을 때 호출됩니다.
+                        Log.d(TAG, "Image uploaded successfully")
+                    }
+                    .addOnFailureListener {
+                        // 업로드가 실패했을 때 호출됩니다.
+                        Log.e(TAG, "Image upload failed", it)
+                    }
+            }
+
+        */
+
+
+        }
+
+    }//갤러리로 이동했을때
+
+
 
 
 }
