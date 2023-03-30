@@ -14,12 +14,16 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Adapter.GalaryAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 class BoardPostActivity : AppCompatActivity() {
 
@@ -30,6 +34,7 @@ class BoardPostActivity : AppCompatActivity() {
 
     private var imageUris = mutableListOf<Uri>()
 
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +44,6 @@ class BoardPostActivity : AppCompatActivity() {
 
         binding = ActivityBoardPostBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
-
 
 
         binding!!.backBtn.setOnClickListener {
@@ -88,17 +92,52 @@ class BoardPostActivity : AppCompatActivity() {
 
         binding!!.updateButton.setOnClickListener {
 
+
             val post = binding!!.post.text.toString()
 
             val date : String = getDate()
             val time : String = getTime()
 
-            val boardPost = BoardDetail(userName,userImg,post,imageUris,date,time)
+            if(imageUris.size == 1){
+
+                val storage = FirebaseStorage.getInstance()
+                val storageRef = storage.reference
+
+                // 파일 이름 생성
+                val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+                val imageFileName = "IMG_" + timestamp + "_" + UUID.randomUUID().toString()
+
+                // 업로드할 파일 경로 설정
+                val imageRef = storageRef.child("images/$imageFileName")
+
+                imageRef.putFile(imageUris.get(0)!!)
+                    .addOnSuccessListener {
+
+                        // 업로드 성공 시
+                        Toast.makeText(this, "Upload success", Toast.LENGTH_SHORT).show()
+
+                        imageRef.downloadUrl
+                            .addOnSuccessListener { uri ->
+
+                                val boardPost = BoardDetail(userName,userImg,post,uri,date,time)
+
+                                if (postId != null) {
+                                    postsRef.child(postId).setValue(boardPost)
+                                }
 
 
-            postId?.let{
-                postsRef.child(it).setValue(boardPost)
+                            }
+
+                    }
+                    .addOnFailureListener { e ->
+                        // 업로드 실패 시
+                        Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+                    }
+
+
             }
+
+
 
             Toast.makeText(this,"게시글이 등록되었습니다.",Toast.LENGTH_SHORT).show()
 
@@ -151,8 +190,6 @@ class BoardPostActivity : AppCompatActivity() {
 
             Log.e("TAG","응답됨")
 
-
-
             if (data?.clipData != null) {
                 // 다중 이미지를 선택한 경우
                 val clipData = data.clipData
@@ -175,6 +212,7 @@ class BoardPostActivity : AppCompatActivity() {
             }
 
             handleSelectedImages(imageUris)
+
 
         }
 

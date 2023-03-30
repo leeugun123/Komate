@@ -6,8 +6,9 @@ data class BoardDetail(
     var userName: String? = null,
     var userImg: String? = null,
     var post: String? = null,
-    var img: List<Uri>? = null,
+    var img: Uri? = null,
     var date: String? = null,
     var time: String? = null,
                       )
+
 
