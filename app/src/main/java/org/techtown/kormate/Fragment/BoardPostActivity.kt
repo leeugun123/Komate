@@ -6,6 +6,7 @@ import android.content.Intent
 import android.icu.number.NumberFormatter.with
 import android.icu.number.NumberRangeFormatter.with
 import android.icu.util.Calendar
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,6 +24,7 @@ import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import com.kakao.sdk.user.UserApiClient
+import org.techtown.kormate.Fragment.Adapter.GalaryAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 
@@ -154,28 +156,43 @@ class BoardPostActivity : AppCompatActivity() {
 
             Log.e("TAG","응답됨")
 
-        /*
-            val imageUri = data?.data
-            if (imageUri != null) {
-                // 이미지를 Firebase Storage에 업로드합니다.
-                val imageRef = storageRef.child("my-image.jpg")
-                imageRef.putFile(imageUri)
-                    .addOnSuccessListener {
-                        // 업로드가 성공했을 때 호출됩니다.
-                        Log.d(TAG, "Image uploaded successfully")
+            val imageUris = mutableListOf<Uri>()
+
+            if (data?.clipData != null) {
+                // 다중 이미지를 선택한 경우
+                val clipData = data.clipData
+
+                if (clipData != null) {
+                    for (i in 0 until clipData.itemCount) {
+                        val uri = clipData.getItemAt(i).uri
+                        imageUris.add(uri)
                     }
-                    .addOnFailureListener {
-                        // 업로드가 실패했을 때 호출됩니다.
-                        Log.e(TAG, "Image upload failed", it)
-                    }
+                }
+
+            } else if (data?.data != null) {
+                // 단일 이미지를 선택한 경우
+                val uri = data.data
+
+                if (uri != null) {
+                    imageUris.add(uri)
+                }
+
             }
 
-        */
-
+            handleSelectedImages(imageUris)
 
         }
 
     }//갤러리로 이동했을때
+
+    private fun handleSelectedImages(imageUris: List<Uri>) {
+
+        val adapter = GalaryAdapter(imageUris)
+
+        binding!!.imgRecyclerView.adapter = adapter
+
+
+    }// 선택한 이미지들을 처리하는 코드를 작성
 
 
 
