@@ -17,11 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kormate"
         tools:targetApi="31">
-
+        <activity
+            android:name=".BoardActivity"
+            android:exported="false" />
         <activity
             android:name=".Fragment.BoardPostActivity"
             android:exported="false" />
-
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
@@ -50,7 +51,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>

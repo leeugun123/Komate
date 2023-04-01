@@ -1,6 +1,7 @@
 package org.techtown.kormate.Fragment.Data
 
 import android.net.Uri
+import java.io.Serializable
 
 data class BoardDetail(
     var userName: String? = null,
@@ -9,6 +10,6 @@ data class BoardDetail(
     var img: String? = null,
     var date: String? = null,
     var time: String? = null,
-                      )
+                      ) : Serializable
 
 

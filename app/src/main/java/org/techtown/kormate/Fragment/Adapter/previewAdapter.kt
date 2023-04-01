@@ -1,14 +1,34 @@
 package org.techtown.kormate.Fragment.Adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.techtown.kormate.Fragment.Data.BoardPreview
+import org.techtown.kormate.BoardActivity
+import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.databinding.BoardpreviewBinding
 
-class previewAdapter(private val boardList : ArrayList<BoardPreview>) : RecyclerView.Adapter<previewAdapter.ViewHolder>(){
+class previewAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Adapter<previewAdapter.ViewHolder>(){
 
-    class ViewHolder(val binding : BoardpreviewBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding : BoardpreviewBinding) : RecyclerView.ViewHolder(binding.root),
+        View.OnClickListener{
+
+            init {
+                itemView.setOnClickListener(this)
+            }
+
+            override fun onClick(v : View){
+
+                val position = adapterPosition
+                val context = itemView.context
+
+                val intent = Intent(context,BoardActivity::class.java)
+                intent.putExtra("postIntel",boardList[position])
+                context.startActivity(intent)
+            }
+
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
