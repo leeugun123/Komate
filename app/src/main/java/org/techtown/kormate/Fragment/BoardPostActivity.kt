@@ -98,6 +98,7 @@ class BoardPostActivity : AppCompatActivity() {
             val date : String = getDate()
             val time : String = getTime()
 
+
             if(imageUris.size == 1){
 
                 val storage = FirebaseStorage.getInstance()
@@ -116,10 +117,14 @@ class BoardPostActivity : AppCompatActivity() {
                         // 업로드 성공 시
                         Toast.makeText(this, "Upload success", Toast.LENGTH_SHORT).show()
 
-                        imageRef.downloadUrl
+                        //업로드는 성공적으로 업로드 됨.
+
+                       imageRef.downloadUrl
                             .addOnSuccessListener { uri ->
 
-                                val boardPost = BoardDetail(userName,userImg,post,uri,date,time)
+                                Log.e("TAG",uri.toString())
+
+                                val boardPost = BoardDetail(userName,userImg,post,uri.toString(),date,time)
 
                                 if (postId != null) {
                                     postsRef.child(postId).setValue(boardPost)
