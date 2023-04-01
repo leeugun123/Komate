@@ -39,7 +39,7 @@ class BoardFragment : Fragment() {
 
         val postRef = Firebase.database.reference.child("posts")
 
-        val recentList = ArrayList<BoardPreview>()
+        val recentList = ArrayList<BoardDetail>()
 
         //비동기 호출
         postRef.addValueEventListener(object : ValueEventListener{
@@ -54,7 +54,13 @@ class BoardFragment : Fragment() {
 
                     if (post != null) {
 
-                        recentList.add(BoardPreview(post.date.toString(),post.time.toString(),post.post.toString()))
+                        recentList.add(BoardDetail(
+                            post.userName,
+                            post.userImg,
+                            post.post,
+                            post.img,
+                            post.date.toString(),
+                            post.time.toString()))
 
                     }
 
