@@ -39,11 +39,12 @@ class BoardPostActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val postsRef = Firebase.database.reference.child("posts")
-        val postId = postsRef.push().key
-
         binding = ActivityBoardPostBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
+
+
+        val postsRef = Firebase.database.reference.child("posts")
+        val postId = postsRef.push().key
 
 
         binding!!.backBtn.setOnClickListener {
