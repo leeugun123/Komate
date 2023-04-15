@@ -40,6 +40,13 @@ class BoardActivity : AppCompatActivity() {
         binding!!.postText.setText(list.post)
 
 
+        Glide.with(this)
+            .load(list.userImg)
+            .circleCrop()
+            .into(binding!!.replyImg)
+
+
+
     }
 
 
