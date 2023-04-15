@@ -36,7 +36,6 @@ class BoardFragment : Fragment() {
         val boardRecyclerView = binding!!.boardRecyclerview
         boardRecyclerView.layoutManager = LinearLayoutManager(activity)
 
-
         val postRef = Firebase.database.reference.child("posts")
 
         val recentList = ArrayList<BoardDetail>()
@@ -55,12 +54,16 @@ class BoardFragment : Fragment() {
                     if (post != null) {
 
                         recentList.add(BoardDetail(
+
                             post.userName,
                             post.userImg,
                             post.post,
                             post.img,
                             post.date.toString(),
-                            post.time.toString()))
+                            post.time.toString()),
+
+
+                        )
 
                     }
 

@@ -20,6 +20,7 @@ import com.gun0912.tedpermission.normal.TedPermission
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Adapter.GalaryAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
+import org.techtown.kormate.Fragment.Data.Comment
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.io.File
 import java.text.SimpleDateFormat
@@ -45,7 +46,6 @@ class BoardPostActivity : AppCompatActivity() {
 
         val postsRef = Firebase.database.reference.child("posts")
         val postId = postsRef.push().key
-
 
         binding!!.backBtn.setOnClickListener {
             finish()
@@ -116,16 +116,17 @@ class BoardPostActivity : AppCompatActivity() {
                     .addOnSuccessListener {
 
                         // 업로드 성공 시
-                        Toast.makeText(this, "Upload success", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "게시글 업로드 완료", Toast.LENGTH_SHORT).show()
 
                         //업로드는 성공적으로 업로드 됨.
-
                        imageRef.downloadUrl
                             .addOnSuccessListener { uri ->
 
                                 Log.e("TAG",uri.toString())
 
-                                val boardPost = BoardDetail(userName,userImg,post,uri.toString(),date,time)
+                                var comments: List<Comment> = listOf()
+
+                                val boardPost = BoardDetail(userName,userImg,post,uri.toString(),date,time,comments)
 
                                 if (postId != null) {
                                     postsRef.child(postId).setValue(boardPost)
