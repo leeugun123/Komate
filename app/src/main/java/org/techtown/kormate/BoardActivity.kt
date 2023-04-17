@@ -2,7 +2,9 @@ package org.techtown.kormate
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import org.techtown.kormate.Fragment.Adapter.CommentAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.databinding.ActivityBoardBinding
 
@@ -46,6 +48,13 @@ class BoardActivity : AppCompatActivity() {
             .into(binding!!.replyImg)
 
 
+
+        val commentRecyclerView = binding!!.commentRecyclerView
+        commentRecyclerView.layoutManager = LinearLayoutManager(this)
+
+        val commentList = list.comments
+
+        commentRecyclerView.adapter = CommentAdapter(commentList)
 
 
     }

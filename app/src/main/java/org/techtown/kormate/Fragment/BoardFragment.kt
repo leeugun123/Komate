@@ -38,7 +38,7 @@ class BoardFragment : Fragment() {
 
         val postRef = Firebase.database.reference.child("posts")
 
-        val recentList = ArrayList<BoardDetail>()
+        val recentList : MutableList<BoardDetail> = mutableListOf()
 
         //비동기 호출
         postRef.addValueEventListener(object : ValueEventListener{
@@ -54,16 +54,15 @@ class BoardFragment : Fragment() {
                     if (post != null) {
 
                         recentList.add(BoardDetail(
-
                             post.userName,
                             post.userImg,
                             post.post,
                             post.img,
-                            post.date.toString(),
-                            post.time.toString()),
-
-
-                        )
+                            post.date,
+                            post.time,
+                            post.comments
+                            //여기서 comment를 추가해준다.
+                        ))
 
                     }
 
@@ -153,3 +152,4 @@ class BoardFragment : Fragment() {
 
 
 }
+

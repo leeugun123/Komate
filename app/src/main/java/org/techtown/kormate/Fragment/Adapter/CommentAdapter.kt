@@ -43,6 +43,7 @@ class CommentAdapter(private val comments : MutableList<Comment>) :
                 binding.commentText.text= comment.text
 
 
+
             }
 
 
