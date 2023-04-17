@@ -11,7 +11,7 @@ data class BoardDetail(
     var img: String? = null,
     var date: String? = null,
     var time: String? = null,
-    var comments: List<Comment> = listOf()
+    var comments: MutableList<Comment> = mutableListOf()
 
                       ) : Serializable
 

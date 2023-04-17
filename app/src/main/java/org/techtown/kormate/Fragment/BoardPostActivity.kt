@@ -124,7 +124,10 @@ class BoardPostActivity : AppCompatActivity() {
 
                                 Log.e("TAG",uri.toString())
 
-                                var comments: List<Comment> = listOf()
+                                var comments : MutableList<Comment> = mutableListOf()
+
+                                //테스트
+                                comments.add(Comment("e","e","e","e"))
 
                                 val boardPost = BoardDetail(userName,userImg,post,uri.toString(),date,time,comments)
 
