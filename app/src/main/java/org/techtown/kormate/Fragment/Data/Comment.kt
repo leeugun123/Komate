@@ -2,10 +2,10 @@ package org.techtown.kormate.Fragment.Data
 
 data class Comment(
 
-    val userId : String = "",
-    val userImg : String = "",
-    val text: String = "",
-    val createdTime: String = ""
+    val userName : String? = null,
+    val userImg : String? = null,
+    val text: String? = null,
+    val createdTime: String? = null
 
 )
 
