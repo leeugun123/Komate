@@ -87,50 +87,6 @@ class BoardFragment : Fragment() {
 
     }
 
-    /*
-    private fun getData(): ArrayList<BoardPreview> {
-
-
-        val postRef = Firebase.database.reference.child("posts")
-
-        val recentList = ArrayList<BoardPreview>()
-
-        //비동기 호출
-        postRef.addValueEventListener(object : ValueEventListener{
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-
-                recentList.clear()
-
-                for(snapshot in snapshot.children){
-
-                    val post = snapshot.getValue(BoardDetail::class.java)
-
-
-                    if (post != null) {
-
-                        recentList.add(BoardPreview(post.date.toString(),post.time.toString(),post.post.toString()))
-
-
-                    }
-
-                }
-
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-
-        })
-
-        return recentList
-
-    }
-
-    */
 
 
 

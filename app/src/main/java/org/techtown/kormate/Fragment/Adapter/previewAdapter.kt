@@ -1,6 +1,7 @@
 package org.techtown.kormate.Fragment.Adapter
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,8 +25,13 @@ class previewAdapter(private val boardList : List<BoardDetail>) : RecyclerView.A
                 val context = itemView.context
 
                 val intent = Intent(context,BoardActivity::class.java)
+
+
+
                 intent.putExtra("postIntel",boardList[position])
                 context.startActivity(intent)
+
+
 
             }
 
