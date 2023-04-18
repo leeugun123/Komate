@@ -28,6 +28,7 @@ data class Comment(
     }
 
     companion object CREATOR : Parcelable.Creator<Comment> {
+
         override fun createFromParcel(parcel: Parcel): Comment {
             return Comment(parcel)
         }
@@ -35,7 +36,10 @@ data class Comment(
         override fun newArray(size: Int): Array<Comment?> {
             return arrayOfNulls(size)
         }
+
     }
+
+
 }
 
 

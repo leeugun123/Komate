@@ -54,6 +54,8 @@ class BoardFragment : Fragment() {
                     if (post != null) {
 
                         recentList.add(BoardDetail(
+
+                            post.postId,
                             post.userName,
                             post.userImg,
                             post.post,
@@ -61,6 +63,7 @@ class BoardFragment : Fragment() {
                             post.date,
                             post.time,
                             post.comments
+
                             //여기서 comment를 추가해준다.
                         ))
 

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import org.techtown.kormate.Fragment.Adapter.CommentAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.databinding.ActivityBoardBinding
@@ -24,6 +26,8 @@ class BoardActivity : AppCompatActivity() {
         }//뒤로 가기
 
         //intent 받기
+
+        val postsRef = Firebase.database.reference.child("posts")
 
         val receiveData  = intent.getParcelableExtra<BoardDetail>("postIntel")
 
@@ -65,8 +69,18 @@ class BoardActivity : AppCompatActivity() {
 
             }
 
-
         }
+
+        binding!!.reply.setOnClickListener {
+
+
+
+
+        }//작성하기
+
+
+
+
 
     }
 

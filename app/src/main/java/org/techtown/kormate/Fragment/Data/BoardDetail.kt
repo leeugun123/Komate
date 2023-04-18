@@ -5,28 +5,38 @@ import android.os.Parcelable
 
 
 data class BoardDetail(
+
+    var postId : String? = null,
     var userName: String? = null,
     var userImg: String? = null,
     var post: String? = null,
     var img: String? = null,
     var date: String? = null,
     var time: String? = null,
+
     var comments: MutableList<Comment> = mutableListOf()
+
 ): Parcelable {
 
     constructor(parcel: Parcel) : this(
+
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
+        parcel.readString(),
+
         mutableListOf<Comment>().apply {
             parcel.readList(this, Comment::class.java.classLoader)
         }
+
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+
+        parcel.writeString(postId)
         parcel.writeString(userName)
         parcel.writeString(userImg)
         parcel.writeString(post)
@@ -34,6 +44,7 @@ data class BoardDetail(
         parcel.writeString(date)
         parcel.writeString(time)
         parcel.writeList(comments)
+
     }
 
     override fun describeContents(): Int {

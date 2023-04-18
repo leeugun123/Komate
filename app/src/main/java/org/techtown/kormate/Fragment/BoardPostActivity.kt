@@ -128,7 +128,7 @@ class BoardPostActivity : AppCompatActivity() {
                                 //테스트
                                 comments.add(Comment("e","e","e","e"))
 
-                                val boardPost = BoardDetail(userName,userImg,post,uri.toString(),date,time,comments)
+                                val boardPost = BoardDetail(postId,userName,userImg,post,uri.toString(),date,time,comments)
 
                                 if (postId != null) {
                                     postsRef.child(postId).setValue(boardPost)
