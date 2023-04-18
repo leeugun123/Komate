@@ -34,7 +34,7 @@ class CommentAdapter(private val comments : MutableList<Comment>) :
 
                 Glide.with(itemView)
                     .load(comment.userImg)
-                    .centerCrop()
+                     .circleCrop()
                     .into(binding.commentUserImg)
                 //유저 이미지 추가
 

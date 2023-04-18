@@ -51,6 +51,8 @@ class BoardActivity : AppCompatActivity() {
                     .circleCrop()
                     .into(binding!!.userImg)
 
+
+
                 binding!!.userName.setText(list.userName)
                 binding!!.date.setText(list.date)
                 binding!!.time.setText(list.time)
