@@ -105,7 +105,9 @@ class BoardActivity : AppCompatActivity() {
 
                         boardDetail!!.comments.add(comment)
 
+
                         objRef.setValue(boardDetail)
+                        binding!!.commentRecyclerView.adapter = CommentAdapter(boardDetail!!.comments)
 
                     }
 
