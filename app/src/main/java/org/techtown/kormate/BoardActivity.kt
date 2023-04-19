@@ -94,12 +94,11 @@ class BoardActivity : AppCompatActivity() {
 
                 val objRef = postsRef.child(postId)
 
-                objRef.addValueEventListener(object : ValueEventListener {
+                objRef.addListenerForSingleValueEvent(object : ValueEventListener {
 
                     override fun onDataChange(snapshot: DataSnapshot) {
 
                         val boardDetail = snapshot.getValue(BoardDetail::class.java)
-
 
                         val comment = Comment(list?.userName,list?.userImg
                         ,binding!!.reply.text.toString(),"현재시간")

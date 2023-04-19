@@ -125,8 +125,6 @@ class BoardPostActivity : AppCompatActivity() {
 
                                 var comments : MutableList<Comment> = mutableListOf()
 
-                                //테스트
-                                comments.add(Comment("e","e","e","e"))
 
                                 val boardPost = BoardDetail(postId,userName,userImg,post,uri.toString(),date,time,comments)
 
