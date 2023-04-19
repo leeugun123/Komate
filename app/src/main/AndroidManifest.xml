@@ -20,6 +20,7 @@
 
         <activity
             android:name=".BoardActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
 
         <activity

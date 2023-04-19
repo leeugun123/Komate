@@ -24,8 +24,6 @@ class HomeFragment : Fragment() {
 
         UserApiClient.instance.me { user, error ->
 
-
-
             "${user?.kakaoAccount?.profile?.nickname}".also {
 
                 if(it != null)
@@ -36,6 +34,7 @@ class HomeFragment : Fragment() {
             if(user?.kakaoAccount?.profile?.profileImageUrl != null)
                 Glide.with(binding!!.userProfile).load(user?.kakaoAccount?.profile?.profileImageUrl).circleCrop().into(binding!!.userProfile)
 
+            
 
         }//viewModel를 통해 가져오는 것으로 수정
 
