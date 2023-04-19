@@ -1,8 +1,10 @@
 package org.techtown.kormate
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -109,6 +111,12 @@ class BoardActivity : AppCompatActivity() {
 
                         objRef.setValue(boardDetail)
                         binding!!.commentRecyclerView.adapter = CommentAdapter(boardDetail!!.comments)
+
+
+                        // editText 초기화 및 키보드 숨기기
+                        binding!!.reply.text.clear()
+                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(binding!!.reply.windowToken, 0)
 
                         Toast.makeText(this@BoardActivity, "댓글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
 

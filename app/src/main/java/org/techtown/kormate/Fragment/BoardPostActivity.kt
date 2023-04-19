@@ -96,11 +96,8 @@ class BoardPostActivity : AppCompatActivity() {
 
             val post = binding!!.post.text.toString()
 
-            val date : String = getDate()
-            val time : String = getTime()
 
-
-            if(imageUris.size == 1){
+            if(post.length > 0 || imageUris.size > 0){
 
                 val storage = FirebaseStorage.getInstance()
                 val storageRef = storage.reference
@@ -115,11 +112,7 @@ class BoardPostActivity : AppCompatActivity() {
                 imageRef.putFile(imageUris.get(0)!!)
                     .addOnSuccessListener {
 
-                        // 업로드 성공 시
-                        Toast.makeText(this, "게시글 업로드 완료", Toast.LENGTH_SHORT).show()
-
-                        //업로드는 성공적으로 업로드 됨.
-                       imageRef.downloadUrl
+                        imageRef.downloadUrl
                             .addOnSuccessListener { uri ->
 
                                 Log.e("TAG",uri.toString())
@@ -132,7 +125,6 @@ class BoardPostActivity : AppCompatActivity() {
                                     postsRef.child(postId).setValue(boardPost)
                                 }
 
-
                             }
 
                     }
@@ -141,14 +133,20 @@ class BoardPostActivity : AppCompatActivity() {
                         Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
                     }
 
+                Toast.makeText(this,"게시글이 등록되었습니다.",Toast.LENGTH_SHORT).show()
+
+                finish()
+
+            }
+            else{
+
+                Toast.makeText(this,"내용이 없습니다. 내용을 입력해주세요",Toast.LENGTH_SHORT).show()
 
             }
 
 
 
-            Toast.makeText(this,"게시글이 등록되었습니다.",Toast.LENGTH_SHORT).show()
 
-            finish()
 
         }//업데이트 버튼
 
