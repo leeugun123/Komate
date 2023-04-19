@@ -60,8 +60,7 @@ class BoardFragment : Fragment() {
                             post.userImg,
                             post.post,
                             post.img,
-                            post.date,
-                            post.time,
+                            post.dateTime,
                             post.comments
 
                             //여기서 comment를 추가해준다.

@@ -32,7 +32,6 @@ class previewAdapter(private val boardList : List<BoardDetail>) : RecyclerView.A
                 context.startActivity(intent)
 
 
-
             }
 
         }
@@ -49,8 +48,7 @@ class previewAdapter(private val boardList : List<BoardDetail>) : RecyclerView.A
 
         val list = boardList[position]
 
-        holder.binding.date.text = list.date
-        holder.binding.time.text = list.time
+        holder.binding.dateTime.text = list.dateTime
 
         var concetPost : String? = null
 

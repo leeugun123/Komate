@@ -11,8 +11,7 @@ data class BoardDetail(
     var userImg: String? = null,
     var post: String? = null,
     var img: String? = null,
-    var date: String? = null,
-    var time: String? = null,
+    var dateTime: String? = null,
 
     var comments: MutableList<Comment> = mutableListOf()
 
@@ -20,7 +19,6 @@ data class BoardDetail(
 
     constructor(parcel: Parcel) : this(
 
-        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -41,8 +39,7 @@ data class BoardDetail(
         parcel.writeString(userImg)
         parcel.writeString(post)
         parcel.writeString(img)
-        parcel.writeString(date)
-        parcel.writeString(time)
+        parcel.writeString(dateTime)
         parcel.writeList(comments)
 
     }

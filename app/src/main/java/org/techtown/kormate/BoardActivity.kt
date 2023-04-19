@@ -3,6 +3,7 @@ package org.techtown.kormate
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
@@ -10,6 +11,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import org.techtown.kormate.Fragment.Adapter.CommentAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.Fragment.Data.Comment
@@ -54,8 +56,8 @@ class BoardActivity : AppCompatActivity() {
 
 
                 binding!!.userName.setText(list.userName)
-                binding!!.date.setText(list.date)
-                binding!!.time.setText(list.time)
+                binding!!.dateTime.setText(list.dateTime)
+
 
                 Glide.with(this)
                     .load(list.img)
@@ -101,14 +103,14 @@ class BoardActivity : AppCompatActivity() {
                         val boardDetail = snapshot.getValue(BoardDetail::class.java)
 
                         val comment = Comment(list?.userName,list?.userImg
-                        ,binding!!.reply.text.toString(),"현재시간")
+                        ,binding!!.reply.text.toString(),CurrentDateTime.getCommentTime())
 
                         boardDetail!!.comments.add(comment)
 
                         objRef.setValue(boardDetail)
                         binding!!.commentRecyclerView.adapter = CommentAdapter(boardDetail!!.comments)
 
-
+                        Toast.makeText(this@BoardActivity, "댓글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
 
 
                     }

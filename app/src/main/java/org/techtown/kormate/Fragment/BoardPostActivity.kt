@@ -18,6 +18,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import com.kakao.sdk.user.UserApiClient
+import org.techtown.kormate.CurrentDateTime
 import org.techtown.kormate.Fragment.Adapter.GalaryAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.Fragment.Data.Comment
@@ -125,8 +126,7 @@ class BoardPostActivity : AppCompatActivity() {
 
                                 var comments : MutableList<Comment> = mutableListOf()
 
-
-                                val boardPost = BoardDetail(postId,userName,userImg,post,uri.toString(),date,time,comments)
+                                val boardPost = BoardDetail(postId,userName,userImg,post,uri.toString(),CurrentDateTime.getPostTime(),comments)
 
                                 if (postId != null) {
                                     postsRef.child(postId).setValue(boardPost)
