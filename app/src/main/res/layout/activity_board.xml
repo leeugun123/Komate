@@ -35,7 +35,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="20dp"
                     android:src="@drawable/ic_baseline_arrow_back_ios_24"
-                    android:background="@color/white"
+                    android:background="#FFFFFFFF"
                     />
 
                 <TextView
@@ -143,12 +143,12 @@
                     android:textColorHint="#2196F3"
                     />
 
-                <Button
+                <ImageButton
                     android:id="@+id/post"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:drawableRight="@drawable/ic_baseline_send_24"
+                    android:background="#FFFFFFFF"
+                    android:src="@drawable/ic_baseline_send_24"
                     />
 
             </LinearLayout>
