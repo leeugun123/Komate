@@ -7,9 +7,7 @@
     android:orientation="vertical"
     tools:context=".BoardActivity">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
 
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -132,7 +130,7 @@
                     android:id="@+id/reply_img"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="5dp"
                     android:src="@drawable/hi"
                     />
 
@@ -149,11 +147,11 @@
                     android:id="@+id/post"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:text="작성"
+                    android:background="@color/white"
+                    android:drawableRight="@drawable/ic_baseline_send_24"
                     />
 
             </LinearLayout>
-
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -161,14 +159,14 @@
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                >
+
+
+            </androidx.recyclerview.widget.RecyclerView>
 
 
         </LinearLayout>
 
-
-
-    </ScrollView>
 
 
 
