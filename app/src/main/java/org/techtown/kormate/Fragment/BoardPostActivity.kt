@@ -93,11 +93,18 @@ class BoardPostActivity : AppCompatActivity() {
 
         binding!!.updateButton.setOnClickListener {
 
-
             val post = binding!!.post.text.toString()
 
+            var picUri : String = ""
 
-            if(post.length > 0 || imageUris.size > 0){
+            var comments : MutableList<Comment> = mutableListOf()
+
+
+            if(imageUris.size == 0 && post.length == 0){
+
+                Toast.makeText(this,"내용이 없습니다. 내용을 입력해주세요",Toast.LENGTH_SHORT).show()
+            }
+            else if(imageUris.size > 0){
 
                 val storage = FirebaseStorage.getInstance()
                 val storageRef = storage.reference
@@ -117,12 +124,14 @@ class BoardPostActivity : AppCompatActivity() {
 
                                 Log.e("TAG",uri.toString())
 
-                                var comments : MutableList<Comment> = mutableListOf()
+                                picUri = uri.toString()
 
-                                val boardPost = BoardDetail(postId,userName,userImg,post,uri.toString(),CurrentDateTime.getPostTime(),comments)
+                                val boardPost = BoardDetail(postId,userName,userImg,post,picUri,CurrentDateTime.getPostTime(),comments)
 
                                 if (postId != null) {
+
                                     postsRef.child(postId).setValue(boardPost)
+
                                 }
 
                             }
@@ -140,52 +149,29 @@ class BoardPostActivity : AppCompatActivity() {
             }
             else{
 
-                Toast.makeText(this,"내용이 없습니다. 내용을 입력해주세요",Toast.LENGTH_SHORT).show()
+                val boardPost = BoardDetail(postId,userName,userImg,post,picUri,CurrentDateTime.getPostTime(),comments)
+
+                if (postId != null) {
+                    postsRef.child(postId).setValue(boardPost)
+                }
+
+                Toast.makeText(this,"게시글이 등록되었습니다.",Toast.LENGTH_SHORT).show()
+
+                finish()
+
 
             }
-
-
 
 
 
         }//업데이트 버튼
 
 
+
+
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun getDate() : String{
 
-        val calendar = Calendar.getInstance()
-
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        val dateString = "$year-${month + 1}-$day"   // 2022-4-22
-
-        return dateString
-
-    }//현재 날짜 가져오기
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun getTime() : String{
-
-        val calendar = Calendar.getInstance()
-
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-
-        var timeString : String? = null
-
-        if(minute.toString().length <= 1)
-            timeString = "$hour" +":"+ "0" +"$minute"
-        else
-            timeString = "$hour:$minute"
-
-        return timeString
-
-    }//현재 시간 가져오기
 
 
     override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?){

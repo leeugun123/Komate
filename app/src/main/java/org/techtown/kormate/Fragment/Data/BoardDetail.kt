@@ -1,12 +1,13 @@
 package org.techtown.kormate.Fragment.Data
 
+import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
 
 
 data class BoardDetail(
 
-    var postId : String? = null,
+    var postId: String? = null,
     var userName: String? = null,
     var userImg: String? = null,
     var post: String? = null,
