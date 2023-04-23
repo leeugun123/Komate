@@ -90,81 +90,59 @@ class BoardPostActivity : AppCompatActivity() {
         }//사진 올리기
 
 
-
         binding!!.updateButton.setOnClickListener {
 
             val post = binding!!.post.text.toString()
 
-            var picUri : String = ""
-
-            var comments : MutableList<Comment> = mutableListOf()
-
-
-            if(imageUris.size == 0 && post.length == 0){
-
-                Toast.makeText(this,"내용이 없습니다. 내용을 입력해주세요",Toast.LENGTH_SHORT).show()
+            if (post.isEmpty() && imageUris.isEmpty()) {
+                Toast.makeText(this, "내용이 없습니다. 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
-            else if(imageUris.size > 0){
 
-                val storage = FirebaseStorage.getInstance()
-                val storageRef = storage.reference
+            val storage = FirebaseStorage.getInstance()
+            val storageRef = storage.reference
+            var picUri: String? = null
 
-                // 파일 이름 생성
-                val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-                val imageFileName = "IMG_" + timestamp + "_" + UUID.randomUUID().toString()
+            if (imageUris.isNotEmpty()) {
 
-                // 업로드할 파일 경로 설정
+                val imageFileName = "IMG_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}_${UUID.randomUUID()}"
                 val imageRef = storageRef.child("images/$imageFileName")
 
-                imageRef.putFile(imageUris.get(0)!!)
-                    .addOnSuccessListener {
-
+                imageRef.putFile(imageUris[0]!!)
+                    .addOnSuccessListener { taskSnapshot ->
                         imageRef.downloadUrl
                             .addOnSuccessListener { uri ->
 
-                                Log.e("TAG",uri.toString())
-
                                 picUri = uri.toString()
+                                val boardPost = BoardDetail(postId, userName, userImg, post, picUri!!, CurrentDateTime.getPostTime(), mutableListOf())
+                                postsRef.child(postId!!).setValue(boardPost)
 
-                                val boardPost = BoardDetail(postId,userName,userImg,post,picUri,CurrentDateTime.getPostTime(),comments)
+                                //업로드 화면 구현
 
-                                if (postId != null) {
-
-                                    postsRef.child(postId).setValue(boardPost)
-
-                                }
+                                finish()
 
                             }
-
                     }
                     .addOnFailureListener { e ->
-                        // 업로드 실패 시
+
                         Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+
                     }
+            }
+            else {
 
-                Toast.makeText(this,"게시글이 등록되었습니다.",Toast.LENGTH_SHORT).show()
-
+                val boardPost = BoardDetail(postId, userName, userImg, post, picUri, CurrentDateTime.getPostTime(), mutableListOf())
+                postsRef.child(postId!!).setValue(boardPost)
                 finish()
 
             }
-            else{
 
-                val boardPost = BoardDetail(postId,userName,userImg,post,picUri,CurrentDateTime.getPostTime(),comments)
-
-                if (postId != null) {
-                    postsRef.child(postId).setValue(boardPost)
-                }
-
-                Toast.makeText(this,"게시글이 등록되었습니다.",Toast.LENGTH_SHORT).show()
-
-                finish()
-
-
-            }
+            Toast.makeText(this, "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
 
 
 
-        }//업데이트 버튼
+        }//작성 완료 버튼 클릭 시
+
 
 
 
