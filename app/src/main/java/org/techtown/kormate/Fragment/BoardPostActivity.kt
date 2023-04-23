@@ -119,7 +119,7 @@ class BoardPostActivity : AppCompatActivity() {
 
                                 //업로드 화면 구현
 
-                                finish()
+                                complete()
 
                             }
                     }
@@ -129,15 +129,15 @@ class BoardPostActivity : AppCompatActivity() {
 
                     }
             }
+            //비동기적으로 구현됨
             else {
 
                 val boardPost = BoardDetail(postId, userName, userImg, post, picUri, CurrentDateTime.getPostTime(), mutableListOf())
                 postsRef.child(postId!!).setValue(boardPost)
-                finish()
+                complete()
 
             }
 
-            Toast.makeText(this, "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
 
 
 
@@ -145,7 +145,13 @@ class BoardPostActivity : AppCompatActivity() {
 
 
 
+    }
 
+
+    private fun complete(){
+
+        finish()
+        Toast.makeText(this, "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
 
     }
 
