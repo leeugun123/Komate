@@ -1,9 +1,11 @@
 package org.techtown.kormate
 
 import android.content.Context
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -61,11 +63,30 @@ class BoardActivity : AppCompatActivity() {
                 binding!!.dateTime.setText(list.dateTime)
 
 
-                Glide.with(this)
-                    .load(list.img)
-                    .into(binding!!.uploadImg)
+                if(list.img == null){
+
+                    val parentView = binding!!.uploadImg.parent as ViewGroup
+                    parentView.removeView(binding!!.uploadImg)
+                    Toast.makeText(this@BoardActivity, "이미지 뷰 삭제", Toast.LENGTH_SHORT).show()
+
+                    binding!!.commentLinear.setPadding(binding!!.commentLinear.paddingLeft,
+                        900, binding!!.commentLinear.paddingRight ,binding!!.commentLinear.paddingBottom)
+
+                }
+                else{
+
+
+                    Glide.with(this)
+                        .load(list.img)
+                        .into(binding!!.uploadImg)
+
+                }//img가 없을 경우 imgView 제거
+
+
 
                 binding!!.postText.setText(list.post)
+
+
 
 
                 Glide.with(this)
@@ -143,6 +164,9 @@ class BoardActivity : AppCompatActivity() {
 
 
     }
+
+
+
 
 
 }
