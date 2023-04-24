@@ -41,6 +41,8 @@ class BoardActivity : AppCompatActivity() {
 
         var list : BoardDetail? = null
 
+        val commentRecyclerView = binding!!.commentRecyclerView
+
         if (receiveData != null) {
 
             list = receiveData
@@ -49,12 +51,10 @@ class BoardActivity : AppCompatActivity() {
 
                 postId = list.postId
 
-
                 Glide.with(this)
                     .load(list.userImg)
                     .circleCrop()
                     .into(binding!!.userImg)
-
 
 
                 binding!!.userName.setText(list.userName)
@@ -74,7 +74,7 @@ class BoardActivity : AppCompatActivity() {
                     .into(binding!!.replyImg)
 
 
-                val commentRecyclerView = binding!!.commentRecyclerView
+
                 commentRecyclerView.layoutManager = LinearLayoutManager(this)
 
                 val commentList = list.comments
@@ -122,6 +122,7 @@ class BoardActivity : AppCompatActivity() {
 
                         Toast.makeText(this@BoardActivity, "댓글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
 
+                        commentRecyclerView.scrollToPosition(boardDetail.comments.size-1)
 
                     }
 
