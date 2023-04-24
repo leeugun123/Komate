@@ -2,6 +2,7 @@ package org.techtown.kormate.Fragment
 
 import android.Manifest
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.icu.util.Calendar
 import android.net.Uri
@@ -92,12 +93,21 @@ class BoardPostActivity : AppCompatActivity() {
 
         binding!!.updateButton.setOnClickListener {
 
+
+            // ProgressDialog 생성
+            val progressDialog = ProgressDialog(this)
+            progressDialog.setMessage("업로드 중")
+            progressDialog.setCancelable(false) // 사용자가 대화 상자를 닫을 수 없도록 설정
+            progressDialog.show()
+
+
             val post = binding!!.post.text.toString()
 
             if (post.isEmpty() && imageUris.isEmpty()) {
                 Toast.makeText(this, "내용이 없습니다. 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
 
             val storage = FirebaseStorage.getInstance()
             val storageRef = storage.reference
@@ -119,6 +129,9 @@ class BoardPostActivity : AppCompatActivity() {
 
                                 //업로드 화면 구현
 
+                                // ProgressDialog 닫기
+                                progressDialog.dismiss()
+
                                 complete()
 
                             }
@@ -134,6 +147,10 @@ class BoardPostActivity : AppCompatActivity() {
 
                 val boardPost = BoardDetail(postId, userName, userImg, post, picUri, CurrentDateTime.getPostTime(), mutableListOf())
                 postsRef.child(postId!!).setValue(boardPost)
+
+                // ProgressDialog 닫기
+                progressDialog.dismiss()
+
                 complete()
 
             }

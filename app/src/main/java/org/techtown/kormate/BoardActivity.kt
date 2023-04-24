@@ -124,6 +124,8 @@ class BoardActivity : AppCompatActivity() {
 
                         commentRecyclerView.scrollToPosition(boardDetail.comments.size-1)
 
+
+
                     }
 
                     override fun onCancelled(error: DatabaseError) {
