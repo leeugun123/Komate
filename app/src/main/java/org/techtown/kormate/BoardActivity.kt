@@ -81,6 +81,8 @@ class BoardActivity : AppCompatActivity() {
 
                 commentRecyclerView.adapter = CommentAdapter(commentList)
 
+                commentRecyclerView.scrollToPosition(commentList.size-1)
+                //리사이클러뷰 맨 밑으로 이동
 
             }
 
