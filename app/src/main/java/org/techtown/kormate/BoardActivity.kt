@@ -63,11 +63,11 @@ class BoardActivity : AppCompatActivity() {
                 binding!!.dateTime.setText(list.dateTime)
 
 
-                if(list.img == null){
+                if(list.img.size == 0){
 
                     val parentView = binding!!.uploadImg.parent as ViewGroup
                     parentView.removeView(binding!!.uploadImg)
-                    Toast.makeText(this@BoardActivity, "이미지 뷰 삭제", Toast.LENGTH_SHORT).show()
+
 
                     binding!!.commentLinear.setPadding(binding!!.commentLinear.paddingLeft,
                         900, binding!!.commentLinear.paddingRight ,binding!!.commentLinear.paddingBottom)
