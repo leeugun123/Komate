@@ -1,6 +1,5 @@
 package org.techtown.kormate.Fragment.Data
 
-import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
 
@@ -11,7 +10,7 @@ data class BoardDetail(
     var userName: String? = null,
     var userImg: String? = null,
     var post: String? = null,
-    var img: String? = null,
+    var img: Array<String?> = arrayOfNulls(3),
     var dateTime: String? = null,
 
     var comments: MutableList<Comment> = mutableListOf()
@@ -24,7 +23,7 @@ data class BoardDetail(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString(),
+        arrayOf(parcel.readString()),
         parcel.readString(),
 
         mutableListOf<Comment>().apply {
@@ -39,7 +38,7 @@ data class BoardDetail(
         parcel.writeString(userName)
         parcel.writeString(userImg)
         parcel.writeString(post)
-        parcel.writeString(img)
+        parcel.writeString(img.toString())
         parcel.writeString(dateTime)
         parcel.writeList(comments)
 
