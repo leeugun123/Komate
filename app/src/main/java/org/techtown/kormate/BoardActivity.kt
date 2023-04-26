@@ -5,6 +5,7 @@ import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -65,8 +66,14 @@ class BoardActivity : AppCompatActivity() {
 
                 if(list.img.size == 0){
 
-                    val parentView = binding!!.uploadImg.parent as ViewGroup
-                    parentView.removeView(binding!!.uploadImg)
+                    val parentView1 = binding!!.uploadImageView1.parent as ViewGroup
+                    parentView1.removeView(binding!!.uploadImageView1)
+
+                    val parentView2 = binding!!.uploadImageView2.parent as ViewGroup
+                    parentView2.removeView(binding!!.uploadImageView2)
+
+                    val parentView3 = binding!!.uploadImageView3.parent as ViewGroup
+                    parentView3.removeView(binding!!.uploadImageView3)
 
 
                     binding!!.commentLinear.setPadding(binding!!.commentLinear.paddingLeft,
@@ -75,17 +82,33 @@ class BoardActivity : AppCompatActivity() {
                 }
                 else{
 
-                    Glide.with(this)
-                        .load(list.img.get(0))
-                        .into(binding!!.uploadImg)
+                    val imageViewList = listOf(binding!!.uploadImageView1, binding!!.uploadImageView2, binding!!.uploadImageView3)
+
+                    for (i in list.img.indices) {
+
+                        Glide.with(this)
+                            .load(list.img[i])
+                            .override(1000,1000)
+                            .into(imageViewList[i])
+
+                        imageViewList[i].visibility = View.VISIBLE
+
+                    }
+
+                    for (i in list.img.size until imageViewList.size) {
+                        imageViewList[i].visibility = View.GONE
+                    }
+
+                    //코드가 뭔가 이해가 안 감.....
+
+
+
 
                 }//img가 없을 경우 imgView 제거
 
 
 
                 binding!!.postText.setText(list.post)
-
-
 
 
                 Glide.with(this)
