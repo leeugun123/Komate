@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
-import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +21,6 @@ import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.CurrentDateTime
 import org.techtown.kormate.Fragment.Adapter.GalaryAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
-import org.techtown.kormate.Fragment.Data.Comment
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -111,28 +109,99 @@ class BoardPostActivity : AppCompatActivity() {
 
             val storage = FirebaseStorage.getInstance()
             val storageRef = storage.reference
-            var picUri: String? = null
 
-            if (imageUris.isNotEmpty()) {
+            var picUri: MutableList<String> = mutableListOf()
 
-                val imageFileName = "IMG_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}_${UUID.randomUUID()}"
-                val imageRef = storageRef.child("images/$imageFileName")
+            //사진이 1장인 경우
+            if (imageUris.size > 0) {
 
-                imageRef.putFile(imageUris[0]!!)
+                val imageFileName1 = "IMG_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}_${UUID.randomUUID()}"
+                val imageRef1 = storageRef.child("images/$imageFileName1")
+
+
+                imageRef1.putFile(imageUris[0]!!)
                     .addOnSuccessListener { taskSnapshot ->
-                        imageRef.downloadUrl
+                        imageRef1.downloadUrl
                             .addOnSuccessListener { uri ->
 
-                                picUri = uri.toString()
-                                val boardPost = BoardDetail(postId, userName, userImg, post, picUri!!, CurrentDateTime.getPostTime(), mutableListOf())
-                                postsRef.child(postId!!).setValue(boardPost)
+                                picUri.add(uri.toString())
 
-                                //업로드 화면 구현
+                                //사진이 2장인 경우,
+                                if (imageUris.size > 1){
 
-                                // ProgressDialog 닫기
-                                progressDialog.dismiss()
+                                    val imageFileName2 = "IMG_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}_${UUID.randomUUID()}"
+                                    val imageRef2 = storageRef.child("images/$imageFileName2")
 
-                                complete()
+                                    imageRef2.putFile(imageUris[1]!!)
+                                        .addOnSuccessListener{ taskSnapshot ->
+                                            imageRef2.downloadUrl
+                                                .addOnSuccessListener{ uri ->
+
+                                                    picUri.add(uri.toString())
+
+                                                    //사진이 3장인 경우
+                                                    if(imageUris.size > 2){
+
+                                                        val imageFileName3 = "IMG_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}_${UUID.randomUUID()}"
+                                                        val imageRef3 = storageRef.child("images/$imageFileName3")
+
+                                                        imageRef3.putFile(imageUris[2]!!)
+                                                            .addOnSuccessListener { taskSnapshot ->
+                                                                imageRef3.downloadUrl
+                                                                    .addOnSuccessListener { uri ->
+
+                                                                        picUri.add(uri.toString())
+
+                                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userName, userImg, post, picUri!!, CurrentDateTime.getPostTime(), mutableListOf()))
+
+
+                                                                        progressDialog.dismiss()
+
+                                                                        complete()
+
+                                                                    }
+                                                            }
+
+
+
+
+                                                    }
+                                                    else{
+
+                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userName, userImg, post, picUri!!, CurrentDateTime.getPostTime(), mutableListOf()))
+
+                                                        progressDialog.dismiss()
+
+                                                        complete()
+
+                                                    }
+
+
+
+                                                }
+
+                                        }
+                                        .addOnFailureListener { e ->
+
+                                            Toast.makeText(this, "2번째 사진 업로드 실패 " + e.message, Toast.LENGTH_SHORT).show()
+
+                                        }
+
+
+
+
+                                }else{
+
+                                    postsRef.child(postId!!).setValue(BoardDetail(postId, userName, userImg, post, picUri!!, CurrentDateTime.getPostTime(), mutableListOf()))
+
+                                    progressDialog.dismiss()
+
+                                    complete()
+
+                                }
+
+
+
 
                             }
                     }
@@ -141,6 +210,11 @@ class BoardPostActivity : AppCompatActivity() {
                         Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
 
                     }
+
+
+
+
+
             }
             //비동기적으로 구현됨
             else {
@@ -188,6 +262,12 @@ class BoardPostActivity : AppCompatActivity() {
 
                 if (clipData != null) {
                     for (i in 0 until clipData.itemCount) {
+
+                        if(i == 3)
+                            break
+                        //3장부터는 허용 x
+
+
                         val uri = clipData.getItemAt(i).uri
                         imageUris.add(uri)
                     }

@@ -75,9 +75,8 @@ class BoardActivity : AppCompatActivity() {
                 }
                 else{
 
-
                     Glide.with(this)
-                        .load(list.img)
+                        .load(list.img.get(0))
                         .into(binding!!.uploadImg)
 
                 }//img가 없을 경우 imgView 제거
