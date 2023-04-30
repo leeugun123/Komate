@@ -26,7 +26,7 @@ data class Comment(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
 
-        parcel.readLong()
+        userId?.let { parcel.writeLong(it) }
         parcel.writeString(userName)
         parcel.writeString(userImg)
         parcel.writeString(text)
