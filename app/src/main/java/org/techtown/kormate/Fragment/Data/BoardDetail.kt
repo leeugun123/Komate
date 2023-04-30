@@ -21,6 +21,7 @@ data class BoardDetail(
 ): Parcelable {
 
     constructor(parcel: Parcel) : this(
+
         parcel.readString(),
         parcel.readLong(),
         parcel.readString(),
