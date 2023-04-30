@@ -2,7 +2,9 @@ package org.techtown.kormate.Fragment.Data
 
 import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class BoardDetail(
 
     var postId: String? = null,
@@ -36,7 +38,7 @@ data class BoardDetail(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
 
         parcel.writeString(postId)
-        parcel.writeLong(userId!!)
+        userId?.let { parcel.writeLong(it) }
         parcel.writeString(userName)
         parcel.writeString(userImg)
         parcel.writeString(post)
