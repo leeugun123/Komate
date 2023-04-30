@@ -48,6 +48,8 @@ class CommentAdapter(private val comments : MutableList<Comment>, private val us
                 binding.commentTime.text = comment.createdTime
                 binding.commentText.text= comment.text
 
+                Log.e("TAG",comment.userId.toString())
+
                 if(userId == comment.userId){
 
                     deleteButton.setOnClickListener {

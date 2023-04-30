@@ -124,6 +124,8 @@ class BoardActivity : AppCompatActivity() {
 
                 val commentList = list.comments
 
+                Log.e("TAG","유저"+ userId.toString())
+
                 commentRecyclerView.adapter = CommentAdapter(commentList, userId!!)
 
                 commentRecyclerView.scrollToPosition(commentList.size-1)

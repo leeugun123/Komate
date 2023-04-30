@@ -33,12 +33,14 @@ class previewAdapter(private val boardList : List<BoardDetail>) : RecyclerView.A
 
             }
 
-        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         val binding = BoardpreviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
+
+
     }
 
 
