@@ -54,13 +54,16 @@ class BoardPostActivity : AppCompatActivity() {
 
         var userName : String? = null
         var userImg: String? = null
+        var userId : Long? = null
 
         UserApiClient.instance.me { user, error ->
 
             userName = user?.kakaoAccount?.profile?.nickname
             userImg = user?.kakaoAccount?.profile?.profileImageUrl
+            userId = user?.id
 
-        }//viewModel를 통해 가져오는 것으로 수정
+        }//카카오톡을 통해서 사용자 고유 id 가져오기
+
 
         binding!!.uploadImgButton.setOnClickListener {
 
@@ -112,19 +115,6 @@ class BoardPostActivity : AppCompatActivity() {
             val storage = FirebaseStorage.getInstance()
             val storageRef = storage.reference
 
-            var userId : Long? = null
-
-            UserApiClient.instance.me { user, error ->
-
-                if (error != null) {
-                    Log.e(TAG, "카카오 사용자 정보 요청 실패", error)
-                }
-                else if (user != null) {
-                    userId = user.id
-                    // 여기에서 user.id 를 사용하여 사용자의 ID 값을 가져올 수 있습니다.
-                }
-
-            }//카카오톡을 통해서 사용자 고유 id 가져오기
 
 
 
@@ -180,7 +170,6 @@ class BoardPostActivity : AppCompatActivity() {
 
                                                                     }
                                                             }
-
 
 
 
