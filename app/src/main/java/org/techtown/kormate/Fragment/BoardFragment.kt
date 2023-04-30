@@ -58,6 +58,7 @@ class BoardFragment : Fragment() {
                         recentList.add(BoardDetail(
 
                             post.postId,
+                            post.userId,
                             post.userName,
                             post.userImg,
                             post.post,

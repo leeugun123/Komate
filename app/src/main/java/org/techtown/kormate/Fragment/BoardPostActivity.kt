@@ -3,6 +3,7 @@ package org.techtown.kormate.Fragment
 import android.Manifest
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -12,6 +13,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -110,6 +112,23 @@ class BoardPostActivity : AppCompatActivity() {
             val storage = FirebaseStorage.getInstance()
             val storageRef = storage.reference
 
+            var userId : Long? = null
+
+            UserApiClient.instance.me { user, error ->
+
+                if (error != null) {
+                    Log.e(TAG, "카카오 사용자 정보 요청 실패", error)
+                }
+                else if (user != null) {
+                    userId = user.id
+                    // 여기에서 user.id 를 사용하여 사용자의 ID 값을 가져올 수 있습니다.
+                }
+
+            }//카카오톡을 통해서 사용자 고유 id 가져오기
+
+
+
+
             var picUri: MutableList<String> = mutableListOf()
 
             //사진이 1장인 경우
@@ -152,7 +171,7 @@ class BoardPostActivity : AppCompatActivity() {
 
                                                                         picUri.add(uri.toString())
 
-                                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userName, userImg, post, picUri!!, CurrentDateTime.getPostTime(), mutableListOf()))
+                                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userId ,userName, userImg, post, picUri!!, CurrentDateTime.getPostTime(), mutableListOf()))
 
 
                                                                         progressDialog.dismiss()
@@ -168,7 +187,7 @@ class BoardPostActivity : AppCompatActivity() {
                                                     }
                                                     else{
 
-                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userName, userImg, post, picUri!!, CurrentDateTime.getPostTime(), mutableListOf()))
+                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userId,userName, userImg, post, picUri!!, CurrentDateTime.getPostTime(), mutableListOf()))
 
                                                         progressDialog.dismiss()
 
@@ -192,7 +211,7 @@ class BoardPostActivity : AppCompatActivity() {
 
                                 }else{
 
-                                    postsRef.child(postId!!).setValue(BoardDetail(postId, userName, userImg, post, picUri!!, CurrentDateTime.getPostTime(), mutableListOf()))
+                                    postsRef.child(postId!!).setValue(BoardDetail(postId, userId, userName, userImg, post, picUri!!, CurrentDateTime.getPostTime(), mutableListOf()))
 
                                     progressDialog.dismiss()
 
@@ -219,7 +238,7 @@ class BoardPostActivity : AppCompatActivity() {
             //비동기적으로 구현됨
             else {
 
-                val boardPost = BoardDetail(postId, userName, userImg, post, picUri, CurrentDateTime.getPostTime(), mutableListOf())
+                val boardPost = BoardDetail(postId, userId, userName, userImg, post, picUri, CurrentDateTime.getPostTime(), mutableListOf())
                 postsRef.child(postId!!).setValue(boardPost)
 
                 // ProgressDialog 닫기

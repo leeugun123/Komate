@@ -27,7 +27,6 @@ class previewAdapter(private val boardList : List<BoardDetail>) : RecyclerView.A
                 val intent = Intent(context,BoardActivity::class.java)
 
 
-
                 intent.putExtra("postIntel",boardList[position])
                 context.startActivity(intent)
 
@@ -59,6 +58,7 @@ class previewAdapter(private val boardList : List<BoardDetail>) : RecyclerView.A
             concetPost = list.post.toString()
 
         holder.binding.post.text = concetPost
+
 
     }
 

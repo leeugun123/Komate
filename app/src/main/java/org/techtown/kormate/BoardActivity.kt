@@ -1,7 +1,6 @@
 package org.techtown.kormate
 
 import android.content.Context
-import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -41,6 +40,7 @@ class BoardActivity : AppCompatActivity() {
         val receiveData  = intent.getParcelableExtra<BoardDetail>("postIntel")
 
         var postId : String? = null
+        var userId : Long? = null
 
         var list : BoardDetail? = null
 
@@ -53,6 +53,8 @@ class BoardActivity : AppCompatActivity() {
             if (list != null) {
 
                 postId = list.postId
+
+                userId = list.userId
 
                 Glide.with(this)
                     .load(list.userImg)
@@ -149,8 +151,8 @@ class BoardActivity : AppCompatActivity() {
 
                         val boardDetail = snapshot.getValue(BoardDetail::class.java)
 
-                        val comment = Comment(list?.userName,list?.userImg
-                        ,binding!!.reply.text.toString(),CurrentDateTime.getCommentTime())
+                        val comment = Comment(userId ,list?.userName ,list?.userImg
+                        ,binding!!.reply.text.toString() ,CurrentDateTime.getCommentTime())
 
                         boardDetail!!.comments.add(comment)
 

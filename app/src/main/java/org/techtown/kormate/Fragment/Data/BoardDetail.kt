@@ -6,6 +6,7 @@ import android.os.Parcelable
 data class BoardDetail(
 
     var postId: String? = null,
+    var userId: Long? = null,
     var userName: String? = null,
     var userImg: String? = null,
     var post: String? = null,
@@ -19,6 +20,7 @@ data class BoardDetail(
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
+        parcel.readLong(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -32,13 +34,16 @@ data class BoardDetail(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+
         parcel.writeString(postId)
+        parcel.writeLong(userId!!)
         parcel.writeString(userName)
         parcel.writeString(userImg)
         parcel.writeString(post)
         parcel.writeStringList(img)
         parcel.writeString(dateTime)
         parcel.writeList(comments)
+
     }
 
     override fun describeContents(): Int {
