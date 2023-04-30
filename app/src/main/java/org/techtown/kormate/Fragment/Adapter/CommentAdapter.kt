@@ -1,13 +1,18 @@
 package org.techtown.kormate.Fragment.Adapter
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Data.Comment
 import org.techtown.kormate.databinding.CommentimgBinding
 
-class CommentAdapter(private val comments : MutableList<Comment>) :
+class CommentAdapter(private val comments : MutableList<Comment>, private val userId : Long) :
     RecyclerView.Adapter<CommentAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentAdapter.ViewHolder {
@@ -29,6 +34,7 @@ class CommentAdapter(private val comments : MutableList<Comment>) :
 
         RecyclerView.ViewHolder(binding.root){
 
+            val deleteButton : ImageButton = binding.deleteButton
 
             fun bind(comment : Comment){
 
@@ -42,9 +48,25 @@ class CommentAdapter(private val comments : MutableList<Comment>) :
                 binding.commentTime.text = comment.createdTime
                 binding.commentText.text= comment.text
 
+                if(userId == comment.userId){
+
+                    deleteButton.setOnClickListener {
+
+
+                    }
+
+
+                }
+                else{
+                    deleteButton.visibility = View.GONE
+                }
+
+
 
 
             }
+
+
 
 
         }

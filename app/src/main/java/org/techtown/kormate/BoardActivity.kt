@@ -61,9 +61,9 @@ class BoardActivity : AppCompatActivity() {
                     .circleCrop()
                     .into(binding!!.userImg)
 
-
                 binding!!.userName.setText(list.userName)
                 binding!!.dateTime.setText(list.dateTime)
+
 
 
                 if(list.img.size == 0){
@@ -124,7 +124,7 @@ class BoardActivity : AppCompatActivity() {
 
                 val commentList = list.comments
 
-                commentRecyclerView.adapter = CommentAdapter(commentList)
+                commentRecyclerView.adapter = CommentAdapter(commentList, userId!!)
 
                 commentRecyclerView.scrollToPosition(commentList.size-1)
                 //리사이클러뷰 맨 밑으로 이동
@@ -157,7 +157,10 @@ class BoardActivity : AppCompatActivity() {
                         boardDetail!!.comments.add(comment)
 
                         objRef.setValue(boardDetail)
-                        binding!!.commentRecyclerView.adapter = CommentAdapter(boardDetail!!.comments)
+
+                        binding!!.commentRecyclerView.adapter = CommentAdapter(boardDetail!!.comments,
+                            userId!!
+                        )
 
 
                         // editText 초기화 및 키보드 숨기기
