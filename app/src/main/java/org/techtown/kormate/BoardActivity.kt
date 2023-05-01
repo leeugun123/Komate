@@ -126,7 +126,7 @@ class BoardActivity : AppCompatActivity() {
 
                 Log.e("TAG","유저"+ userId.toString())
 
-                commentRecyclerView.adapter = CommentAdapter(commentList, userId!!)
+                commentRecyclerView.adapter = CommentAdapter(commentList, userId!!,postId.toString())
 
                 commentRecyclerView.scrollToPosition(commentList.size-1)
                 //리사이클러뷰 맨 밑으로 이동
@@ -161,7 +161,7 @@ class BoardActivity : AppCompatActivity() {
                         objRef.setValue(boardDetail)
 
                         binding!!.commentRecyclerView.adapter = CommentAdapter(boardDetail!!.comments,
-                            userId!!
+                            userId!!,postId
                         )
 
                         // editText 초기화 및 키보드 숨기기
