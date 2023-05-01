@@ -153,7 +153,7 @@ class BoardActivity : AppCompatActivity() {
 
                         val boardDetail = snapshot.getValue(BoardDetail::class.java)
 
-                        val comment = Comment(userId ,list?.userName ,list?.userImg
+                        val comment = Comment(objRef.push().key,userId ,list?.userName ,list?.userImg
                         ,binding!!.reply.text.toString() ,CurrentDateTime.getCommentTime())
 
                         boardDetail!!.comments.add(comment)
@@ -163,7 +163,6 @@ class BoardActivity : AppCompatActivity() {
                         binding!!.commentRecyclerView.adapter = CommentAdapter(boardDetail!!.comments,
                             userId!!
                         )
-
 
                         // editText 초기화 및 키보드 숨기기
                         binding!!.reply.text.clear()
