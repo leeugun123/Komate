@@ -27,6 +27,8 @@ class previewAdapter(private val boardList : List<BoardDetail>) : RecyclerView.A
                 val intent = Intent(context,BoardActivity::class.java)
 
 
+                Log.e("TAG",boardList[position].comments.size.toString() +"어뎁터")
+
                 intent.putExtra("postIntel",boardList[position])
                 context.startActivity(intent)
 

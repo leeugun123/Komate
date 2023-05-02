@@ -1,12 +1,15 @@
 package org.techtown.kormate.Fragment.Adapter
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
@@ -15,6 +18,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.kakao.sdk.user.UserApiClient
+import org.techtown.kormate.CurrentDateTime
+import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.Fragment.Data.Comment
 import org.techtown.kormate.databinding.CommentimgBinding
 
@@ -30,10 +35,20 @@ class CommentAdapter(private val comments : MutableList<Comment>, private val us
 
     override fun onBindViewHolder(holder: CommentAdapter.ViewHolder, position: Int) {
 
+
+        Log.e("TAG",position.toString())
+
         val comment = comments[position]
+
+
+
         holder.bind(comment,position)
 
+
+
+
     }
+
 
     override fun getItemCount(): Int = comments.size
 
@@ -55,7 +70,7 @@ class CommentAdapter(private val comments : MutableList<Comment>, private val us
                 binding.commentTime.text = comment.createdTime
                 binding.commentText.text= comment.text
 
-                Log.e("TAG",comment.userId.toString())
+                //Log.e("TAG",comment.userId.toString())
 
                 if(userId == comment.userId){
 
@@ -64,6 +79,7 @@ class CommentAdapter(private val comments : MutableList<Comment>, private val us
                         val commentsRef = Firebase.database.reference.child("posts").child(postId).child("comments")
                         commentsRef.orderByChild("id").equalTo(comment.id.toString()).addListenerForSingleValueEvent(object :
                             ValueEventListener {
+
                             override fun onDataChange(snapshot: DataSnapshot) {
 
                                 for (data in snapshot.children) {
@@ -71,17 +87,22 @@ class CommentAdapter(private val comments : MutableList<Comment>, private val us
                                     data.ref.removeValue().addOnSuccessListener {
                                         // 댓글 삭제 성공 시 comments 리스트에서도 해당 댓글 제거
                                         val comment = data.getValue(Comment::class.java)
+
                                         comment?.let {
 
                                             comments.remove(it)
+
                                             notifyItemRemoved(pos)
-                                            notifyItemRangeChanged(pos, comments.size - pos)
+
+
                                             Toast.makeText(itemView.context, "댓글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
 
                                         }
+
                                     }
 
                                 }
+
 
                             }
 

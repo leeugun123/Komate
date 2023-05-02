@@ -119,12 +119,16 @@ class BoardActivity : AppCompatActivity() {
                     .into(binding!!.replyImg)
 
 
-
                 commentRecyclerView.layoutManager = LinearLayoutManager(this)
 
                 val commentList = list.comments
 
-                Log.e("TAG","유저"+ userId.toString())
+               // Log.e("TAG","리스트 크기" + commentList.size.toString())
+
+                //여기서 전달 되는 리스트 크기가 변하지 않음
+
+
+              //  Log.e("TAG","유저"+ userId.toString())
 
                 commentRecyclerView.adapter = CommentAdapter(commentList, userId!!,postId.toString())
 
