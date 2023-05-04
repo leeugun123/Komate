@@ -161,7 +161,7 @@ class BoardPostActivity : AppCompatActivity() {
 
                                                                         picUri.add(uri.toString())
 
-                                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userId ,userName, userImg, post, picUri!!, CurrentDateTime.getPostTime(), mutableListOf()))
+                                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userId ,userName, userImg, post, picUri!!, CurrentDateTime.getPostTime()))
 
 
                                                                         progressDialog.dismiss()
@@ -176,7 +176,7 @@ class BoardPostActivity : AppCompatActivity() {
                                                     }
                                                     else{
 
-                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userId,userName, userImg, post, picUri!!, CurrentDateTime.getPostTime(), mutableListOf()))
+                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userId,userName, userImg, post, picUri!!, CurrentDateTime.getPostTime()))
 
                                                         progressDialog.dismiss()
 
@@ -200,7 +200,7 @@ class BoardPostActivity : AppCompatActivity() {
 
                                 }else{
 
-                                    postsRef.child(postId!!).setValue(BoardDetail(postId, userId, userName, userImg, post, picUri!!, CurrentDateTime.getPostTime(), mutableListOf()))
+                                    postsRef.child(postId!!).setValue(BoardDetail(postId, userId, userName, userImg, post, picUri!!, CurrentDateTime.getPostTime()))
 
                                     progressDialog.dismiss()
 
@@ -227,7 +227,7 @@ class BoardPostActivity : AppCompatActivity() {
             //비동기적으로 구현됨
             else {
 
-                val boardPost = BoardDetail(postId, userId, userName, userImg, post, picUri, CurrentDateTime.getPostTime(), mutableListOf())
+                val boardPost = BoardDetail(postId, userId, userName, userImg, post, picUri, CurrentDateTime.getPostTime())
                 postsRef.child(postId!!).setValue(boardPost)
 
                 // ProgressDialog 닫기

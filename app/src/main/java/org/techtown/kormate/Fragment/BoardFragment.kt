@@ -64,14 +64,12 @@ class BoardFragment : Fragment() {
                             post.post,
                             post.img,
                             post.dateTime,
-                            post.comments
+
 
                             //여기서 comment를 추가해준다.
                         ))
 
-                        Log.e("TAG","프래그먼트 " + post.comments.size.toString())
-                        //여기서 comments의 크기가 2로 들어감
-                        //중간 데이터를 삭제하는 경우,
+
 
 
                     }

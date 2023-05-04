@@ -76,6 +76,7 @@ class CommentAdapter(private val comments : MutableList<Comment>, private val us
 
                     deleteButton.setOnClickListener {
 
+                        /*
                         val commentsRef = Firebase.database.reference.child("posts").child(postId).child("comments")
                         commentsRef.orderByChild("id").equalTo(comment.id.toString()).addListenerForSingleValueEvent(object :
                             ValueEventListener {
@@ -112,6 +113,8 @@ class CommentAdapter(private val comments : MutableList<Comment>, private val us
 
 
                         })
+
+                        */
 
                     }
 

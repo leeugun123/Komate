@@ -15,7 +15,7 @@ data class BoardDetail(
     var img: MutableList<String> = mutableListOf(),
     var dateTime: String? = null,
 
-    var comments: MutableList<Comment> = mutableListOf()
+
 
 
 ): Parcelable {
@@ -30,9 +30,7 @@ data class BoardDetail(
         parcel.createStringArrayList()?.toMutableList() as MutableList<String>,
         parcel.readString(),
 
-        mutableListOf<Comment>().apply {
-            parcel.readList(this, Comment::class.java.classLoader)
-        }
+
 
     )
 
@@ -45,7 +43,7 @@ data class BoardDetail(
         parcel.writeString(post)
         parcel.writeStringList(img)
         parcel.writeString(dateTime)
-        parcel.writeList(comments)
+
 
     }
 

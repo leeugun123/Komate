@@ -25,6 +25,8 @@ class BoardActivity : AppCompatActivity() {
 
     private var binding : ActivityBoardBinding? = null
 
+    private var commentSize : Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,6 +37,10 @@ class BoardActivity : AppCompatActivity() {
             finish()
         }//뒤로 가기
 
+
+
+
+
         //intent 받기
 
         val receiveData  = intent.getParcelableExtra<BoardDetail>("postIntel")
@@ -44,7 +50,9 @@ class BoardActivity : AppCompatActivity() {
 
         var list : BoardDetail? = null
 
+
         val commentRecyclerView = binding!!.commentRecyclerView
+        commentRecyclerView.layoutManager = LinearLayoutManager(this)
 
         if (receiveData != null) {
 
@@ -104,14 +112,10 @@ class BoardActivity : AppCompatActivity() {
                     //코드가 뭔가 이해가 안 감.....
 
 
-
-
                 }//img가 없을 경우 imgView 제거
 
 
-
                 binding!!.postText.setText(list.post)
-
 
                 Glide.with(this)
                     .load(list.userImg)
@@ -119,29 +123,48 @@ class BoardActivity : AppCompatActivity() {
                     .into(binding!!.replyImg)
 
 
-                commentRecyclerView.layoutManager = LinearLayoutManager(this)
-
-                val commentList = list.comments
-
-               // Log.e("TAG","리스트 크기" + commentList.size.toString())
-
-                //여기서 전달 되는 리스트 크기가 변하지 않음
-
-
-              //  Log.e("TAG","유저"+ userId.toString())
-
-                commentRecyclerView.adapter = CommentAdapter(commentList, userId!!,postId.toString())
-
-                commentRecyclerView.scrollToPosition(commentList.size-1)
-                //리사이클러뷰 맨 밑으로 이동
 
             }
+
+            val commentsRef = Firebase.database.reference.child("posts").child(postId.toString()).child("comments")
+
+            commentsRef.addValueEventListener(object : ValueEventListener{
+
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                    val commentList = mutableListOf<Comment>()
+
+                    for(shapshot in dataSnapshot.children){
+
+                        val comment = shapshot.getValue(Comment::class.java)
+
+                        if(comment != null){
+                            commentList.add(comment)
+                        }
+
+                    }
+
+                    commentSize = commentList.size
+                    commentRecyclerView.adapter = CommentAdapter(commentList , userId!!, postId.toString())
+                    commentRecyclerView.scrollToPosition(commentList.size-1)
+
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                    Log.e("TAG","댓글 조회 실패")
+
+                }
+
+            })
+
+
+
 
 
         }
 
-        val postsRef = Firebase.database.reference.child("posts")
-        //댓글 업데이트를 위한 파이베이스 변수
 
         binding!!.post.setOnClickListener {
 
@@ -149,49 +172,28 @@ class BoardActivity : AppCompatActivity() {
 
                 Log.e("TAG","등록")
 
-                val objRef = postsRef.child(postId)
+                val objRef = Firebase.database.reference.child("posts").child(postId).child("comments")
 
-                objRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                val objCommentRef = objRef.child(objRef.push().key.toString())
 
-                    override fun onDataChange(snapshot: DataSnapshot) {
+                val comment = Comment(userId ,list?.userName ,list?.userImg
+                    ,binding!!.reply.text.toString() ,CurrentDateTime.getCommentTime())
 
-                        val boardDetail = snapshot.getValue(BoardDetail::class.java)
+                objCommentRef.setValue(comment)
 
-                        val comment = Comment(objRef.push().key,userId ,list?.userName ,list?.userImg
-                        ,binding!!.reply.text.toString() ,CurrentDateTime.getCommentTime())
+                binding!!.reply.text.clear()
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding!!.reply.windowToken, 0)
 
-                        boardDetail!!.comments.add(comment)
+                Toast.makeText(this@BoardActivity, "댓글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
 
-                        objRef.setValue(boardDetail)
-
-                        binding!!.commentRecyclerView.adapter = CommentAdapter(boardDetail!!.comments,
-                            userId!!,postId
-                        )
-
-                        // editText 초기화 및 키보드 숨기기
-                        binding!!.reply.text.clear()
-                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.hideSoftInputFromWindow(binding!!.reply.windowToken, 0)
-
-                        Toast.makeText(this@BoardActivity, "댓글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
-
-                        commentRecyclerView.scrollToPosition(boardDetail.comments.size-1)
-
-
-
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-
-
-                    }
-
-                })
+                commentSize += 1
+                commentRecyclerView.scrollToPosition(commentSize-1)
 
             }
 
-        }//작성하기
-
+        }//댓글 등록
+        //1개만 등록되지 왜?
 
 
 
