@@ -5,16 +5,24 @@ import android.os.Parcelable
 
 data class Comment(
 
+    var id : String? = null,
+
     var userId: Long? = null,
+
     var userName: String? = null,
+
     var userImg: String? = null,
+
     var text: String? = null,
+
     var createdTime: String? = null
+
 
 ): Parcelable {
 
     constructor(parcel: Parcel) : this(
 
+        parcel.readString(),
         parcel.readLong(),
         parcel.readString(),
         parcel.readString(),
@@ -27,6 +35,7 @@ data class Comment(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
 
 
+        parcel.writeString(id)
         userId?.let { parcel.writeLong(it) }
         parcel.writeString(userName)
         parcel.writeString(userImg)

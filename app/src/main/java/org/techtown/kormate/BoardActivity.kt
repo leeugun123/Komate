@@ -15,7 +15,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import org.techtown.kormate.Fragment.Adapter.CommentAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.Fragment.Data.Comment
@@ -174,9 +173,11 @@ class BoardActivity : AppCompatActivity() {
 
                 val objRef = Firebase.database.reference.child("posts").child(postId).child("comments")
 
-                val objCommentRef = objRef.child(objRef.push().key.toString())
+                val id = objRef.push().key.toString()
 
-                val comment = Comment(userId ,list?.userName ,list?.userImg
+                val objCommentRef = objRef.child(id)
+
+                val comment = Comment(id, list?.userId ,list?.userName ,list?.userImg
                     ,binding!!.reply.text.toString() ,CurrentDateTime.getCommentTime())
 
                 objCommentRef.setValue(comment)
