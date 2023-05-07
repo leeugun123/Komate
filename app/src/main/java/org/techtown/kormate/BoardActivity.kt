@@ -218,6 +218,11 @@ class BoardActivity : AppCompatActivity() {
 
                         Toast.makeText(context, "편집 기능은 아직 개발 중 입니다. ㅎㅎ", Toast.LENGTH_SHORT).show()
 
+
+
+
+
+
                         true
                     }//편집 기능 선택
 

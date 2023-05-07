@@ -17,16 +17,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kormate"
         tools:targetApi="31">
-
+        <activity
+            android:name=".BoardEditActivity"
+            android:exported="false" />
         <activity
             android:name=".BoardActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
-
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Fragment.BoardPostActivity"
             android:exported="false" />
-
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
@@ -41,11 +41,9 @@
                     android:scheme="kakao1a987af33c38144b391fffdf4e43f62" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
-
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -55,7 +53,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:exported="true" />

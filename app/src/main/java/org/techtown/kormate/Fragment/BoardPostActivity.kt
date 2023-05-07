@@ -36,7 +36,6 @@ class BoardPostActivity : AppCompatActivity() {
 
     private var imageUris = mutableListOf<Uri>()
 
-
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,13 +95,11 @@ class BoardPostActivity : AppCompatActivity() {
 
         binding!!.updateButton.setOnClickListener {
 
-
             // ProgressDialog 생성
             val progressDialog = ProgressDialog(this)
             progressDialog.setMessage("업로드 중")
             progressDialog.setCancelable(false) // 사용자가 대화 상자를 닫을 수 없도록 설정
             progressDialog.show()
-
 
             val post = binding!!.post.text.toString()
 
@@ -111,12 +108,8 @@ class BoardPostActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-
             val storage = FirebaseStorage.getInstance()
             val storageRef = storage.reference
-
-
-
 
 
             var picUri: MutableList<String> = mutableListOf()
@@ -126,7 +119,6 @@ class BoardPostActivity : AppCompatActivity() {
 
                 val imageFileName1 = "IMG_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}_${UUID.randomUUID()}"
                 val imageRef1 = storageRef.child("images/$imageFileName1")
-
 
                 imageRef1.putFile(imageUris[0]!!)
                     .addOnSuccessListener { taskSnapshot ->
