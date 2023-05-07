@@ -4,9 +4,13 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -15,6 +19,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.gun0912.tedpermission.provider.TedPermissionProvider.context
+import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Adapter.CommentAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.Fragment.Data.Comment
@@ -159,10 +165,64 @@ class BoardActivity : AppCompatActivity() {
             })
 
 
+        }
 
+
+        UserApiClient.instance.me { user, error ->
+
+            userId = user?.id
+
+            if(!userId!!.equals(list!!.userId))
+                binding!!.edit.visibility = View.GONE
+
+        }//카카오톡을 통해서 사용자 고유 id 가져오기
+
+
+
+
+        binding!!.edit.setOnClickListener {
+
+          val popupMenu = PopupMenu(this,it)
+
+            popupMenu.menuInflater.inflate(R.menu.post_menu,popupMenu.menu)
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when(menuItem.itemId){
+
+                    R.id.action_delete ->{
+
+
+
+
+
+
+
+                        true
+                    }//삭제 기능 구현
+
+                    R.id.action_edit ->{
+
+                        Toast.makeText(context, "편집 기능은 아직 개발 중 입니다. ㅎㅎ", Toast.LENGTH_SHORT).show()
+
+                        true
+                    }//편집 기능 선택
+
+
+                    else -> false
+                    //아무것도 선택 x
+                }
+
+            }
+
+            popupMenu.show()
 
 
         }
+
+
+
+
+
+
 
 
         binding!!.post.setOnClickListener {
