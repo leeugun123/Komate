@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -191,8 +192,13 @@ class BoardActivity : AppCompatActivity() {
                     R.id.action_delete ->{
 
 
+                        val databaseReference = FirebaseDatabase.getInstance().reference.child("posts")
+                        databaseReference.child(postId.toString()).removeValue()
+
+                        Toast.makeText(context, "게시판이 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
 
 
+                        finish()
 
 
 
