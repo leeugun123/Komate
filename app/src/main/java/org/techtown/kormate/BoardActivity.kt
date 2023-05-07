@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
@@ -191,15 +192,23 @@ class BoardActivity : AppCompatActivity() {
 
                     R.id.action_delete ->{
 
+                        val builder = AlertDialog.Builder(this)
+                        builder.setTitle("이 게시판을 삭제하시겠습니까?")
 
-                        val databaseReference = FirebaseDatabase.getInstance().reference.child("posts")
-                        databaseReference.child(postId.toString()).removeValue()
+                        builder.setPositiveButton("예") { dialog, which ->
 
-                        Toast.makeText(context, "게시판이 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
+                            val databaseReference = FirebaseDatabase.getInstance().reference.child("posts")
+                            databaseReference.child(postId.toString()).removeValue()
+                            Toast.makeText(context, "게시판이 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
 
+                            finish()
 
-                        finish()
+                        }
+                        builder.setNegativeButton("아니오") { dialog, which ->
 
+                        }
+
+                        builder.create().show()
 
 
                         true
