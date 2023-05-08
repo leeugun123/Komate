@@ -74,10 +74,12 @@ class BoardPostActivity : AppCompatActivity() {
 
                     override fun onPermissionGranted() {
                         // 권한이 허용되면 갤러리에서 이미지를 선택합니다.
-                        val intent = Intent(Intent.ACTION_PICK , MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                         intent.type = "image/*"
                         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
                         startActivityForResult(Intent.createChooser(intent, "Select images"), REQUEST_CODE_PICK_IMAGES)
+
 
 
 
@@ -270,9 +272,11 @@ class BoardPostActivity : AppCompatActivity() {
                 if (clipData != null) {
                     for (i in 0 until clipData.itemCount) {
 
-                        if(i == 3)
-                            break
-                        //3장부터는 허용 x
+                        if(i == 3){
+                            Toast.makeText(this, "사진은 3장까지만 선택 가능합니다.", Toast.LENGTH_SHORT).show()
+                            return
+                        }//사진 개수 제한
+
 
 
                         val uri = clipData.getItemAt(i).uri
