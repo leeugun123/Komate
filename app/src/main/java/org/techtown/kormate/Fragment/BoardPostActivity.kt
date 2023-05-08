@@ -36,6 +36,7 @@ class BoardPostActivity : AppCompatActivity() {
     private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
 
     private var imageUris = mutableListOf<Uri>()
+    private var adapter : GalaryAdapter? = null
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +68,6 @@ class BoardPostActivity : AppCompatActivity() {
 
         binding!!.uploadImgButton.setOnClickListener {
 
-            imageUris.clear()
 
             TedPermission.create()
                 .setPermissionListener(object : PermissionListener {
@@ -114,7 +114,6 @@ class BoardPostActivity : AppCompatActivity() {
             progressDialog.setMessage("업로드 중")
             progressDialog.setCancelable(false) // 사용자가 대화 상자를 닫을 수 없도록 설정
             progressDialog.show()
-
 
 
             val storage = FirebaseStorage.getInstance()
@@ -263,6 +262,8 @@ class BoardPostActivity : AppCompatActivity() {
 
         if (requestCode == REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
 
+            imageUris.clear()
+
             Log.e("TAG","응답됨")
 
             if (data?.clipData != null) {
@@ -273,8 +274,12 @@ class BoardPostActivity : AppCompatActivity() {
                     for (i in 0 until clipData.itemCount) {
 
                         if(i == 3){
+
+                            //4장 이상 갤러리에서 선택했을때 3장까지만 자름.
+                            handleSelectedImages(imageUris)
                             Toast.makeText(this, "사진은 3장까지만 선택 가능합니다.", Toast.LENGTH_SHORT).show()
                             return
+
                         }//사진 개수 제한
 
 
@@ -294,6 +299,7 @@ class BoardPostActivity : AppCompatActivity() {
 
             }
 
+            //정상적으로 사진을 골랐을때
             handleSelectedImages(imageUris)
 
 
@@ -303,7 +309,9 @@ class BoardPostActivity : AppCompatActivity() {
 
     private fun handleSelectedImages(imageUris: List<Uri>) {
 
-        val adapter = GalaryAdapter(imageUris)
+        adapter = GalaryAdapter(imageUris)
+
+        adapter!!.notifyDataSetChanged()
 
         Log.e("TAG","갤러리 선택됨")
 
