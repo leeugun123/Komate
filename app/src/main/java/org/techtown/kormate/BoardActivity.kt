@@ -243,8 +243,6 @@ class BoardActivity : AppCompatActivity() {
 
 
 
-
-
         binding!!.post.setOnClickListener {
 
             if(postId != null){

@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -73,7 +74,7 @@ class BoardPostActivity : AppCompatActivity() {
 
                     override fun onPermissionGranted() {
                         // 권한이 허용되면 갤러리에서 이미지를 선택합니다.
-                        val intent = Intent(Intent.ACTION_GET_CONTENT)
+                        val intent = Intent(Intent.ACTION_PICK , MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                         intent.type = "image/*"
                         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                         startActivityForResult(Intent.createChooser(intent, "Select images"), REQUEST_CODE_PICK_IMAGES)
