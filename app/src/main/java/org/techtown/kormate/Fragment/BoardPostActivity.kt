@@ -66,6 +66,8 @@ class BoardPostActivity : AppCompatActivity() {
 
         binding!!.uploadImgButton.setOnClickListener {
 
+            imageUris.clear()
+
             TedPermission.create()
                 .setPermissionListener(object : PermissionListener {
 
@@ -75,7 +77,7 @@ class BoardPostActivity : AppCompatActivity() {
                         intent.type = "image/*"
                         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                         startActivityForResult(Intent.createChooser(intent, "Select images"), REQUEST_CODE_PICK_IMAGES)
-                        
+
 
 
                     }
@@ -95,11 +97,6 @@ class BoardPostActivity : AppCompatActivity() {
 
         binding!!.updateButton.setOnClickListener {
 
-            // ProgressDialog 생성
-            val progressDialog = ProgressDialog(this)
-            progressDialog.setMessage("업로드 중")
-            progressDialog.setCancelable(false) // 사용자가 대화 상자를 닫을 수 없도록 설정
-            progressDialog.show()
 
             val post = binding!!.post.text.toString()
 
@@ -107,6 +104,15 @@ class BoardPostActivity : AppCompatActivity() {
                 Toast.makeText(this, "내용이 없습니다. 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+
+            // ProgressDialog 생성
+            val progressDialog = ProgressDialog(this)
+            progressDialog.setMessage("업로드 중")
+            progressDialog.setCancelable(false) // 사용자가 대화 상자를 닫을 수 없도록 설정
+            progressDialog.show()
+
+
 
             val storage = FirebaseStorage.getInstance()
             val storageRef = storage.reference
