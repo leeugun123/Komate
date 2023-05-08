@@ -18,7 +18,7 @@
         android:theme="@style/Theme.Kormate"
         tools:targetApi="31">
         <activity
-            android:name=".BoardEditActivity"
+            android:name=".Fragment.BoardEditActivity"
             android:exported="false" />
         <activity
             android:name=".BoardActivity"

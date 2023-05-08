@@ -193,13 +193,13 @@ class BoardActivity : AppCompatActivity() {
                     R.id.action_delete ->{
 
                         val builder = AlertDialog.Builder(this)
-                        builder.setTitle("이 게시판을 삭제하시겠습니까?")
+                        builder.setTitle("이 게시물을 삭제하시겠습니까?")
 
                         builder.setPositiveButton("예") { dialog, which ->
 
                             val databaseReference = FirebaseDatabase.getInstance().reference.child("posts")
                             databaseReference.child(postId.toString()).removeValue()
-                            Toast.makeText(context, "게시판이 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "게시물이 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
 
                             finish()
 

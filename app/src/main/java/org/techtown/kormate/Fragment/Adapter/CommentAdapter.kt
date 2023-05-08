@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -18,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.CurrentDateTime
 import org.techtown.kormate.Fragment.Data.BoardDetail
@@ -67,13 +69,26 @@ class CommentAdapter(private val comments : MutableList<Comment>, private val us
 
                     deleteButton.setOnClickListener {
 
+                        val builder = AlertDialog.Builder(binding.root.context)
+                        builder.setTitle("댓글을 삭제하시겠습니까?")
 
-                        val databaseReference = FirebaseDatabase.getInstance().reference.child("posts")
-                            .child(postId).child("comments")
+                        builder.setPositiveButton("예") { dialog, which ->
 
-                        databaseReference.child(comment.id.toString()).removeValue()
+                            val databaseReference = FirebaseDatabase.getInstance().reference.child("posts")
+                                .child(postId).child("comments")
 
-                        Toast.makeText(binding.root.context, "삭제되었습니다", Toast.LENGTH_SHORT).show()
+                            databaseReference.child(comment.id.toString()).removeValue()
+
+                            Toast.makeText(binding.root.context, " 댓글이 삭제되었습니다", Toast.LENGTH_SHORT).show()
+
+                        }
+                        builder.setNegativeButton("아니오") { dialog, which ->
+
+
+                        }
+
+                        builder.create().show()
+
 
                     }
 
