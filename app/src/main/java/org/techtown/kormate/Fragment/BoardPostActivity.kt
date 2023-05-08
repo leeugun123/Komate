@@ -263,6 +263,7 @@ class BoardPostActivity : AppCompatActivity() {
         if (requestCode == REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
 
             imageUris.clear()
+            binding!!.uploadImgButton.setText("사진 올리기(0/3)")
 
             Log.e("TAG","응답됨")
 
@@ -278,6 +279,9 @@ class BoardPostActivity : AppCompatActivity() {
                             //4장 이상 갤러리에서 선택했을때 3장까지만 자름.
                             handleSelectedImages(imageUris)
                             Toast.makeText(this, "사진은 3장까지만 선택 가능합니다.", Toast.LENGTH_SHORT).show()
+
+                            binding!!.uploadImgButton.setText("사진 올리기(3/3)")
+
                             return
 
                         }//사진 개수 제한
@@ -300,6 +304,7 @@ class BoardPostActivity : AppCompatActivity() {
             }
 
             //정상적으로 사진을 골랐을때
+            binding!!.uploadImgButton.setText("사진 올리기(" + imageUris.size.toString() + "/3)")
             handleSelectedImages(imageUris)
 
 
