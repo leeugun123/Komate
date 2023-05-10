@@ -47,8 +47,6 @@ class BoardActivity : AppCompatActivity() {
 
 
 
-
-
         //intent 받기
 
         val receiveData  = intent.getParcelableExtra<BoardDetail>("postIntel")
@@ -119,49 +117,16 @@ class BoardActivity : AppCompatActivity() {
 
 
                     binding!!.uploadImageView1.setOnClickListener {
-
-                        val intent = Intent(this,ImageDetailActivity::class.java)
-
-                        intent.putExtra("entirePage",3)
-                        intent.putExtra("currentPage",1)
-
-                        intent.putExtra("imgUrl",list.img[0])
-
-
-                        startActivity(intent)
-
-
+                        tossIntent(list.img.size,1,list.img[0])
                     }//첫번째 뷰
 
                     binding!!.uploadImageView2.setOnClickListener {
-
-                        val intent = Intent(this,ImageDetailActivity::class.java)
-
-                        intent.putExtra("entirePage",3)
-                        intent.putExtra("currentPage",2)
-
-                        intent.putExtra("imgUrl",list.img[1])
-
-
-                        startActivity(intent)
-
-
+                        tossIntent(list.img.size,2,list.img[1])
                     }//두번째 뷰
 
-
                     binding!!.uploadImageView3.setOnClickListener {
-
-                        val intent = Intent(this,ImageDetailActivity::class.java)
-
-                        intent.putExtra("entirePage",3)
-                        intent.putExtra("currentPage",3)
-
-                        intent.putExtra("imgUrl",list.img[2])
-
-                        startActivity(intent)
-
-
-                    }//첫번째 뷰
+                        tossIntent(list.img.size,3,list.img[2])
+                    }//세번째 뷰
 
 
 
@@ -330,8 +295,20 @@ class BoardActivity : AppCompatActivity() {
 
     }
 
+    private fun tossIntent(entirePage: Int, curPage: Int,imgUri : String) {
+
+        val intent = Intent(this,ImageDetailActivity::class.java)
+
+        intent.putExtra("entirePage",entirePage)
+        intent.putExtra("currentPage",curPage)
+
+        intent.putExtra("imgUrl",imgUri)
 
 
+        startActivity(intent)
+
+
+    }
 
 
 }

@@ -30,7 +30,7 @@ class ImageDetailActivity : AppCompatActivity() {
 
         Glide.with(this)
             .load(receiveUrl)
-            .override(1000,1000)
+            .override(1500,1500)
             .centerCrop()
             .into(binding!!.detailImg)
 
