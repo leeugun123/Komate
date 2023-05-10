@@ -1,6 +1,7 @@
 package org.techtown.kormate
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -116,10 +117,61 @@ class BoardActivity : AppCompatActivity() {
                         imageViewList[i].visibility = View.GONE
                     }
 
+
+                    binding!!.uploadImageView1.setOnClickListener {
+
+                        val intent = Intent(this,ImageDetailActivity::class.java)
+
+                        intent.putExtra("entirePage",3)
+                        intent.putExtra("currentPage",1)
+
+                        intent.putExtra("imgUrl",list.img[0])
+
+
+                        startActivity(intent)
+
+
+                    }//첫번째 뷰
+
+                    binding!!.uploadImageView2.setOnClickListener {
+
+                        val intent = Intent(this,ImageDetailActivity::class.java)
+
+                        intent.putExtra("entirePage",3)
+                        intent.putExtra("currentPage",2)
+
+                        intent.putExtra("imgUrl",list.img[1])
+
+
+                        startActivity(intent)
+
+
+                    }//두번째 뷰
+
+
+                    binding!!.uploadImageView3.setOnClickListener {
+
+                        val intent = Intent(this,ImageDetailActivity::class.java)
+
+                        intent.putExtra("entirePage",3)
+                        intent.putExtra("currentPage",3)
+
+                        intent.putExtra("imgUrl",list.img[2])
+
+                        startActivity(intent)
+
+
+                    }//첫번째 뷰
+
+
+
+
                     //코드가 뭔가 이해가 안 감.....
 
 
                 }//img가 없을 경우 imgView 제거
+
+
 
 
                 binding!!.postText.setText(list.post)
