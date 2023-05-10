@@ -31,8 +31,8 @@ class ImageDetailActivity : AppCompatActivity() {
         val curPage = intent.getIntExtra("currentPage",1)
         //현재 페이지 / 전체페이지 표시
 
-        binding!!.cur.setText(curPage.toString())
-        binding!!.entire.setText(entirePage.toString())
+        binding!!.cur.text = curPage.toString()
+        binding!!.entire.text = entirePage.toString()
         //페이지 text에 표시
 
         Glide.with(this)
@@ -69,15 +69,10 @@ class ImageDetailActivity : AppCompatActivity() {
                 override fun onReceive(context: Context?, intent: Intent?) {
 
                     // 다운로드가 완료된 파일의 ID와 현재 다운로드 ID를 비교하여 동일하면 다운로드가 완료된 것입니다.
-                    if (intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1) == downloadId) {
-
-                        Toast.makeText(context, "이미지 다운", Toast.LENGTH_SHORT).show()
+                    if (intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1) == downloadId)
+                        Toast.makeText(context, "이미지 다운 완료", Toast.LENGTH_SHORT).show()
                         // 이미지를 열기 위한 인텐트를 생성합니다.
-                        val openImageIntent = Intent(Intent.ACTION_VIEW)
-                        openImageIntent.setDataAndType(Uri.parse("file://$filePath"), "image/*")
-                        startActivity(openImageIntent)
 
-                    }
                 }
             }
 

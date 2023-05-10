@@ -76,6 +76,8 @@ class BoardFragment : Fragment() {
 
                 }
 
+                recentList.reverse()
+
                 boardRecyclerView.adapter = previewAdapter(recentList)
 
             }
