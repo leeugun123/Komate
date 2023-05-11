@@ -55,7 +55,7 @@ class HomeFragment : Fragment() {
         val recentList : MutableList<BoardDetail> = mutableListOf()
 
         //비동기 호출
-        postRef.addValueEventListener(object : ValueEventListener {
+        postRef.limitToLast(4).addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
 
@@ -80,9 +80,7 @@ class HomeFragment : Fragment() {
                             //여기서 comment를 추가해준다.
                         ))
 
-                        if(recentList.size == 4)
-                            break
-                        //4개까지만 가져오기
+
 
 
                     }
