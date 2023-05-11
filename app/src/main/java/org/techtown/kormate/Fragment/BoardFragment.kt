@@ -40,14 +40,14 @@ class BoardFragment : Fragment() {
 
         val postRef = Firebase.database.reference.child("posts")
 
-        val recentList : MutableList<BoardDetail> = mutableListOf()
+        val entireList : MutableList<BoardDetail> = mutableListOf()
 
         //비동기 호출
         postRef.addValueEventListener(object : ValueEventListener{
 
             override fun onDataChange(snapshot: DataSnapshot) {
 
-                recentList.clear()
+                entireList.clear()
 
                 for(snapshot in snapshot.children){
 
@@ -55,7 +55,7 @@ class BoardFragment : Fragment() {
 
                     if (post != null) {
 
-                        recentList.add(BoardDetail(
+                        entireList.add(BoardDetail(
 
                             post.postId,
                             post.userId,
@@ -76,9 +76,9 @@ class BoardFragment : Fragment() {
 
                 }
 
-                recentList.reverse()
+                entireList.reverse()
 
-                boardRecyclerView.adapter = previewAdapter(recentList)
+                boardRecyclerView.adapter = previewAdapter(entireList)
 
             }
 
