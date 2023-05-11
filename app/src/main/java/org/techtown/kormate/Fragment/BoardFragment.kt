@@ -49,7 +49,7 @@ class BoardFragment : Fragment() {
 
                 entireList.clear()
 
-                for(snapshot in snapshot.children){
+                for(snapshot in snapshot.children.reversed()){
 
                     val post = snapshot.getValue(BoardDetail::class.java)
 
@@ -76,7 +76,6 @@ class BoardFragment : Fragment() {
 
                 }
 
-                entireList.reverse()
 
                 boardRecyclerView.adapter = previewAdapter(entireList)
 

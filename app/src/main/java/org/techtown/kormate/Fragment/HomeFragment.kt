@@ -61,7 +61,7 @@ class HomeFragment : Fragment() {
 
                 recentList.clear()
 
-                for(snapshot in snapshot.children){
+                for(snapshot in snapshot.children.reversed()){
 
                     val post = snapshot.getValue(BoardDetail::class.java)
 
@@ -89,7 +89,7 @@ class HomeFragment : Fragment() {
 
                 }
 
-                recentList.reverse()
+
 
                 recentRecyclerView.adapter = RecentAdapter(recentList)
 
