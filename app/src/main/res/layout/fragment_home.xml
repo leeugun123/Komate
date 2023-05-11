@@ -9,7 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+
+        android:background="#2196F3"
         android:orientation="vertical">
 
         <TextView
@@ -19,6 +20,7 @@
             android:layout_marginLeft="10dp"
             android:text="깐부 kkanbu"
             android:textSize="20sp"
+            android:textColor="@color/white"
             android:textFontWeight="700"
             android:textAppearance="@style/kkanbuLogin"
             android:textStyle="bold"
@@ -45,6 +47,7 @@
                 android:layout_marginLeft="10dp"
                 android:textStyle="bold"
                 android:textSize="30sp"
+                android:textColor="@color/white"
                 android:gravity="center"
                 android:textAlignment="center"
                 android:textAppearance="@style/schoolText"
