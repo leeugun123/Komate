@@ -50,8 +50,8 @@ class RecentAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Ad
 
         var concetPost : String? = null
 
-        if(list.post.toString().length > 105){
-            concetPost = list.post?.substring(0,110)+"..."
+        if(list.post.toString().length > 53){
+            concetPost = list.post?.substring(0,52)+"..."
         }
         else
             concetPost = list.post.toString()
