@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "822278269639",
+    "firebase_url": "https://kormate-default-rtdb.firebaseio.com",
+    "project_id": "kormate",
+    "storage_bucket": "kormate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822278269639:android:f4af2fbc3c09dc2c5f2ce2",
+        "android_client_info": {
+          "package_name": "org.techtown.kormate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "822278269639-5o552so9gkj8sdsj5lkqf06jhrktro7a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoqeCWykiZBs0mZjRqcIMu4uBN7MUb5ug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "822278269639-5o552so9gkj8sdsj5lkqf06jhrktro7a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

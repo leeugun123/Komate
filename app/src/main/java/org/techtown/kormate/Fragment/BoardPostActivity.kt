@@ -107,7 +107,12 @@ class BoardPostActivity : AppCompatActivity() {
             if (post.isEmpty() && imageUris.isEmpty()) {
                 Toast.makeText(this, "내용이 없습니다. 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
-            }
+            }//사진하고 글 둘다 없는 경우
+
+            if (post.isEmpty()) {
+                Toast.makeText(this, "글의 내용이 없습니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }//글의 내용이 없는 경우
 
 
             // ProgressDialog 생성
