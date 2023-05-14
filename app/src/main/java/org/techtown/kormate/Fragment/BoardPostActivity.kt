@@ -263,9 +263,8 @@ class BoardPostActivity : AppCompatActivity() {
         if (requestCode == REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
 
             imageUris.clear()
-            binding!!.uploadImgButton.setText("사진 올리기(0/3)")
 
-            Log.e("TAG","응답됨")
+            binding!!.uploadImgButton.setText("사진 올리기(0/3)")
 
             if (data?.clipData != null) {
                 // 다중 이미지를 선택한 경우
@@ -312,7 +311,7 @@ class BoardPostActivity : AppCompatActivity() {
 
     }//갤러리로 이동했을때
 
-    private fun handleSelectedImages(imageUris: List<Uri>) {
+    private fun handleSelectedImages(imageUris: MutableList<Uri>) {
 
         adapter = GalaryAdapter(imageUris)
 

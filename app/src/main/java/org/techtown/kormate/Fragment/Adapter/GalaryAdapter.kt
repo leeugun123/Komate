@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.techtown.kormate.databinding.GalaryimgBinding
 
-class GalaryAdapter(private val imageUris: List<Uri>) :
+class GalaryAdapter(private val imageUris: MutableList<Uri>) :
     RecyclerView.Adapter<GalaryAdapter.ViewHolder>() {
 
 
@@ -24,6 +24,9 @@ class GalaryAdapter(private val imageUris: List<Uri>) :
 
     }
 
+
+
+
     override fun getItemCount(): Int = imageUris.size
 
     inner class ViewHolder(private val binding: GalaryimgBinding) :
@@ -31,10 +34,24 @@ class GalaryAdapter(private val imageUris: List<Uri>) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(uri: Uri) {
+
             Glide.with(itemView)
                 .load(uri)
                 .centerCrop()
                 .into(binding.galaryImg)
+
+
+            binding.cancelButton.setOnClickListener {
+
+                imageUris.removeAt(position)
+                notifyItemRemoved(position)
+
+
+            }
+
+
+
+
         }
 
     }
