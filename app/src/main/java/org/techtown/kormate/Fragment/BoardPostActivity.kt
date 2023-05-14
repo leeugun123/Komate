@@ -246,15 +246,12 @@ class BoardPostActivity : AppCompatActivity() {
 
     }
 
-
     private fun complete(){
 
         finish()
         Toast.makeText(this, "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
 
     }
-
-
 
 
     override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?){
@@ -273,22 +270,14 @@ class BoardPostActivity : AppCompatActivity() {
                 if (clipData != null) {
                     for (i in 0 until clipData.itemCount) {
 
-                        if(i == 3){
-
-                            //4장 이상 갤러리에서 선택했을때 3장까지만 자름.
-                            handleSelectedImages(imageUris)
-                            Toast.makeText(this, "사진은 3장까지만 선택 가능합니다.", Toast.LENGTH_SHORT).show()
-
-                            binding!!.uploadImgButton.setText("사진 올리기(3/3)")
-
-                            return
-
-                        }//사진 개수 제한
-
+                        if(i == 3)
+                            break
+                        //사진 개수 제한
 
 
                         val uri = clipData.getItemAt(i).uri
                         imageUris.add(uri)
+
                     }
                 }
 
@@ -316,6 +305,8 @@ class BoardPostActivity : AppCompatActivity() {
         adapter = GalaryAdapter(imageUris)
 
         adapter!!.notifyDataSetChanged()
+
+        binding!!.uploadImgButton.setText("사진 올리기(" + imageUris.size.toString() + "/3)")
 
         Log.e("TAG","갤러리 선택됨")
 
