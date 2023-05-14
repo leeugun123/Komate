@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import org.techtown.kormate.databinding.GalaryimgBinding
 
 class GalaryAdapter(private val imageUris: MutableList<Uri>) :

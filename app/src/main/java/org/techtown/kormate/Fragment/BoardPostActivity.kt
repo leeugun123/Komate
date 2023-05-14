@@ -20,6 +20,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
+import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.CurrentDateTime
 import org.techtown.kormate.Fragment.Adapter.GalaryAdapter
@@ -259,21 +260,22 @@ class BoardPostActivity : AppCompatActivity() {
 
         if (requestCode == REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
 
-            imageUris.clear()
 
-            binding!!.uploadImgButton.setText("사진 올리기(0/3)")
 
             if (data?.clipData != null) {
                 // 다중 이미지를 선택한 경우
                 val clipData = data.clipData
 
                 if (clipData != null) {
+
                     for (i in 0 until clipData.itemCount) {
 
-                        if(i == 3)
+                        if(imageUris.size == 3){
+                            Toast.makeText(this, "사진은 최대 3장까지 업로드 가능합니다.", Toast.LENGTH_SHORT).show()
                             break
-                        //사진 개수 제한
+                        }
 
+                        //사진 개수 제한
 
                         val uri = clipData.getItemAt(i).uri
                         imageUris.add(uri)
