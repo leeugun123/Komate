@@ -265,8 +265,6 @@ class BoardPostActivity : AppCompatActivity() {
 
         if (requestCode == REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
 
-
-
             if (data?.clipData != null) {
                 // 다중 이미지를 선택한 경우
                 val clipData = data.clipData
@@ -300,17 +298,16 @@ class BoardPostActivity : AppCompatActivity() {
 
             //정상적으로 사진을 골랐을때
             binding!!.uploadImgButton.setText("사진 올리기(" + imageUris.size.toString() + "/3)")
-            handleSelectedImages(imageUris)
+            handleSelectedImages(imageUris, binding!!)
 
 
         }
 
     }//갤러리로 이동했을때
 
-    private fun handleSelectedImages(imageUris: MutableList<Uri>) {
+    private fun handleSelectedImages(imageUris: MutableList<Uri>, acBinding : ActivityBoardPostBinding) {
 
-        adapter = GalaryAdapter(imageUris)
-
+        adapter = GalaryAdapter(imageUris,acBinding)
         adapter!!.notifyDataSetChanged()
 
         binding!!.uploadImgButton.setText("사진 올리기(" + imageUris.size.toString() + "/3)")

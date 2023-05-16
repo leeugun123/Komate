@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import org.techtown.kormate.databinding.GalaryimgBinding
 
-class GalaryAdapter(private val imageUris: MutableList<Uri>) :
+class GalaryAdapter(private val imageUris: MutableList<Uri>,private var acBinding : ActivityBoardPostBinding) :
     RecyclerView.Adapter<GalaryAdapter.ViewHolder>() {
 
 
@@ -22,6 +22,7 @@ class GalaryAdapter(private val imageUris: MutableList<Uri>) :
 
         val uri = imageUris[position]
         holder.bind(uri)
+
 
     }
 
@@ -47,6 +48,7 @@ class GalaryAdapter(private val imageUris: MutableList<Uri>) :
                 imageUris.removeAt(position)
                 notifyItemRemoved(position)
 
+                acBinding.uploadImgButton.text = "사진 올리기(" + imageUris.size.toString() + "/3)"
 
             }
 
