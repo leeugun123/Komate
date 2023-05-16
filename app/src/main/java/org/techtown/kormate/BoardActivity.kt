@@ -75,8 +75,8 @@ class BoardActivity : AppCompatActivity() {
                     .circleCrop()
                     .into(binding!!.userImg)
 
-                binding!!.userName.setText(list.userName)
-                binding!!.dateTime.setText(list.dateTime)
+                binding!!.userName.text = list.userName
+                binding!!.dateTime.text = list.dateTime
 
 
 
@@ -129,9 +129,6 @@ class BoardActivity : AppCompatActivity() {
                     }//세번째 뷰
 
 
-
-
-                    //코드가 뭔가 이해가 안 감.....
 
 
                 }//img가 없을 경우 imgView 제거
@@ -233,7 +230,7 @@ class BoardActivity : AppCompatActivity() {
 
                     R.id.action_edit ->{
 
-                        Toast.makeText(context, "편집 기능은 아직 개발 중 입니다. ㅎㅎ", Toast.LENGTH_SHORT).show()
+                      //  Toast.makeText(context, "편집 기능은 아직 개발 중 입니다. ㅎㅎ", Toast.LENGTH_SHORT).show()
 
 
 
