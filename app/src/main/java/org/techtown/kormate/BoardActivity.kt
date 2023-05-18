@@ -25,6 +25,7 @@ import com.google.firebase.ktx.Firebase
 import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Adapter.CommentAdapter
+import org.techtown.kormate.Fragment.BoardEditActivity
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.Fragment.Data.Comment
 import org.techtown.kormate.databinding.ActivityBoardBinding
@@ -44,7 +45,6 @@ class BoardActivity : AppCompatActivity() {
         binding!!.backBtn.setOnClickListener {
             finish()
         }//뒤로 가기
-
 
 
         //intent 받기
@@ -134,9 +134,7 @@ class BoardActivity : AppCompatActivity() {
                 }//img가 없을 경우 imgView 제거
 
 
-
-
-                binding!!.postText.setText(list.post)
+                binding!!.postText.text = list.post
 
                 Glide.with(this)
                     .load(list.userImg)
@@ -230,11 +228,10 @@ class BoardActivity : AppCompatActivity() {
 
                     R.id.action_edit ->{
 
-                      //  Toast.makeText(context, "편집 기능은 아직 개발 중 입니다. ㅎㅎ", Toast.LENGTH_SHORT).show()
 
-
-
-
+                        val intent = Intent(this,BoardEditActivity::class.java)
+                        intent.putExtra("postIntel",receiveData)
+                        startActivity(intent)
 
 
                         true
