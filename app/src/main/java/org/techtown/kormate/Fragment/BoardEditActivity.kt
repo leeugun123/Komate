@@ -33,11 +33,11 @@ class BoardEditActivity : AppCompatActivity() {
     private val REQUEST_CODE_PICK_IMAGES = 1
     private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
 
-    private var imageUris = mutableListOf<Uri>()
+    private var imageUris = mutableListOf<String>()
+
     private var adapter : GalaryAdapter? = null
 
     private var picUri: MutableList<String> = mutableListOf()
-
 
     private val postsRef = Firebase.database.reference.child("posts")
 
@@ -49,6 +49,8 @@ class BoardEditActivity : AppCompatActivity() {
 
         binding!!.title.text = "게시물 수정"
         binding!!.updateButton.text = "수정하기"
+        //xml 수정 변경
+
 
         val receiveData = intent.getParcelableExtra<BoardDetail>("postIntel")
         var list : BoardDetail? = null
@@ -61,24 +63,23 @@ class BoardEditActivity : AppCompatActivity() {
             if(list != null){
 
                 binding!!.post.setText(list.post.toString())
-                picUri = list!!.img
+                picUri = list.img
                 //이전 정보 갱신
 
                 if(picUri.size > 0){
 
-                    for (i in 0 until picUri.size) {
-                        imageUris.add(picUri[i].toUri())
-                    }
-
-                    handleSelectedImages(imageUris, binding!!)
-
+                    handleSelectedImages(picUri, binding!!)
 
                 }//사진이 있는 경우
+
+
+                //기존에 있던 img는 picUri에 넣으면 x
 
 
             }
 
         }
+
 
         binding!!.uploadImgButton.setOnClickListener {
 
@@ -87,15 +88,13 @@ class BoardEditActivity : AppCompatActivity() {
                 .setPermissionListener(object : PermissionListener {
 
                     override fun onPermissionGranted() {
+
                         // 권한이 허용되면 갤러리에서 이미지를 선택합니다.
                         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                         intent.type = "image/*"
                         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
                         startActivityForResult(Intent.createChooser(intent, "Select images"), REQUEST_CODE_PICK_IMAGES)
-
-
-
 
                     }
 
@@ -135,7 +134,7 @@ class BoardEditActivity : AppCompatActivity() {
             val storage = FirebaseStorage.getInstance()
             val storageRef = storage.reference
 
-
+            var newPicUri: MutableList<String> = mutableListOf()
 
             //사진이 1장인 경우
             if (imageUris.size > 0) {
@@ -144,12 +143,12 @@ class BoardEditActivity : AppCompatActivity() {
 
                 val imageRef1 = storageRef.child("images/$imageFileName1")
 
-                imageRef1.putFile(imageUris[0]!!)
-                    .addOnSuccessListener { taskSnapshot ->
+                imageRef1.putFile(imageUris[0].toUri())
+                    .addOnSuccessListener {
                         imageRef1.downloadUrl
                             .addOnSuccessListener { uri ->
 
-                                picUri.add(uri.toString())
+                                newPicUri.add(uri.toString())
 
                                 //사진이 2장인 경우,
                                 if (imageUris.size > 1){
@@ -160,12 +159,12 @@ class BoardEditActivity : AppCompatActivity() {
                                         )}_${UUID.randomUUID()}"
                                     val imageRef2 = storageRef.child("images/$imageFileName2")
 
-                                    imageRef2.putFile(imageUris[1]!!)
-                                        .addOnSuccessListener{ taskSnapshot ->
+                                    imageRef2.putFile(imageUris[1].toUri())
+                                        .addOnSuccessListener{
                                             imageRef2.downloadUrl
                                                 .addOnSuccessListener{ uri ->
 
-                                                    picUri.add(uri.toString())
+                                                    newPicUri.add(uri.toString())
 
                                                     //사진이 3장인 경우
                                                     if(imageUris.size > 2){
@@ -176,15 +175,16 @@ class BoardEditActivity : AppCompatActivity() {
                                                             )}_${UUID.randomUUID()}"
                                                         val imageRef3 = storageRef.child("images/$imageFileName3")
 
-                                                        imageRef3.putFile(imageUris[2]!!)
-                                                            .addOnSuccessListener { taskSnapshot ->
+                                                        imageRef3.putFile(imageUris[2].toUri())
+                                                            .addOnSuccessListener {
                                                                 imageRef3.downloadUrl
                                                                     .addOnSuccessListener { uri ->
 
-                                                                        picUri.add(uri.toString())
+                                                                        newPicUri.add(uri.toString())
 
                                                                         postsRef.child(list!!.postId!!).setValue(BoardDetail(list.postId, list.userId, list.userName,
-                                                                            list.userImg, post, picUri!!, list.dateTime))
+                                                                            list.userImg, post,
+                                                                            mergeTwoLists(picUri,imageUris), list.dateTime))
 
 
                                                                         progressDialog.dismiss()
@@ -200,7 +200,8 @@ class BoardEditActivity : AppCompatActivity() {
                                                     else{
 
                                                         postsRef.child(list!!.postId!!).setValue(BoardDetail(list.postId, list.userId, list.userName,
-                                                            list.userImg, post, picUri!!, list.dateTime))
+                                                            list.userImg, post,
+                                                            mergeTwoLists(picUri,imageUris), list.dateTime))
 
                                                         progressDialog.dismiss()
 
@@ -225,7 +226,8 @@ class BoardEditActivity : AppCompatActivity() {
                                 }else{
 
                                     postsRef.child(list!!.postId!!).setValue(BoardDetail(list.postId, list.userId, list.userName,
-                                        list.userImg, post, picUri!!, list.dateTime))
+                                        list.userImg, post,
+                                        mergeTwoLists(picUri,imageUris), list.dateTime))
 
                                     progressDialog.dismiss()
 
@@ -266,11 +268,9 @@ class BoardEditActivity : AppCompatActivity() {
         }
 
 
-
         binding!!.backBtn.setOnClickListener {
             finish()
         }//뒤로가기
-
 
 
     }
@@ -295,54 +295,62 @@ class BoardEditActivity : AppCompatActivity() {
 
                     for (i in 0 until clipData.itemCount) {
 
-                        if(imageUris.size == 3){
+                        if(picUri.size + imageUris.size == 3){
                             Toast.makeText(this, "사진은 최대 3장까지 업로드 가능합니다.", Toast.LENGTH_SHORT).show()
                             break
                         }
-
                         //사진 개수 제한
 
                         val uri = clipData.getItemAt(i).uri
-                        imageUris.add(uri)
+                        imageUris.add(uri.toString())
 
                     }
+
                 }
 
             } else if (data?.data != null) {
+
                 // 단일 이미지를 선택한 경우
                 val uri = data.data
 
-                if (imageUris.size < 3 && uri != null) {
-                    imageUris.add(uri)
+                if (picUri.size + imageUris.size  < 3 && uri != null) {
+                    imageUris.add(uri.toString())
                 }
+                else
+                    Toast.makeText(this, "사진은 최대 3장까지 업로드 가능합니다.", Toast.LENGTH_SHORT).show()
 
             }
 
-            //정상적으로 사진을 골랐을때
-            binding!!.uploadImgButton.setText("사진 올리기(" + imageUris.size.toString() + "/3)")
-
-
-            handleSelectedImages(imageUris, binding!!)
-
+            handleSelectedImages(mergeTwoLists(picUri,imageUris), binding!!)
 
         }
 
     }//갤러리로 이동했을때
 
-    private fun handleSelectedImages(imageUris: MutableList<Uri>, acBinding : ActivityBoardPostBinding) {
+
+
+    private fun handleSelectedImages(imageUris: MutableList<String>, acBinding : ActivityBoardPostBinding) {
 
         adapter = GalaryAdapter(imageUris,acBinding)
         adapter!!.notifyDataSetChanged()
 
-        binding!!.uploadImgButton.setText("사진 올리기(" + imageUris.size.toString() + "/3)")
-
-        Log.e("TAG","갤러리 선택됨")
-
+        binding!!.uploadImgButton.text = "사진 올리기(" + imageUris.size.toString() + "/3)"
         binding!!.imgRecyclerView.layoutManager = GridLayoutManager(this,3)
         binding!!.imgRecyclerView.adapter = adapter
 
 
     }// 선택한 이미지들을 처리하는 코드를 작성
+
+
+    private fun mergeTwoLists(list1: MutableList<String>, list2: MutableList<String>) : MutableList<String> {
+
+        val mergedList = mutableListOf<String>()
+        mergedList.addAll(list1)
+        mergedList.addAll(list2)
+        return mergedList
+
+    }//기존 GalaryList와 새로 선택한 GalaryList를 병합
+
 
 
 }

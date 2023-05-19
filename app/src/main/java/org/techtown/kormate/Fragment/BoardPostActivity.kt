@@ -13,6 +13,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.database.ktx.database
@@ -36,7 +37,7 @@ class BoardPostActivity : AppCompatActivity() {
     private val REQUEST_CODE_PICK_IMAGES = 1
     private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
 
-    private var imageUris = mutableListOf<Uri>()
+    private var imageUris = mutableListOf<String>()
     private var adapter : GalaryAdapter? = null
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -66,9 +67,7 @@ class BoardPostActivity : AppCompatActivity() {
 
         }//카카오톡을 통해서 사용자 고유 id 가져오기
 
-
         binding!!.uploadImgButton.setOnClickListener {
-
 
             TedPermission.create()
                 .setPermissionListener(object : PermissionListener {
@@ -80,21 +79,16 @@ class BoardPostActivity : AppCompatActivity() {
                         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
                         startActivityForResult(Intent.createChooser(intent, "Select images"), REQUEST_CODE_PICK_IMAGES)
-
-
-
-
                     }
 
                     override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
                         // 권한이 거부되면 처리합니다.
                         // ...
                     }
+
                 })
                 .setPermissions(PERMISSION_READ_EXTERNAL_STORAGE)
                 .check()
-
-
 
         }//사진 올리기
 
@@ -134,7 +128,7 @@ class BoardPostActivity : AppCompatActivity() {
                 val imageFileName1 = "IMG_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}_${UUID.randomUUID()}"
                 val imageRef1 = storageRef.child("images/$imageFileName1")
 
-                imageRef1.putFile(imageUris[0]!!)
+                imageRef1.putFile(imageUris[0].toUri())
                     .addOnSuccessListener { taskSnapshot ->
                         imageRef1.downloadUrl
                             .addOnSuccessListener { uri ->
@@ -147,7 +141,7 @@ class BoardPostActivity : AppCompatActivity() {
                                     val imageFileName2 = "IMG_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}_${UUID.randomUUID()}"
                                     val imageRef2 = storageRef.child("images/$imageFileName2")
 
-                                    imageRef2.putFile(imageUris[1]!!)
+                                    imageRef2.putFile(imageUris[1].toUri())
                                         .addOnSuccessListener{ taskSnapshot ->
                                             imageRef2.downloadUrl
                                                 .addOnSuccessListener{ uri ->
@@ -160,14 +154,15 @@ class BoardPostActivity : AppCompatActivity() {
                                                         val imageFileName3 = "IMG_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}_${UUID.randomUUID()}"
                                                         val imageRef3 = storageRef.child("images/$imageFileName3")
 
-                                                        imageRef3.putFile(imageUris[2]!!)
+                                                        imageRef3.putFile(imageUris[2].toUri())
                                                             .addOnSuccessListener { taskSnapshot ->
                                                                 imageRef3.downloadUrl
                                                                     .addOnSuccessListener { uri ->
 
                                                                         picUri.add(uri.toString())
 
-                                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userId ,userName, userImg, post, picUri!!, CurrentDateTime.getPostTime()))
+                                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userId ,userName, userImg, post,
+                                                                            picUri, CurrentDateTime.getPostTime()))
 
 
                                                                         progressDialog.dismiss()
@@ -182,7 +177,8 @@ class BoardPostActivity : AppCompatActivity() {
                                                     }
                                                     else{
 
-                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userId,userName, userImg, post, picUri!!, CurrentDateTime.getPostTime()))
+                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userId,userName, userImg, post,
+                                                            picUri, CurrentDateTime.getPostTime()))
 
                                                         progressDialog.dismiss()
 
@@ -206,7 +202,8 @@ class BoardPostActivity : AppCompatActivity() {
 
                                 }else{
 
-                                    postsRef.child(postId!!).setValue(BoardDetail(postId, userId, userName, userImg, post, picUri!!, CurrentDateTime.getPostTime()))
+                                    postsRef.child(postId!!).setValue(BoardDetail(postId, userId, userName, userImg, post,
+                                        picUri, CurrentDateTime.getPostTime()))
 
                                     progressDialog.dismiss()
 
@@ -281,7 +278,7 @@ class BoardPostActivity : AppCompatActivity() {
                         //사진 개수 제한
 
                         val uri = clipData.getItemAt(i).uri
-                        imageUris.add(uri)
+                        imageUris.add(uri.toString())
 
                     }
                 }
@@ -291,13 +288,13 @@ class BoardPostActivity : AppCompatActivity() {
                 val uri = data.data
 
                 if (uri != null) {
-                    imageUris.add(uri)
+                    imageUris.add(uri.toString())
                 }
 
             }
 
             //정상적으로 사진을 골랐을때
-            binding!!.uploadImgButton.setText("사진 올리기(" + imageUris.size.toString() + "/3)")
+            binding!!.uploadImgButton.text = "사진 올리기(" + imageUris.size.toString() + "/3)"
             handleSelectedImages(imageUris, binding!!)
 
 
@@ -305,12 +302,12 @@ class BoardPostActivity : AppCompatActivity() {
 
     }//갤러리로 이동했을때
 
-    private fun handleSelectedImages(imageUris: MutableList<Uri>, acBinding : ActivityBoardPostBinding) {
+    private fun handleSelectedImages(imageUris: MutableList<String>, acBinding : ActivityBoardPostBinding) {
 
         adapter = GalaryAdapter(imageUris,acBinding)
         adapter!!.notifyDataSetChanged()
 
-        binding!!.uploadImgButton.setText("사진 올리기(" + imageUris.size.toString() + "/3)")
+        binding!!.uploadImgButton.text = "사진 올리기(" + imageUris.size.toString() + "/3)"
 
         Log.e("TAG","갤러리 선택됨")
 

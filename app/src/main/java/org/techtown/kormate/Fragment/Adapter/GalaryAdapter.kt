@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import org.techtown.kormate.databinding.GalaryimgBinding
 
-class GalaryAdapter(private val imageUris: MutableList<Uri>, private var acBinding : ActivityBoardPostBinding) :
+class GalaryAdapter(private val imageUris: MutableList<String>, private var acBinding : ActivityBoardPostBinding) :
     RecyclerView.Adapter<GalaryAdapter.ViewHolder>() {
 
 
@@ -26,14 +26,13 @@ class GalaryAdapter(private val imageUris: MutableList<Uri>, private var acBindi
 
     }
 
-
     override fun getItemCount(): Int = imageUris.size
 
     inner class ViewHolder(private val binding: GalaryimgBinding) :
 
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(uri: Uri) {
+        fun bind(uri: String) {
 
             Glide.with(itemView)
                 .load(uri)
