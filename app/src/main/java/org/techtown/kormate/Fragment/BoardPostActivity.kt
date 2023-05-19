@@ -125,105 +125,37 @@ class BoardPostActivity : AppCompatActivity() {
             //사진이 1장인 경우
             if (imageUris.size > 0) {
 
-                val imageFileName1 = "IMG_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}_${UUID.randomUUID()}"
-                val imageRef1 = storageRef.child("images/$imageFileName1")
+                val imageFileNames = mutableListOf<String>()
 
-                imageRef1.putFile(imageUris[0].toUri())
-                    .addOnSuccessListener { taskSnapshot ->
-                        imageRef1.downloadUrl
-                            .addOnSuccessListener { uri ->
+                for (i in 0 until imageUris.size) {
+                    val imageFileName = "IMG_${
+                        SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
+                            Date()
+                        )}_${UUID.randomUUID()}"
+                    val imageRef = storageRef.child("images/$imageFileName")
 
-                                picUri.add(uri.toString())
+                    imageRef.putFile(imageUris[i].toUri())
+                        .addOnSuccessListener {
+                            imageRef.downloadUrl
+                                .addOnSuccessListener { uri ->
 
-                                //사진이 2장인 경우,
-                                if (imageUris.size > 1){
+                                    imageFileNames.add(uri.toString())
 
-                                    val imageFileName2 = "IMG_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}_${UUID.randomUUID()}"
-                                    val imageRef2 = storageRef.child("images/$imageFileName2")
+                                    if (imageFileNames.size == imageUris.size) {
+                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userId, userName, userImg, post, imageFileNames, CurrentDateTime.getPostTime()))
 
-                                    imageRef2.putFile(imageUris[1].toUri())
-                                        .addOnSuccessListener{ taskSnapshot ->
-                                            imageRef2.downloadUrl
-                                                .addOnSuccessListener{ uri ->
+                                        progressDialog.dismiss()
 
-                                                    picUri.add(uri.toString())
-
-                                                    //사진이 3장인 경우
-                                                    if(imageUris.size > 2){
-
-                                                        val imageFileName3 = "IMG_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}_${UUID.randomUUID()}"
-                                                        val imageRef3 = storageRef.child("images/$imageFileName3")
-
-                                                        imageRef3.putFile(imageUris[2].toUri())
-                                                            .addOnSuccessListener { taskSnapshot ->
-                                                                imageRef3.downloadUrl
-                                                                    .addOnSuccessListener { uri ->
-
-                                                                        picUri.add(uri.toString())
-
-                                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userId ,userName, userImg, post,
-                                                                            picUri, CurrentDateTime.getPostTime()))
-
-
-                                                                        progressDialog.dismiss()
-
-                                                                        complete()
-
-                                                                    }
-                                                            }
-
-
-
-                                                    }
-                                                    else{
-
-                                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userId,userName, userImg, post,
-                                                            picUri, CurrentDateTime.getPostTime()))
-
-                                                        progressDialog.dismiss()
-
-                                                        complete()
-
-                                                    }
-
-
-
-                                                }
-
-                                        }
-                                        .addOnFailureListener { e ->
-
-                                            Toast.makeText(this, "2번째 사진 업로드 실패 " + e.message, Toast.LENGTH_SHORT).show()
-
-                                        }
-
-
-
-
-                                }else{
-
-                                    postsRef.child(postId!!).setValue(BoardDetail(postId, userId, userName, userImg, post,
-                                        picUri, CurrentDateTime.getPostTime()))
-
-                                    progressDialog.dismiss()
-
-                                    complete()
-
+                                        complete()
+                                    }
                                 }
+                        }
+                        .addOnFailureListener { e ->
 
+                            Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
 
-
-
-                            }
-                    }
-                    .addOnFailureListener { e ->
-
-                        Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
-
-                    }
-
-
-
+                        }
+                }
 
 
             }

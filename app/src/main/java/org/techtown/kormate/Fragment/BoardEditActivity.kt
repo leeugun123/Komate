@@ -139,117 +139,39 @@ class BoardEditActivity : AppCompatActivity() {
             //사진이 1장인 경우
             if (imageUris.size > 0) {
 
-                val imageFileName1 = "IMG_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}_${UUID.randomUUID()}"
+                val imageFileNames = mutableListOf<String>()
 
-                val imageRef1 = storageRef.child("images/$imageFileName1")
+                for (i in 0 until imageUris.size) {
+                    val imageFileName = "IMG_${
+                        SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
+                            Date()
+                        )}_${UUID.randomUUID()}"
+                    val imageRef = storageRef.child("images/$imageFileName")
 
-                imageRef1.putFile(imageUris[0].toUri())
-                    .addOnSuccessListener {
-                        imageRef1.downloadUrl
-                            .addOnSuccessListener { uri ->
+                    imageRef.putFile(imageUris[i].toUri())
+                        .addOnSuccessListener {
+                            imageRef.downloadUrl
+                                .addOnSuccessListener { uri ->
 
-                                newPicUri.add(uri.toString())
+                                    imageFileNames.add(uri.toString())
 
-                                //사진이 2장인 경우,
-                                if (imageUris.size > 1){
+                                    if (imageFileNames.size == imageUris.size) {
+                                        postsRef.child(list!!.postId!!).setValue(BoardDetail(list.postId, list.userId, list.userName,
+                                            list.userImg, post,
+                                            mergeTwoLists(picUri, imageFileNames), list.dateTime))
 
-                                    val imageFileName2 = "IMG_${
-                                        SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
-                                            Date()
-                                        )}_${UUID.randomUUID()}"
-                                    val imageRef2 = storageRef.child("images/$imageFileName2")
+                                        progressDialog.dismiss()
 
-                                    imageRef2.putFile(imageUris[1].toUri())
-                                        .addOnSuccessListener{
-                                            imageRef2.downloadUrl
-                                                .addOnSuccessListener{ uri ->
-
-                                                    newPicUri.add(uri.toString())
-
-                                                    //사진이 3장인 경우
-                                                    if(imageUris.size > 2){
-
-                                                        val imageFileName3 = "IMG_${
-                                                            SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
-                                                                Date()
-                                                            )}_${UUID.randomUUID()}"
-                                                        val imageRef3 = storageRef.child("images/$imageFileName3")
-
-                                                        imageRef3.putFile(imageUris[2].toUri())
-                                                            .addOnSuccessListener {
-                                                                imageRef3.downloadUrl
-                                                                    .addOnSuccessListener { uri ->
-
-                                                                        newPicUri.add(uri.toString())
-
-                                                                        postsRef.child(list!!.postId!!).setValue(BoardDetail(list.postId, list.userId, list.userName,
-                                                                            list.userImg, post,
-                                                                            mergeTwoLists(picUri,imageUris), list.dateTime))
-
-
-                                                                        progressDialog.dismiss()
-
-                                                                        complete()
-
-                                                                    }
-                                                            }
-
-
-
-                                                    }
-                                                    else{
-
-                                                        postsRef.child(list!!.postId!!).setValue(BoardDetail(list.postId, list.userId, list.userName,
-                                                            list.userImg, post,
-                                                            mergeTwoLists(picUri,imageUris), list.dateTime))
-
-                                                        progressDialog.dismiss()
-
-                                                        complete()
-
-                                                    }
-
-
-
-                                                }
-
-                                        }
-                                        .addOnFailureListener { e ->
-
-                                            Toast.makeText(this, "2번째 사진 업로드 실패 " + e.message, Toast.LENGTH_SHORT).show()
-
-                                        }
-
-
-
-
-                                }else{
-
-                                    postsRef.child(list!!.postId!!).setValue(BoardDetail(list.postId, list.userId, list.userName,
-                                        list.userImg, post,
-                                        mergeTwoLists(picUri,imageUris), list.dateTime))
-
-                                    progressDialog.dismiss()
-
-                                    complete()
-
+                                        complete()
+                                    }
                                 }
+                        }
+                        .addOnFailureListener { e ->
 
+                            Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
 
-
-
-                            }
-                    }
-                    .addOnFailureListener { e ->
-
-                        Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
-
-                    }
-
-
-
-
-
+                        }
+                }
             }
             //비동기적으로 구현됨
             else {
