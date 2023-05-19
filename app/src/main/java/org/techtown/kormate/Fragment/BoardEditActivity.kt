@@ -156,13 +156,15 @@ class BoardEditActivity : AppCompatActivity() {
                                     imageFileNames.add(uri.toString())
 
                                     if (imageFileNames.size == imageUris.size) {
-                                        postsRef.child(list!!.postId!!).setValue(BoardDetail(list.postId, list.userId, list.userName,
-                                            list.userImg, post,
-                                            mergeTwoLists(picUri, imageFileNames), list.dateTime))
+
+                                        var boardDetail = BoardDetail(list!!.postId, list.userId, list.userName, list.userImg, post,
+                                            mergeTwoLists(picUri, imageFileNames), list.dateTime)
+
+                                        postsRef.child(list!!.postId!!).setValue(boardDetail)
 
                                         progressDialog.dismiss()
 
-                                        complete()
+                                        complete(boardDetail)
                                     }
                                 }
                         }
@@ -176,14 +178,16 @@ class BoardEditActivity : AppCompatActivity() {
             //비동기적으로 구현됨
             else {
 
-                val boardPost = BoardDetail(list!!.postId, list.userId, list.userName, list.userImg, post, picUri, list.dateTime)
+                val boardDetail = BoardDetail(list!!.postId, list.userId, list.userName, list.userImg, post, picUri, list.dateTime)
 
-                postsRef.child(list.postId!!).setValue(boardPost)
+                postsRef.child(list.postId!!).setValue(boardDetail)
 
                 // ProgressDialog 닫기
                 progressDialog.dismiss()
 
-                complete()
+                complete(boardDetail)
+
+
 
             }
 
@@ -197,12 +201,18 @@ class BoardEditActivity : AppCompatActivity() {
 
     }
 
-    private fun complete(){
+    private fun complete(boardDetail : BoardDetail){
+
+        val resIntent = Intent()
+        resIntent.putExtra("resIntent",boardDetail)
+        setResult(Activity.RESULT_OK,resIntent)
+        //인텐트 응답
 
         finish()
         Toast.makeText(this, "게시글이 수정되었습니다.", Toast.LENGTH_SHORT).show()
 
     }
+
 
     override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?){
         super.onActivityResult(requestCode, resultCode, data)
