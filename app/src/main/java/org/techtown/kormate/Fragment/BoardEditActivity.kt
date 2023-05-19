@@ -12,14 +12,19 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import org.techtown.kormate.CurrentDateTime
+import org.techtown.kormate.Fragment.Adapter.CommentAdapter
 import org.techtown.kormate.Fragment.Adapter.GalaryAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
+import org.techtown.kormate.Fragment.Data.Comment
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,6 +45,8 @@ class BoardEditActivity : AppCompatActivity() {
     private var picUri: MutableList<String> = mutableListOf()
 
     private val postsRef = Firebase.database.reference.child("posts")
+
+    private var commentList = mutableListOf<Comment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +80,36 @@ class BoardEditActivity : AppCompatActivity() {
                 }//사진이 있는 경우
 
 
-                //기존에 있던 img는 picUri에 넣으면 x
+                val commentsRef = Firebase.database.reference.child("posts").child(list.postId.toString()).child("comments")
+
+                commentsRef.addValueEventListener(object : ValueEventListener {
+
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                        commentList.clear()
+
+                        for(shapshot in dataSnapshot.children){
+
+                            val comment = shapshot.getValue(Comment::class.java)
+
+                            if(comment != null){
+                                commentList.add(comment)
+
+                            }
+
+                        }
+
+                        Log.e("TAG",commentList.size.toString())
+
+
+
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.e("TAG","댓글 조회 실패")
+                    }
+
+                })//댓글 최신화
 
 
             }
@@ -134,7 +170,6 @@ class BoardEditActivity : AppCompatActivity() {
             val storage = FirebaseStorage.getInstance()
             val storageRef = storage.reference
 
-            var newPicUri: MutableList<String> = mutableListOf()
 
             //사진이 1장인 경우
             if (imageUris.size > 0) {
@@ -161,6 +196,7 @@ class BoardEditActivity : AppCompatActivity() {
                                             mergeTwoLists(picUri, imageFileNames), list.dateTime)
 
                                         postsRef.child(list!!.postId!!).setValue(boardDetail)
+                                        postsRef.child(list!!.postId!!).child("comments").setValue(commentList)
 
                                         progressDialog.dismiss()
 
@@ -181,6 +217,7 @@ class BoardEditActivity : AppCompatActivity() {
                 val boardDetail = BoardDetail(list!!.postId, list.userId, list.userName, list.userImg, post, picUri, list.dateTime)
 
                 postsRef.child(list.postId!!).setValue(boardDetail)
+                postsRef.child(list!!.postId!!).child("comments").setValue(commentList)
 
                 // ProgressDialog 닫기
                 progressDialog.dismiss()

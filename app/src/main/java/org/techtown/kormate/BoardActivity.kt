@@ -16,6 +16,7 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -42,6 +43,8 @@ class BoardActivity : AppCompatActivity() {
     private var postId : String? = null
     private var userId : Long? = null
     private var list : BoardDetail? = null
+    private var commentRecyclerView : RecyclerView? = null
+    private var commentList = mutableListOf<Comment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,47 +56,15 @@ class BoardActivity : AppCompatActivity() {
             finish()
         }//뒤로 가기
 
+        commentRecyclerView = binding!!.commentRecyclerView
+        commentRecyclerView!!.layoutManager = LinearLayoutManager(this)
 
         //intent 받기
-
         val receiveData  = intent.getParcelableExtra<BoardDetail>("postIntel")
 
         postBoardDetail(receiveData!!)
         //게시판 최신화
 
-        val commentRecyclerView = binding!!.commentRecyclerView
-        commentRecyclerView.layoutManager = LinearLayoutManager(this)
-
-        val commentsRef = Firebase.database.reference.child("posts").child(postId.toString()).child("comments")
-
-        commentsRef.addValueEventListener(object : ValueEventListener{
-
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-
-                val commentList = mutableListOf<Comment>()
-
-                for(shapshot in dataSnapshot.children){
-
-                    val comment = shapshot.getValue(Comment::class.java)
-
-                    if(comment != null){
-                        commentList.add(comment)
-                    }
-
-                }
-
-                commentSize = commentList.size
-                commentRecyclerView.adapter = CommentAdapter(commentList , userId!!, postId.toString())
-                commentRecyclerView.scrollToPosition(commentList.size-1)
-
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("TAG","댓글 조회 실패")
-            }
-
-        })//댓글 최신화
 
         binding!!.post.setOnClickListener {
 
@@ -110,6 +81,8 @@ class BoardActivity : AppCompatActivity() {
 
                 objCommentRef.setValue(comment)
 
+
+
                 binding!!.reply.text.clear()
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding!!.reply.windowToken, 0)
@@ -117,14 +90,12 @@ class BoardActivity : AppCompatActivity() {
                 Toast.makeText(this@BoardActivity, "댓글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
 
                 commentSize += 1
-                commentRecyclerView.scrollToPosition(commentSize-1)
+                commentRecyclerView!!.scrollToPosition(commentSize-1)
 
             }
 
         }
         //댓글 등록
-
-
 
 
         UserApiClient.instance.me { user, _ ->
@@ -174,6 +145,9 @@ class BoardActivity : AppCompatActivity() {
 
                         val intent = Intent(this,BoardEditActivity::class.java)
                         intent.putExtra("postIntel",receiveData)
+
+
+
                         startActivityForResult(intent,REQUEST_CODE_EDIT_ACTIVITY)
 
                         true
@@ -189,6 +163,7 @@ class BoardActivity : AppCompatActivity() {
             popupMenu.show()
 
         }//수정 아이콘
+
 
 
 
@@ -296,7 +271,6 @@ class BoardActivity : AppCompatActivity() {
 
                 }//img가 없을 경우 imgView 제거
 
-
                 binding!!.postText.text = list!!.post
 
                 Glide.with(this)
@@ -304,8 +278,40 @@ class BoardActivity : AppCompatActivity() {
                     .circleCrop()
                     .into(binding!!.replyImg)
 
-            }//게시판 최신화
+                val commentsRef = Firebase.database.reference.child("posts").child(postId.toString()).child("comments")
 
+                commentsRef.addValueEventListener(object : ValueEventListener{
+
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                        commentList.clear()
+
+                        for(shapshot in dataSnapshot.children){
+
+                            val comment = shapshot.getValue(Comment::class.java)
+
+                            if(comment != null){
+                                commentList.add(comment)
+                                Log.e("TAG","댓글 조회")
+                            }
+
+                        }
+
+                        Log.e("TAG","댓글 변경 감지")
+                        commentSize = commentList.size
+                        commentRecyclerView!!.adapter = CommentAdapter(commentList , userId!!, postId.toString())
+                        commentRecyclerView!!.scrollToPosition(commentList.size-1)
+
+
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.e("TAG","댓글 조회 실패")
+                    }
+
+                })//댓글 최신화
+
+            }//게시판 최신화
 
 
         }
