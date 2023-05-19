@@ -42,9 +42,10 @@ class BoardActivity : AppCompatActivity() {
 
     private var postId : String? = null
     private var userId : Long? = null
-    private var list : BoardDetail? = null
+    private var receiveData : BoardDetail? = null
     private var commentRecyclerView : RecyclerView? = null
     private var commentList = mutableListOf<Comment>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,9 +61,9 @@ class BoardActivity : AppCompatActivity() {
         commentRecyclerView!!.layoutManager = LinearLayoutManager(this)
 
         //intent 받기
-        val receiveData  = intent.getParcelableExtra<BoardDetail>("postIntel")
+        receiveData = intent.getParcelableExtra<BoardDetail>("postIntel")
 
-        postBoardDetail(receiveData!!)
+        postBoardDetail()
         //게시판 최신화
 
 
@@ -70,13 +71,15 @@ class BoardActivity : AppCompatActivity() {
 
             if(postId != null){
 
+
+
                 val objRef = Firebase.database.reference.child("posts").child(postId!!).child("comments")
 
                 val id = objRef.push().key.toString()
 
                 val objCommentRef = objRef.child(id)
 
-                val comment = Comment(id, list?.userId ,list?.userName ,list?.userImg
+                val comment = Comment(id, receiveData?.userId ,receiveData?.userName ,receiveData?.userImg
                     ,binding!!.reply.text.toString() ,CurrentDateTime.getCommentTime())
 
                 objCommentRef.setValue(comment)
@@ -102,7 +105,7 @@ class BoardActivity : AppCompatActivity() {
 
             userId = user?.id
 
-            if(userId!! != list!!.userId)
+            if(userId!! != receiveData!!.userId)
                 binding!!.edit.visibility = View.GONE
 
         }//userId를 통해 확인하여 수정 아이콘 view 확인
@@ -146,8 +149,6 @@ class BoardActivity : AppCompatActivity() {
                         val intent = Intent(this,BoardEditActivity::class.java)
                         intent.putExtra("postIntel",receiveData)
 
-
-
                         startActivityForResult(intent,REQUEST_CODE_EDIT_ACTIVITY)
 
                         true
@@ -188,39 +189,31 @@ class BoardActivity : AppCompatActivity() {
 
         if (requestCode == REQUEST_CODE_EDIT_ACTIVITY && resultCode == Activity.RESULT_OK) {
 
-            val receive_Intent  = data?.getParcelableExtra<BoardDetail>("resIntent")
+            receiveData = data?.getParcelableExtra<BoardDetail>("resIntent")
 
-            val board : BoardDetail? = receive_Intent
-
-            postBoardDetail(board!!)
-
+            postBoardDetail()
 
         }
 
     }//수정하고 난 후 최신화
 
-    private fun postBoardDetail(receiveIntent : BoardDetail){
+    private fun postBoardDetail(){
 
+            if (receiveData != null) {
 
-        if (receiveIntent != null) {
+                postId = receiveData!!.postId
 
-            list = receiveIntent
-
-            if (list != null) {
-
-                postId = list!!.postId
-
-                userId = list!!.userId
+                userId = receiveData!!.userId
 
                 Glide.with(this)
-                    .load(list!!.userImg)
+                    .load(receiveData!!.userImg)
                     .circleCrop()
                     .into(binding!!.userImg)
 
-                binding!!.userName.text = list!!.userName
-                binding!!.dateTime.text = list!!.dateTime
+                binding!!.userName.text = receiveData!!.userName
+                binding!!.dateTime.text = receiveData!!.dateTime
 
-                if(list!!.img.size == 0){
+                if(receiveData!!.img.size == 0){
 
                     val parentView1 = binding!!.uploadImageView1.parent as ViewGroup
                     parentView1.removeView(binding!!.uploadImageView1)
@@ -240,10 +233,10 @@ class BoardActivity : AppCompatActivity() {
 
                     val imageViewList = listOf(binding!!.uploadImageView1, binding!!.uploadImageView2, binding!!.uploadImageView3)
 
-                    for (i in list!!.img.indices) {
+                    for (i in receiveData!!.img.indices) {
 
                         Glide.with(this)
-                            .load(list!!.img[i])
+                            .load(receiveData!!.img[i])
                             .override(1000,1000)
                             .into(imageViewList[i])
 
@@ -251,30 +244,30 @@ class BoardActivity : AppCompatActivity() {
 
                     }
 
-                    for (i in list!!.img.size until imageViewList.size) {
+                    for (i in receiveData!!.img.size until imageViewList.size) {
                         imageViewList[i].visibility = View.GONE
                     }
 
 
                     binding!!.uploadImageView1.setOnClickListener {
-                        tossIntent(list!!.img.size,1, list!!.img[0])
+                        tossIntent(receiveData!!.img.size,1, receiveData!!.img[0])
                     }//첫번째 뷰
 
                     binding!!.uploadImageView2.setOnClickListener {
-                        tossIntent(list!!.img.size,2, list!!.img[1])
+                        tossIntent(receiveData!!.img.size,2, receiveData!!.img[1])
                     }//두번째 뷰
 
                     binding!!.uploadImageView3.setOnClickListener {
-                        tossIntent(list!!.img.size,3, list!!.img[2])
+                        tossIntent(receiveData!!.img.size,3, receiveData!!.img[2])
                     }//세번째 뷰
 
 
                 }//img가 없을 경우 imgView 제거
 
-                binding!!.postText.text = list!!.post
+                binding!!.postText.text = receiveData!!.post
 
                 Glide.with(this)
-                    .load(list!!.userImg)
+                    .load(receiveData!!.userImg)
                     .circleCrop()
                     .into(binding!!.replyImg)
 
@@ -311,7 +304,7 @@ class BoardActivity : AppCompatActivity() {
 
                 })//댓글 최신화
 
-            }//게시판 최신화
+            //게시판 최신화
 
 
         }

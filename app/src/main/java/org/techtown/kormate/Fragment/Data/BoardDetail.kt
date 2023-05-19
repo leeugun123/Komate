@@ -16,8 +16,6 @@ data class BoardDetail(
     var dateTime: String? = null,
 
 
-
-
 ): Parcelable {
 
     constructor(parcel: Parcel) : this(
