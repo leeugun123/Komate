@@ -1,5 +1,6 @@
 package org.techtown.kormate
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -32,8 +33,10 @@ import org.techtown.kormate.databinding.ActivityBoardBinding
 
 class BoardActivity : AppCompatActivity() {
 
-    private var binding : ActivityBoardBinding? = null
+    private val REQUEST_CODE_EDIT_ACTIVITY = 2
+    //액티비티 수정
 
+    private var binding : ActivityBoardBinding? = null
     private var commentSize : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +80,6 @@ class BoardActivity : AppCompatActivity() {
 
                 binding!!.userName.text = list.userName
                 binding!!.dateTime.text = list.dateTime
-
 
 
                 if(list.img.size == 0){
@@ -129,8 +131,6 @@ class BoardActivity : AppCompatActivity() {
                     }//세번째 뷰
 
 
-
-
                 }//img가 없을 경우 imgView 제거
 
 
@@ -143,7 +143,8 @@ class BoardActivity : AppCompatActivity() {
 
 
 
-            }
+            }//게시판 최신화
+
 
             val commentsRef = Firebase.database.reference.child("posts").child(postId.toString()).child("comments")
 
@@ -171,43 +172,41 @@ class BoardActivity : AppCompatActivity() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-
                     Log.e("TAG","댓글 조회 실패")
-
                 }
 
-            })
+            })//댓글 최신화
+
+        }//액티비티 최신화
 
 
-        }
-
-
-        UserApiClient.instance.me { user, error ->
+        UserApiClient.instance.me { user, _ ->
 
             userId = user?.id
 
-            if(!userId!!.equals(list!!.userId))
+            if(userId!! != list!!.userId)
                 binding!!.edit.visibility = View.GONE
 
-        }//카카오톡을 통해서 사용자 고유 id 가져오기
-
+        }//userId를 통해 확인하여 수정 아이콘 view 확인
 
 
 
         binding!!.edit.setOnClickListener {
 
-          val popupMenu = PopupMenu(this,it)
+            val popupMenu = PopupMenu(this,it)
 
             popupMenu.menuInflater.inflate(R.menu.post_menu,popupMenu.menu)
+
             popupMenu.setOnMenuItemClickListener { menuItem ->
+
                 when(menuItem.itemId){
 
-                    R.id.action_delete ->{
+                    R.id.action_delete -> {
 
                         val builder = AlertDialog.Builder(this)
                         builder.setTitle("이 게시물을 삭제하시겠습니까?")
 
-                        builder.setPositiveButton("예") { dialog, which ->
+                        builder.setPositiveButton("예") { _, _ ->
 
                             val databaseReference = FirebaseDatabase.getInstance().reference.child("posts")
                             databaseReference.child(postId.toString()).removeValue()
@@ -216,23 +215,20 @@ class BoardActivity : AppCompatActivity() {
                             finish()
 
                         }
-                        builder.setNegativeButton("아니오") { dialog, which ->
+                        builder.setNegativeButton("아니오") { _, _ ->
 
                         }
 
                         builder.create().show()
-
 
                         true
                     }//삭제 기능 구현
 
                     R.id.action_edit ->{
 
-
                         val intent = Intent(this,BoardEditActivity::class.java)
                         intent.putExtra("postIntel",receiveData)
-                        startActivity(intent)
-
+                        startActivityForResult(intent,REQUEST_CODE_EDIT_ACTIVITY)
 
                         true
                     }//편집 기능 선택
@@ -246,19 +242,13 @@ class BoardActivity : AppCompatActivity() {
 
             popupMenu.show()
 
-
         }
-
-
-
 
 
 
         binding!!.post.setOnClickListener {
 
             if(postId != null){
-
-                Log.e("TAG","등록")
 
                 val objRef = Firebase.database.reference.child("posts").child(postId).child("comments")
 
@@ -282,9 +272,8 @@ class BoardActivity : AppCompatActivity() {
 
             }
 
-        }//댓글 등록
-        //1개만 등록되지 왜?
-
+        }
+         //댓글 등록
 
 
     }
@@ -295,14 +284,25 @@ class BoardActivity : AppCompatActivity() {
 
         intent.putExtra("entirePage",entirePage)
         intent.putExtra("currentPage",curPage)
-
         intent.putExtra("imgUrl",imgUri)
-
 
         startActivity(intent)
 
-
     }
+
+    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?){
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE_EDIT_ACTIVITY && resultCode == Activity.RESULT_OK) {
+
+
+
+        }
+
+    }//수정하고 난 후 최신화
+
+
+
 
 
 }
