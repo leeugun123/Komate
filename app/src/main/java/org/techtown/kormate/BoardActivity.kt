@@ -71,8 +71,6 @@ class BoardActivity : AppCompatActivity() {
 
             if(postId != null){
 
-
-
                 val objRef = Firebase.database.reference.child("posts").child(postId!!).child("comments")
 
                 val id = objRef.push().key.toString()
@@ -83,7 +81,6 @@ class BoardActivity : AppCompatActivity() {
                     ,binding!!.reply.text.toString() ,CurrentDateTime.getCommentTime())
 
                 objCommentRef.setValue(comment)
-
 
 
                 binding!!.reply.text.clear()

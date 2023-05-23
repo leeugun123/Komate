@@ -64,7 +64,6 @@ class CommentAdapter(private val comments : MutableList<Comment>, private val us
                 binding.commentText.text= comment.text
 
 
-
                 if(userId == comment.userId){
 
                     deleteButton.setOnClickListener {

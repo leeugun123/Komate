@@ -196,7 +196,11 @@ class BoardEditActivity : AppCompatActivity() {
                                             mergeTwoLists(picUri, imageFileNames), list.dateTime)
 
                                         postsRef.child(list!!.postId!!).setValue(boardDetail)
-                                        postsRef.child(list!!.postId!!).child("comments").setValue(commentList)
+
+                                        for (i in 0 until commentList.size) {
+                                            postsRef.child(list!!.postId!!).child("comments").child(commentList[i].id.toString()).setValue(commentList[i])
+                                        }
+
 
                                         progressDialog.dismiss()
 
@@ -217,7 +221,10 @@ class BoardEditActivity : AppCompatActivity() {
                 val boardDetail = BoardDetail(list!!.postId, list.userId, list.userName, list.userImg, post, picUri, list.dateTime)
 
                 postsRef.child(list.postId!!).setValue(boardDetail)
-                postsRef.child(list!!.postId!!).child("comments").setValue(commentList)
+
+                for (i in 0 until commentList.size) {
+                    postsRef.child(list!!.postId!!).child("comments").child(commentList[i].id.toString()).setValue(commentList[i])
+                }
 
                 // ProgressDialog 닫기
                 progressDialog.dismiss()
