@@ -38,6 +38,7 @@ class BoardEditActivity : AppCompatActivity() {
     private val imageUris = mutableListOf<String>()
     private var adapter: GalaryAdapter? = null
     private var picUri = mutableListOf<String>()
+    private var list: BoardDetail? = null
 
     private val postsRef = Firebase.database.reference.child("posts")
     private val commentList = mutableListOf<Comment>()
@@ -51,21 +52,21 @@ class BoardEditActivity : AppCompatActivity() {
         binding.updateButton.text = "수정하기"
 
         val receiveData = intent.getParcelableExtra<BoardDetail>("postIntel")
-        var list: BoardDetail? = null
+
 
         if (receiveData != null) {
             list = receiveData
 
             if (list != null) {
-                binding.post.setText(list.post.toString())
-                picUri = list.img
+                binding.post.setText(list!!.post.toString())
+                picUri = list!!.img
 
                 if (picUri.size > 0) {
                     handleSelectedImages(picUri, binding)
                 }
 
                 val commentsRef =
-                    Firebase.database.reference.child("posts").child(list.postId.toString())
+                    Firebase.database.reference.child("posts").child(list!!.postId.toString())
                         .child("comments")
 
                 commentsRef.addValueEventListener(object : ValueEventListener {
@@ -154,24 +155,20 @@ class BoardEditActivity : AppCompatActivity() {
                                     imageFileNames.add(uri.toString())
 
                                     if (imageFileNames.size == imageUris.size) {
+
                                         val boardDetail = BoardDetail(
                                             list!!.postId,
-                                            list.userId,
-                                            list.userName,
-                                            list.userImg,
+                                            list!!.userId,
+                                            list!!.userName,
+                                            list!!.userImg,
                                             post,
                                             mergeTwoLists(picUri, imageFileNames),
-                                            list.dateTime
+                                            list!!.dateTime
                                         )
 
-                                        postsRef.child(list.postId!!).setValue(boardDetail)
-
-                                        for (i in 0 until commentList.size) {
-                                            postsRef.child(list.postId!!)
-                                                .child("comments")
-                                                .child(commentList[i].id.toString())
-                                                .setValue(commentList[i])
-                                        }
+                                        postsRef.child(list!!.postId!!).setValue(boardDetail)
+                                        uploadComment()
+                                        //댓글 정보 유지하기
 
                                         progressDialog.dismiss()
                                         complete(boardDetail)
@@ -185,20 +182,17 @@ class BoardEditActivity : AppCompatActivity() {
             } else {
                 val boardDetail = BoardDetail(
                     list!!.postId,
-                    list.userId,
-                    list.userName,
-                    list.userImg,
+                    list!!.userId,
+                    list!!.userName,
+                    list!!.userImg,
                     post,
                     picUri,
-                    list.dateTime
+                    list!!.dateTime
                 )
 
-                postsRef.child(list.postId!!).setValue(boardDetail)
-
-                for (i in 0 until commentList.size) {
-                    postsRef.child(list.postId!!).child("comments")
-                        .child(commentList[i].id.toString()).setValue(commentList[i])
-                }
+                postsRef.child(list!!.postId!!).setValue(boardDetail)
+                uploadComment()
+                //댓글 정보 유지하기
 
                 progressDialog.dismiss()
                 complete(boardDetail)
@@ -208,14 +202,28 @@ class BoardEditActivity : AppCompatActivity() {
         binding.backBtn.setOnClickListener {
             finish()
         }
+
     }
 
     private fun complete(boardDetail: BoardDetail) {
+
         val resIntent = Intent()
         resIntent.putExtra("resIntent", boardDetail)
         setResult(Activity.RESULT_OK, resIntent)
         finish()
         Toast.makeText(this, "게시글이 수정되었습니다.", Toast.LENGTH_SHORT).show()
+
+    }
+
+    private fun uploadComment(){
+
+        for (i in 0 until commentList.size) {
+            postsRef.child(list!!.postId!!)
+                .child("comments")
+                .child(commentList[i].id.toString())
+                .setValue(commentList[i])
+        }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -257,6 +265,7 @@ class BoardEditActivity : AppCompatActivity() {
         }
     }
 
+
     private fun handleSelectedImages(imageUris: MutableList<String>, acBinding: ActivityBoardPostBinding) {
         adapter = GalaryAdapter(imageUris, acBinding)
         adapter!!.notifyDataSetChanged()
@@ -266,11 +275,13 @@ class BoardEditActivity : AppCompatActivity() {
         binding.imgRecyclerView.adapter = adapter
     }
 
+
     private fun mergeTwoLists(list1: MutableList<String>, list2: MutableList<String>): MutableList<String> {
         val mergedList = mutableListOf<String>()
         mergedList.addAll(list1)
         mergedList.addAll(list2)
         return mergedList
     }
+
 
 }
