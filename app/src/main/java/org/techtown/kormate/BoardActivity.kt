@@ -109,7 +109,7 @@ class BoardActivity : AppCompatActivity() {
 
             val popupMenu = PopupMenu(this,it)
 
-            //userId = 23
+            userId = 23
 
             if(userId!! != receiveData!!.userId){
                 popupMenu.menuInflater.inflate(R.menu.post_report,popupMenu.menu)
@@ -124,10 +124,10 @@ class BoardActivity : AppCompatActivity() {
 
                     R.id.action_report -> {
 
-                        Toast.makeText(context, "신고", Toast.LENGTH_SHORT).show()
+                        showReportDialog()
 
                         true
-                    }
+                    }//신고하기
 
                     R.id.action_delete -> {
 
@@ -204,6 +204,44 @@ class BoardActivity : AppCompatActivity() {
         }
 
     }//수정하고 난 후 최신화
+
+    private fun showReportDialog() {
+
+        val reasons = arrayOf("욕설", "도배", "인종 혐오 표현", "성적인 만남 유도")
+        val checkedReasons = booleanArrayOf(false, false, false, false, false)
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("신고 사유를 선택하세요")
+        builder.setMultiChoiceItems(reasons, checkedReasons) { _, which, isChecked ->
+            checkedReasons[which] = isChecked
+        }
+
+        builder.setPositiveButton("확인") { _, _ ->
+
+            val selectedReasons = mutableListOf<String>()
+
+            for (i in reasons.indices) {
+
+                if (checkedReasons[i]) {
+                    selectedReasons.add(reasons[i])
+                }
+
+            }
+            // 여기에서 선택한 신고 사유들에 대한 처리를 진행합니다.
+            // 예를 들어, 선택한 신고 사유들을 서버로 전송하거나 다른 작업을 수행할 수 있습니다.
+
+            Toast.makeText(context, "게시물이 신고 되었습니다.", Toast.LENGTH_SHORT).show()
+
+        }
+
+        builder.setNegativeButton("취소") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+
 
     private fun postBoardDetail(){
 
