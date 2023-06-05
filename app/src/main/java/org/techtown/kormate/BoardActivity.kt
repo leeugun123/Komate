@@ -30,6 +30,7 @@ import org.techtown.kormate.Fragment.Adapter.CommentAdapter
 import org.techtown.kormate.Fragment.BoardEditActivity
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.Fragment.Data.Comment
+import org.techtown.kormate.Fragment.Data.Report
 import org.techtown.kormate.databinding.ActivityBoardBinding
 
 class BoardActivity : AppCompatActivity() {
@@ -45,7 +46,6 @@ class BoardActivity : AppCompatActivity() {
     private var receiveData : BoardDetail? = null
     private var commentRecyclerView : RecyclerView? = null
     private var commentList = mutableListOf<Comment>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -175,9 +175,6 @@ class BoardActivity : AppCompatActivity() {
 
 
 
-
-
-
     }
 
     private fun tossIntent(entirePage: Int, curPage: Int,imgUri : String) {
@@ -227,8 +224,10 @@ class BoardActivity : AppCompatActivity() {
                 }
 
             }
-            // 여기에서 선택한 신고 사유들에 대한 처리를 진행합니다.
-            // 예를 들어, 선택한 신고 사유들을 서버로 전송하거나 다른 작업을 수행할 수 있습니다.
+
+            //선택한 신고 사유들에 대한 처리 진행
+            Firebase.database.reference.child("postReports").child(Firebase.database.reference.push().key.toString()).setValue(Report(userId,selectedReasons,receiveData?.userId,receiveData?.postId))
+            //신고 넣기
 
             Toast.makeText(context, "게시물이 신고 되었습니다.", Toast.LENGTH_SHORT).show()
 
