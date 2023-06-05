@@ -95,8 +95,8 @@ class BoardEditActivity : AppCompatActivity() {
             TedPermission.create()
                 .setPermissionListener(object : PermissionListener {
                     override fun onPermissionGranted() {
-                        val intent =
-                            Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+
+                        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                         intent.type = "image/*"
                         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
@@ -104,6 +104,7 @@ class BoardEditActivity : AppCompatActivity() {
                             Intent.createChooser(intent, "Select images"),
                             REQUEST_CODE_PICK_IMAGES
                         )
+
                     }
 
                     override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {

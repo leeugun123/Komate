@@ -66,6 +66,12 @@ class BoardActivity : AppCompatActivity() {
         postBoardDetail()
         //게시판 최신화
 
+        UserApiClient.instance.me { user, _ ->
+
+            userId = user?.id
+
+        }//userId를 통해 확인하여 수정 아이콘 view 확인
+
 
         binding!!.post.setOnClickListener {
 
@@ -98,25 +104,30 @@ class BoardActivity : AppCompatActivity() {
         //댓글 등록
 
 
-        UserApiClient.instance.me { user, _ ->
-
-            userId = user?.id
-
-            if(userId!! != receiveData!!.userId)
-                binding!!.edit.visibility = View.GONE
-
-        }//userId를 통해 확인하여 수정 아이콘 view 확인
-
 
         binding!!.edit.setOnClickListener {
 
             val popupMenu = PopupMenu(this,it)
 
-            popupMenu.menuInflater.inflate(R.menu.post_menu,popupMenu.menu)
+            //userId = 23
+
+            if(userId!! != receiveData!!.userId){
+                popupMenu.menuInflater.inflate(R.menu.post_report,popupMenu.menu)
+            }
+            else {
+                popupMenu.menuInflater.inflate(R.menu.post_menu, popupMenu.menu)
+            }
 
             popupMenu.setOnMenuItemClickListener { menuItem ->
 
                 when(menuItem.itemId){
+
+                    R.id.action_report -> {
+
+                        Toast.makeText(context, "신고", Toast.LENGTH_SHORT).show()
+
+                        true
+                    }
 
                     R.id.action_delete -> {
 
