@@ -6,12 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.techtown.kormate.R
+import org.techtown.kormate.databinding.FragmentMyBinding
 
 
 class MyFragment : Fragment() {
 
+    private var binding : FragmentMyBinding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        binding = FragmentMyBinding.inflate(layoutInflater)
+
+
 
     }
 
@@ -19,8 +26,15 @@ class MyFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my, container, false)
+
+        return binding?.root
+    }
+
+    override fun onDestroyView() {
+
+        binding = null
+        super.onDestroyView()
+
     }
 
 
