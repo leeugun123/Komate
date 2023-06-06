@@ -5,14 +5,82 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.MyFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:layout_gravity="center"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:text="정보 게시판"/>
-        />
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="15dp"
+                android:text="서울과학기술대학교"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#467EDB"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="15dp"
+                android:text="내정보"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:textColor="#102778"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center"
+                android:textSize="18sp"
+                android:textColor="#5C96EC"
+                android:textStyle="bold"
+                android:background="@android:color/transparent"
+                android:text="로그아웃"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/ic_baseline_logout_24"
+                android:layout_gravity="right|center"
+                />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+
+
+
 
 </LinearLayout>
