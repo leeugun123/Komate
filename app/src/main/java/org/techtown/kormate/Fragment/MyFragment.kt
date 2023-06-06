@@ -1,12 +1,16 @@
 package org.techtown.kormate.Fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.kakao.sdk.user.UserApiClient
+import org.techtown.kormate.LoginActivity
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentMyBinding
 
@@ -34,6 +38,48 @@ class MyFragment : Fragment() {
 
 
         }//내 정보 카카오 oAuth로 가져오기
+
+        binding!!.logoutButton.setOnClickListener {
+
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("로그아웃 하시겠습니까?")
+
+            builder.setPositiveButton("예") { dialog, which ->
+
+                UserApiClient.instance.logout { error ->
+                    if (error != null) {
+                        // 로그아웃 실패 처리
+                        Toast.makeText(requireContext(), "로그아웃 실패", Toast.LENGTH_SHORT).show()
+                    } else {
+
+                        val intent = Intent(requireContext(), LoginActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                        startActivity(intent)
+
+                        Toast.makeText(requireContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+
+                        requireActivity().finish()
+
+                    }
+                }
+
+
+            }
+
+            builder.setNegativeButton("아니오") { dialog, which ->
+
+                dialog.dismiss()
+
+            }
+
+            val dialog = builder.create()
+            dialog.show()
+
+
+        }
+
+
 
 
 
