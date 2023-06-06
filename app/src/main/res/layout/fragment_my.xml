@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Fragment.MyFragment">
 
     <LinearLayout
@@ -78,6 +79,77 @@
     </LinearLayout>
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/myfragment_rounded_bacground"
+
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/user_profile"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="60dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="10dp"
+                android:text="Kkanbu"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textAppearance="@style/nametext"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="Korea"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="서울과학기술대학교 | 컴퓨터공학과"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/self_intro_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="안녕 내 이름은 이유건이야 난 코딩을 좋아하고 글자수 글자수 글자수 글자수 글자수
+글자수 글자수 글자수 글자수  글자수 글자수  글자수 글자수  글자수 글자수  글자수 글자수  글자수 글자수  글자수 글자수  글자수 글자수
+글자수 글자수  글자수 글자수 "
+        android:textSize="17sp"
+        android:textColor="#B3000000"
+        android:background="@drawable/myfragment_selftext_background"
+        />
 
 
 
