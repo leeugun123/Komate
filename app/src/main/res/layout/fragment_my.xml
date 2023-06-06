@@ -78,6 +78,14 @@
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rectangle_2"
+        android:alpha="0.3"
+        />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -141,15 +149,143 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:text="안녕 내 이름은 이유건이야 난 코딩을 좋아하고 글자수 글자수 글자수 글자수 글자수
-글자수 글자수 글자수 글자수  글자수 글자수  글자수 글자수  글자수 글자수  글자수 글자수  글자수 글자수  글자수 글자수  글자수 글자수
-글자수 글자수  글자수 글자수 "
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:text="안녕 내 이름은 이유건이야 난 코딩을 좋아해!"
         android:textSize="17sp"
         android:textColor="#B3000000"
         android:background="@drawable/myfragment_selftext_background"
         />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:text="내 정보"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rectangle_2"
+        android:alpha="0.3"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="대학교"
+                android:textSize="15sp"
+                />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:gravity="right"
+                android:text="서울과학기술대학교"
+                android:textColor="@color/black"
+                />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전공"
+                android:textSize="15sp"
+                />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:gravity="right"
+                android:text="경제학"
+                android:textColor="@color/black"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="국적"
+                android:textSize="15sp"
+                />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:gravity="right"
+                android:text="대한민국"
+                android:textColor="@color/black"
+                />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
 
 
 
