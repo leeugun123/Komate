@@ -38,37 +38,39 @@ class NationActivity : AppCompatActivity() {
 
                     binding!!.checkButton.setBackgroundResource(R.color.blue)
                     nation = "한국"
-                    Log.e(TAG,"한국 선택")
 
                 }//한국
 
-                binding!!.radioButton2.id -> {
+                binding!!.radio2.id -> {
 
                     binding!!.checkButton.setBackgroundResource(R.color.blue)
                     nation = "중국"
 
+
                 }//중국
 
-                binding!!.radioButton3.id -> {
+                binding!!.radio3.id -> {
 
                     binding!!.checkButton.setBackgroundResource(R.color.blue)
                     nation = "베트남"
 
+
                 }//베트남
 
-                binding!!.radioButton4.id -> {
+                binding!!.radio4.id -> {
 
                     binding!!.checkButton.setBackgroundResource(R.color.blue)
                     nation = "몽골"
 
+
                 }//몽골
 
-                binding!!.radioButton5.id -> {
+                binding!!.radio5.id -> {
 
                     binding!!.checkButton.setBackgroundResource(R.color.blue)
-                    nation = "우즈벡"
+                    nation = "우즈베키스탄"
 
-                }//우즈벡
+                }//우즈베키스탄
 
             }
 
