@@ -82,7 +82,7 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/radioButton1"
+                android:id="@+id/radio1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" 한국 | Korea"
@@ -220,5 +220,31 @@
         </LinearLayout>
 
     </RadioGroup>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/check_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="#BDBDBD"
+            android:text="확인"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.974"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="0dp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

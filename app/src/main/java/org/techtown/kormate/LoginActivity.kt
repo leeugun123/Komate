@@ -14,6 +14,7 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApi
 import com.kakao.sdk.user.UserApiClient
+import org.techtown.kormate.Profile.NationActivity
 import org.techtown.kormate.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -27,8 +28,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding!!.root)
 
         //----------------------카카오 로그인 api 관련 코드---------------------------------
-
-
 
 
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
@@ -103,9 +102,7 @@ class LoginActivity : AppCompatActivity() {
 
     fun moveNextActivity(){
 
-        var intent : Intent
-        intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        var intent = Intent(this, NationActivity::class.java)
         startActivity(intent)
         finish()
 
