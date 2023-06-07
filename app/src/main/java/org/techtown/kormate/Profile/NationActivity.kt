@@ -26,9 +26,7 @@ class NationActivity : AppCompatActivity() {
 
         var nation : String = ""
 
-        binding!!.backBtn.setOnClickListener {
-            finish()
-        }
+
 
         binding!!.radioGroup.setOnCheckedChangeListener { group, checkId ->
 
@@ -84,7 +82,7 @@ class NationActivity : AppCompatActivity() {
             else{
 
                 //서버 입력 작업 처리
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, MajorActivity::class.java)
                 startActivity(intent)
                 finish()
 
