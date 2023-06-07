@@ -18,6 +18,9 @@
         android:theme="@style/Theme.Kormate"
         tools:targetApi="31">
         <activity
+            android:name=".ReviseActivity"
+            android:exported="false" />
+        <activity
             android:name=".ImageDetailActivity"
             android:exported="false" />
         <activity

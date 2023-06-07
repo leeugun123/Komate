@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.LoginActivity
 import org.techtown.kormate.R
+import org.techtown.kormate.ReviseActivity
 import org.techtown.kormate.databinding.FragmentMyBinding
 
 
@@ -53,7 +54,6 @@ class MyFragment : Fragment() {
                     } else {
 
                         val intent = Intent(requireContext(), LoginActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                         startActivity(intent)
 
                         Toast.makeText(requireContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
@@ -81,6 +81,8 @@ class MyFragment : Fragment() {
 
         binding!!.reviseButt.setOnClickListener {
 
+            val intent = Intent(requireContext(), ReviseActivity::class.java)
+            startActivity(intent)
 
         }//수정 버튼
 
