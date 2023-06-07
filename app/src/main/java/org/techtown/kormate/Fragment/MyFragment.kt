@@ -79,6 +79,13 @@ class MyFragment : Fragment() {
 
         }
 
+        binding!!.reviseButt.setOnClickListener {
+
+
+        }//수정 버튼
+
+
+
 
 
 

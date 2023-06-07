@@ -109,8 +109,6 @@ class BoardActivity : AppCompatActivity() {
 
             val popupMenu = PopupMenu(this,it)
 
-            userId = 23
-
             if(userId!! != receiveData!!.userId){
                 popupMenu.menuInflater.inflate(R.menu.post_report,popupMenu.menu)
             }
