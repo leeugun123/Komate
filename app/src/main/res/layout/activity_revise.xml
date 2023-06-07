@@ -95,16 +95,44 @@
             />
 
         <EditText
+            android:id="@+id/self_edittext"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_marginTop="5dp"
+            android:padding="10dp"
             android:background="@drawable/edittext_border"
+            android:gravity="top|start"
+
             />
 
-
-
-
     </LinearLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/revise_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="#5C96EC"
+            android:text="수정"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.974"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="0dp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

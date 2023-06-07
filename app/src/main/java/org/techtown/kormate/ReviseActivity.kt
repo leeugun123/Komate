@@ -3,6 +3,7 @@ package org.techtown.kormate
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.databinding.ActivityReviseBinding
@@ -40,7 +41,16 @@ class ReviseActivity : AppCompatActivity() {
             finish()
         }
 
+        binding!!.reviseButton.setOnClickListener {
 
+            //파이베이스에 수정된 정보 업로드
+
+
+
+            Toast.makeText(this,"수정되었습니다.",Toast.LENGTH_SHORT).show()
+            finish()
+
+        }
 
 
 
