@@ -50,10 +50,14 @@ class GenderActivity : AppCompatActivity() {
             }
             else{
 
+                Toast.makeText(this,"정보가 입력되었습니다.", Toast.LENGTH_SHORT).show()
+
                 //서버 입력 작업 처리
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
+
+
 
             }
 
