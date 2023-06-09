@@ -2,6 +2,7 @@ package org.techtown.kormate.Fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.kakao.sdk.user.UserApiClient
+import org.techtown.kormate.Fragment.Data.UserIntel
 import org.techtown.kormate.LoginActivity
 import org.techtown.kormate.R
 import org.techtown.kormate.ReviseActivity
@@ -19,6 +25,7 @@ import org.techtown.kormate.databinding.FragmentMyBinding
 class MyFragment : Fragment() {
 
     private var binding : FragmentMyBinding? = null
+    private var userId : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +43,49 @@ class MyFragment : Fragment() {
 
             if(user?.kakaoAccount?.profile?.profileImageUrl != null)
                 Glide.with(binding!!.userProfile).load(user?.kakaoAccount?.profile?.profileImageUrl).circleCrop().into(binding!!.userProfile)
+
+
+            val database = FirebaseDatabase.getInstance()
+            val reference = database.reference.child("usersIntel").child(user!!.id.toString())
+
+            reference.addListenerForSingleValueEvent(object : ValueEventListener {
+
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                    val userIntel = dataSnapshot.getValue(UserIntel::class.java)
+
+                    var nation : String? = null
+
+                    if(userIntel!!.nation.toString() == "한국"){
+                        nation = "Korea"
+                    }else if(userIntel!!.nation.toString() == "중국"){
+                        nation = "China"
+                    }
+                    else if(userIntel!!.nation.toString() == "중국"){
+                        nation = "Vietnam"
+                    }
+                    else if(userIntel!!.nation.toString() == "중국"){
+                        nation = "Mongolia"
+                    }else
+                        nation = "Uzbekistan"
+
+                    binding!!.selfMajor.text = "서울과학기술대학교 | " + userIntel!!.major.toString()
+
+                    binding!!.nation.text = nation
+
+                    binding!!.selfIntroText.text = userIntel.selfIntro.toString()
+
+                    binding!!.majorText.text = userIntel!!.major.toString()
+                    binding!!.nationText.text = userIntel!!.nation.toString()
+                    binding!!.genderText.text = userIntel!!.gender.toString()
+
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+
+                }
+
+            })
 
 
         }//내 정보 카카오 oAuth로 가져오기

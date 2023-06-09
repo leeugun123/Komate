@@ -133,6 +133,7 @@
 
 
                 <TextView
+                    android:id="@+id/nation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|left"
@@ -160,8 +161,8 @@
             </LinearLayout>
 
 
-
             <TextView
+                android:id="@+id/selfMajor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -269,11 +270,11 @@
                 android:layout_weight="1" />
 
             <TextView
+                android:id="@+id/majorText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:gravity="right"
-                android:text="경제학"
                 android:textColor="@color/black"
                 />
 
@@ -301,11 +302,11 @@
                 android:layout_weight="1" />
 
             <TextView
+                android:id="@+id/nationText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:gravity="right"
-                android:text="대한민국"
                 android:textColor="@color/black"
                 />
 
@@ -333,11 +334,11 @@
                 android:layout_weight="1" />
 
             <TextView
+                android:id="@+id/genderText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:gravity="right"
-                android:text="남자"
                 android:textColor="@color/black"
                 />
 
