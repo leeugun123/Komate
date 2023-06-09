@@ -8,20 +8,18 @@ import android.text.TextWatcher
 import android.widget.Toast
 import org.techtown.kormate.MainActivity
 import org.techtown.kormate.R
-import org.techtown.kormate.databinding.ActivityMajorBinding
+import org.techtown.kormate.databinding.ActivitySelfIntroBinding
 
+class SelfIntroActivity : AppCompatActivity() {
 
-class MajorActivity : AppCompatActivity() {
-
-    private var binding : ActivityMajorBinding? = null
+    private var binding : ActivitySelfIntroBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMajorBinding.inflate(layoutInflater)
+        binding = ActivitySelfIntroBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
 
-
-        binding!!.editMajor.addTextChangedListener(object : TextWatcher {
+        binding!!.selfEdittext.addTextChangedListener(object : TextWatcher {
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // 입력 전에 호출되는 메서드
@@ -32,7 +30,9 @@ class MajorActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
+
                 val userInput = s?.toString()?.trim() // 사용자의 입력값
+
                 if (userInput?.length ?: 0 >= 1) {
                     // 입력한 글자가 1글자 이상인 경우 버튼의 색상 변경
                     binding!!.checkButton.setBackgroundResource(R.color.blue)
@@ -40,22 +40,24 @@ class MajorActivity : AppCompatActivity() {
                     // 입력한 글자가 없는 경우 버튼의 색상 초기화
                     binding!!.checkButton.setBackgroundResource(R.color.gray)
                 }
+
             }
+
 
         })
 
 
         binding!!.checkButton.setOnClickListener {
 
-            if(binding!!.editMajor.text.toString().isNotEmpty()){
+            if(binding!!.selfEdittext.text.toString().isNotEmpty()){
 
                 //서버에서 입력 처리
-                val intent = Intent(this, SelfIntroActivity::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             }
             else{
-                Toast.makeText(this,"전공을 입력해주세요.",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"자기소개를 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
 
 
@@ -64,6 +66,5 @@ class MajorActivity : AppCompatActivity() {
 
 
     }
-
 
 }

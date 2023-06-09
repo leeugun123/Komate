@@ -18,6 +18,9 @@
         android:theme="@style/Theme.Kormate"
         tools:targetApi="31">
         <activity
+            android:name=".SelfIntroActivity"
+            android:exported="false" />
+        <activity
             android:name=".Profile.MajorActivity"
             android:exported="false" />
         <activity
