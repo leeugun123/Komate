@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.kakao.sdk.user.UserApiClient
+import org.techtown.kormate.Fragment.Data.UserIntel
 import org.techtown.kormate.MainActivity
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivitySelfIntroBinding
@@ -20,6 +21,8 @@ class SelfIntroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySelfIntroBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
+
+        var receivedIntel  = intent.getParcelableExtra<UserIntel>("userIntel")
 
 
         UserApiClient.instance.me { user, _ ->
@@ -72,8 +75,13 @@ class SelfIntroActivity : AppCompatActivity() {
 
             if(binding!!.selfEdittext.text.toString().isNotEmpty()){
 
-                //서버에서 입력 처리
+
                 val intent = Intent(this, GenderActivity::class.java)
+
+                receivedIntel!!.selfIntro = binding!!.selfEdittext.text.toString()
+
+                intent.putExtra("userIntel",receivedIntel)
+
                 startActivity(intent)
                 finish()
 

@@ -24,6 +24,7 @@
             android:background="@color/white"
             />
 
+
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -34,8 +35,8 @@
             android:textColor="#5C96EC"
             android:textStyle="bold"
             android:text="프로필 수정"
-
             />
+
 
     </LinearLayout>
 

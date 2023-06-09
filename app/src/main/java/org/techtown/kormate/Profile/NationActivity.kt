@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
+import org.techtown.kormate.Fragment.Data.UserIntel
 import org.techtown.kormate.LoginActivity
 import org.techtown.kormate.MainActivity
 import org.techtown.kormate.R
@@ -82,8 +83,12 @@ class NationActivity : AppCompatActivity() {
             else{
 
                 //서버 입력 작업 처리
+                var userIntel : UserIntel = UserIntel(nation,"","","")
+
                 val intent = Intent(this, MajorActivity::class.java)
+                intent.putExtra("userIntel",userIntel)
                 startActivity(intent)
+
                 finish()
 
             }

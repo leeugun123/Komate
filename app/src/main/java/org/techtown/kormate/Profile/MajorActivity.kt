@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
+import org.techtown.kormate.Fragment.Data.UserIntel
 import org.techtown.kormate.MainActivity
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivityMajorBinding
@@ -19,6 +20,8 @@ class MajorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMajorBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
+
+        var receivedIntel  = intent.getParcelableExtra<UserIntel>("userIntel")
 
 
         binding!!.editMajor.addTextChangedListener(object : TextWatcher {
@@ -49,8 +52,13 @@ class MajorActivity : AppCompatActivity() {
 
             if(binding!!.editMajor.text.toString().isNotEmpty()){
 
-                //서버에서 입력 처리
+
                 val intent = Intent(this, SelfIntroActivity::class.java)
+
+                receivedIntel!!.major = binding!!.editMajor.text.toString()
+
+                intent.putExtra("userIntel",receivedIntel)
+
                 startActivity(intent)
                 finish()
             }

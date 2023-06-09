@@ -1,9 +1,12 @@
 package org.techtown.kormate.Profile
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import org.techtown.kormate.Fragment.Data.UserIntel
 import org.techtown.kormate.MainActivity
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivityGenderBinding
@@ -18,6 +21,8 @@ class GenderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGenderBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
+
+        var receivedIntel  = intent.getParcelableExtra<UserIntel>("userIntel")
 
         var gender : String = ""
 
@@ -52,8 +57,12 @@ class GenderActivity : AppCompatActivity() {
 
                 Toast.makeText(this,"정보가 입력되었습니다.", Toast.LENGTH_SHORT).show()
 
-                //서버 입력 작업 처리
                 val intent = Intent(this, MainActivity::class.java)
+
+                receivedIntel!!.gender = gender
+
+
+
                 startActivity(intent)
                 finish()
 
