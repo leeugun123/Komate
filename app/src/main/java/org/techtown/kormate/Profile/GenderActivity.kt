@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.google.firebase.database.FirebaseDatabase
+import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Data.UserIntel
 import org.techtown.kormate.MainActivity
 import org.techtown.kormate.R
@@ -57,10 +59,15 @@ class GenderActivity : AppCompatActivity() {
 
                 Toast.makeText(this,"정보가 입력되었습니다.", Toast.LENGTH_SHORT).show()
 
-                val intent = Intent(this, MainActivity::class.java)
-
                 receivedIntel!!.gender = gender
 
+                val intent = Intent(this, MainActivity::class.java)
+
+                UserApiClient.instance.me { user, error ->
+
+                    writeIntelFirebase(receivedIntel, user?.id.toString())
+
+                }//파이베이스에 데이터 올리기
 
 
                 startActivity(intent)
@@ -74,10 +81,26 @@ class GenderActivity : AppCompatActivity() {
         }
 
 
+    }
 
 
+    fun writeIntelFirebase(userIntel: UserIntel , userId: String) {
 
+        // Firebase Realtime Database의 레퍼런스를 가져옵니다.
+        val database = FirebaseDatabase.getInstance()
+        val reference = database.reference.child("usersIntel").child(userId)
+
+        // UserIntel 객체를 Firebase에 저장합니다.
+        reference.setValue(userIntel)
+
+            .addOnSuccessListener {
+                Toast.makeText(this, "정보가 입력되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+
+            }
 
 
     }
+
 }
