@@ -1,19 +1,17 @@
 package org.techtown.kormate
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
-import android.widget.ImageButton
 import android.widget.Toast
+import com.google.firebase.database.FirebaseDatabase
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
-import com.kakao.sdk.common.model.ClientError
-import com.kakao.sdk.common.model.ClientErrorCause
-import com.kakao.sdk.user.UserApi
 import com.kakao.sdk.user.UserApiClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import org.techtown.kormate.Profile.NationActivity
 import org.techtown.kormate.databinding.ActivityLoginBinding
 
@@ -100,13 +98,48 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    fun moveNextActivity(){
+    private fun moveNextActivity(){
 
-        var intent = Intent(this, NationActivity::class.java)
-        startActivity(intent)
-        finish()
+        UserApiClient.instance.me { user, error ->
+
+            var intent : Intent?
+
+            if(checkId(user!!.id.toString())){
+                intent = Intent(this, MainActivity::class.java)
+            }
+            else
+                intent = Intent(this, NationActivity::class.java)
+
+            startActivity(intent)
+            finish()
+
+        }//파이베이스에 데이터 올리기
+
+
 
     }
+
+    private suspend fun checkDataExistence(userId: String): Boolean = withContext(Dispatchers.IO) {
+
+        val database = FirebaseDatabase.getInstance()
+        val reference = database.reference.child("usersIntel").child(userId)
+
+        return@withContext try {
+            val dataSnapshot = reference.get().await()
+            dataSnapshot.exists()
+        } catch (e: Exception) {
+            false
+        }
+
+    }
+
+    // 사용 예시
+    private fun checkId(userId : String) = runBlocking {
+        return@runBlocking checkDataExistence(userId)
+    }
+
+
+
 
 
 
