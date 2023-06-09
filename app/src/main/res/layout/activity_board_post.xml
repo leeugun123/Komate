@@ -53,10 +53,13 @@
             android:id="@+id/post"
             android:layout_width="match_parent"
             android:layout_height="300dp"
+            android:background="@drawable/edittext_border"
             android:layout_marginTop="60dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:hint="글 내용을 입력하세요..."
+            android:gravity="top|start"
+            android:padding="10dp"
             />
 
 

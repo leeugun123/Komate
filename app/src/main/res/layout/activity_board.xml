@@ -34,7 +34,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="20dp"
                     android:src="@drawable/ic_baseline_arrow_back_ios_24"
-                    android:background="#FFFFFFFF"
+                    android:background="@android:color/transparent"
                     />
 
                 <TextView
@@ -57,10 +57,10 @@
 
                 <ImageButton
                     android:id="@+id/edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_marginTop="0dp"
-                    android:background="#FFFFFF"
+                    android:background="@android:color/transparent"
                     android:layout_gravity="right"
                     android:src="@drawable/ic_baseline_more_vert_24"
                     />
@@ -188,18 +188,20 @@
 
                 <EditText
                     android:id="@+id/reply"
-                    android:layout_width="280dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
                     android:hint="댓글 작성하기..."
+                    android:paddingLeft="5dp"
                     android:textColorHint="#2196F3"
+                    android:background="@drawable/edittext_border"
                     />
 
                 <ImageButton
                     android:id="@+id/post"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:background="#FFFFFFFF"
+                    android:background="@android:color/transparent"
                     android:src="@drawable/ic_baseline_send_24"
                     />
 
@@ -215,6 +217,8 @@
 
 
             </androidx.recyclerview.widget.RecyclerView>
+
+
 
 
         </LinearLayout>
