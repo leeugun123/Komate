@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.MainActivity
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivitySelfIntroBinding
@@ -18,6 +20,25 @@ class SelfIntroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySelfIntroBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
+
+
+        UserApiClient.instance.me { user, _ ->
+
+            "${user?.kakaoAccount?.profile?.nickname}".also {
+
+                if(it != null)
+                    binding!!.userName.text = it
+
+            }
+
+            if(user?.kakaoAccount?.profile?.profileImageUrl != null)
+                Glide.with(binding!!.userpic).load(user?.kakaoAccount?.profile?.profileImageUrl).circleCrop().into(binding!!.userpic)
+
+
+        }//내 프로필 사진 카카오 oAuth로 가져오기
+
+
+
 
         binding!!.selfEdittext.addTextChangedListener(object : TextWatcher {
 
@@ -52,12 +73,13 @@ class SelfIntroActivity : AppCompatActivity() {
             if(binding!!.selfEdittext.text.toString().isNotEmpty()){
 
                 //서버에서 입력 처리
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, GenderActivity::class.java)
                 startActivity(intent)
                 finish()
+
             }
             else{
-                Toast.makeText(this,"자기소개를 입력해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"자기소개를 작성해주세요.", Toast.LENGTH_SHORT).show()
             }
 
 
