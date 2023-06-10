@@ -1,5 +1,7 @@
 package org.techtown.kormate.Fragment
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -28,6 +30,14 @@ class MyFragment : Fragment() {
 
     private var userIntel : UserIntel? = null
 
+    private var userId : String? = null
+
+    companion object {
+        const val REQUEST_REVISE = 1
+        const val RESULT_SUCCESS = 1
+        const val RESULT_FAILURE = 2
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,9 +55,11 @@ class MyFragment : Fragment() {
             if(user?.kakaoAccount?.profile?.profileImageUrl != null)
                 Glide.with(binding!!.userProfile).load(user?.kakaoAccount?.profile?.profileImageUrl).circleCrop().into(binding!!.userProfile)
 
+            userId = user!!.id.toString()
+
 
             val database = FirebaseDatabase.getInstance()
-            val reference = database.reference.child("usersIntel").child(user!!.id.toString())
+            val reference = database.reference.child("usersIntel").child(userId.toString())
 
             reference.addListenerForSingleValueEvent(object : ValueEventListener {
 
@@ -55,17 +67,17 @@ class MyFragment : Fragment() {
 
                     userIntel = dataSnapshot.getValue(UserIntel::class.java)
 
-                    var nation : String? = null
+                    var nation : String?
 
                     if(userIntel!!.nation.toString() == "한국"){
                         nation = "Korea"
                     }else if(userIntel!!.nation.toString() == "중국"){
                         nation = "China"
                     }
-                    else if(userIntel!!.nation.toString() == "중국"){
+                    else if(userIntel!!.nation.toString() == "베트남"){
                         nation = "Vietnam"
                     }
-                    else if(userIntel!!.nation.toString() == "중국"){
+                    else if(userIntel!!.nation.toString() == "몽골"){
                         nation = "Mongolia"
                     }else
                         nation = "Uzbekistan"
@@ -134,7 +146,8 @@ class MyFragment : Fragment() {
 
             val intent = Intent(requireContext(), ReviseActivity::class.java)
             intent.putExtra("userIntel",userIntel)
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_REVISE)
+
 
         }//수정 버튼
 
@@ -162,5 +175,25 @@ class MyFragment : Fragment() {
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_REVISE) {
+            if (resultCode == Activity.RESULT_OK) {
+
+                val response = data?.getParcelableExtra<UserIntel>("userIntel")
+
+                binding!!.selfMajor.text = "서울과학기술대학교 | " + response!!.major.toString()
+
+                binding!!.selfIntroText.text = response!!.selfIntro.toString()
+
+                binding!!.majorText.text = response!!.major.toString()
+
+            }
+
+        }
+
+
+    }
 
 }

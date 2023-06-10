@@ -1,5 +1,7 @@
 package org.techtown.kormate
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.database.FirebaseDatabase
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Data.UserIntel
+import org.techtown.kormate.Fragment.MyFragment.Companion.RESULT_FAILURE
 import org.techtown.kormate.databinding.ActivityReviseBinding
 import org.techtown.kormate.databinding.FragmentMyBinding
 
@@ -16,13 +19,15 @@ class ReviseActivity : AppCompatActivity() {
 
     private var binding : ActivityReviseBinding? = null
 
+    private var receivedIntel : UserIntel? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         binding = ActivityReviseBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
 
-        var receivedIntel  = intent.getParcelableExtra<UserIntel>("userIntel")
+        receivedIntel  = intent.getParcelableExtra("userIntel")
 
         UserApiClient.instance.me { user, _ ->
 
@@ -51,12 +56,12 @@ class ReviseActivity : AppCompatActivity() {
 
         binding!!.reviseButton.setOnClickListener {
 
-             receivedIntel.selfIntro = binding!!.selfEdittext.text.toString()
-             receivedIntel.major = binding!!.majorIntel.text.toString()
+             receivedIntel!!.selfIntro = binding!!.selfEdittext.text.toString()
+             receivedIntel!!.major = binding!!.majorIntel.text.toString()
 
             UserApiClient.instance.me { user, error ->
 
-                writeIntelFirebase(receivedIntel, user?.id.toString())
+                writeIntelFirebase(receivedIntel!!, user?.id.toString())
 
             }//파이베이스에 데이터 올리기
 
@@ -67,7 +72,7 @@ class ReviseActivity : AppCompatActivity() {
 
     }
 
-    fun writeIntelFirebase(userIntel: UserIntel , userId: String) {
+    private fun writeIntelFirebase(userIntel: UserIntel, userId: String) {
 
         // Firebase Realtime Database의 레퍼런스를 가져옵니다.
         val database = FirebaseDatabase.getInstance()
@@ -75,10 +80,16 @@ class ReviseActivity : AppCompatActivity() {
 
         // UserIntel 객체를 Firebase에 저장합니다.
         reference.setValue(userIntel)
-
             .addOnSuccessListener {
+
+                val intent = Intent()
+                intent.putExtra("userIntel",receivedIntel)
+                setResult(Activity.RESULT_OK, intent)
+
                 Toast.makeText(this,"수정되었습니다.",Toast.LENGTH_SHORT).show()
                 finish()
+
+
             }
             .addOnFailureListener {
 

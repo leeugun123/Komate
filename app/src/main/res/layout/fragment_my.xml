@@ -117,7 +117,6 @@
                 android:layout_width="60dp"
                 android:layout_height="24dp"
                 android:layout_marginTop="10dp"
-                android:text="Kkanbu"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textAppearance="@style/nametext"
@@ -137,7 +136,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|left"
-                    android:text="Korea"
                     />
 
 
@@ -167,7 +165,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp"
-                android:text="서울과학기술대학교 | 컴퓨터공학과"
+
                 />
 
         </LinearLayout>
@@ -182,7 +180,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:text="안녕 내 이름은 이유건이야 난 코딩을 좋아해!"
         android:textSize="17sp"
         android:textColor="#B3000000"
         android:background="@drawable/myfragment_selftext_background"
