@@ -25,7 +25,8 @@ import org.techtown.kormate.databinding.FragmentMyBinding
 class MyFragment : Fragment() {
 
     private var binding : FragmentMyBinding? = null
-    private var userId : String? = null
+
+    private var userIntel : UserIntel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +53,7 @@ class MyFragment : Fragment() {
 
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-                    val userIntel = dataSnapshot.getValue(UserIntel::class.java)
+                    userIntel = dataSnapshot.getValue(UserIntel::class.java)
 
                     var nation : String? = null
 
@@ -73,7 +74,7 @@ class MyFragment : Fragment() {
 
                     binding!!.nation.text = nation
 
-                    binding!!.selfIntroText.text = userIntel.selfIntro.toString()
+                    binding!!.selfIntroText.text = userIntel!!.selfIntro.toString()
 
                     binding!!.majorText.text = userIntel!!.major.toString()
                     binding!!.nationText.text = userIntel!!.nation.toString()
@@ -132,6 +133,7 @@ class MyFragment : Fragment() {
         binding!!.reviseButt.setOnClickListener {
 
             val intent = Intent(requireContext(), ReviseActivity::class.java)
+            intent.putExtra("userIntel",userIntel)
             startActivity(intent)
 
         }//수정 버튼
