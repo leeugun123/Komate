@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
@@ -18,93 +19,22 @@ import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Adapter.RecentAdapter
 import org.techtown.kormate.Fragment.Adapter.previewAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
+import org.techtown.kormate.Fragment.ViewModel.HomeViewModel
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentHomeBinding
 
 
 class HomeFragment : Fragment() {
 
-    private var binding : FragmentHomeBinding? = null
+    private var binding: FragmentHomeBinding? = null
+    private lateinit var viewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = FragmentHomeBinding.inflate(layoutInflater)
-
-        UserApiClient.instance.me { user, error ->
-
-            "${user?.kakaoAccount?.profile?.nickname}".also {
-
-                if(it != null)
-                    binding!!.userName.text = it + " 님"
-
-            }
-
-            if(user?.kakaoAccount?.profile?.profileImageUrl != null)
-                Glide.with(binding!!.userProfile).load(user?.kakaoAccount?.profile?.profileImageUrl).circleCrop().into(binding!!.userProfile)
-
-
-        }//viewModel를 통해 가져오는 것으로 수정
-
-
-        val recentRecyclerView = binding!!.recentRecyclerview
-        recentRecyclerView.layoutManager = LinearLayoutManager(activity)
-
-        val postRef = Firebase.database.reference.child("posts")
-
-        val recentList : MutableList<BoardDetail> = mutableListOf()
-
-        //비동기 호출
-        postRef.limitToLast(4).addValueEventListener(object : ValueEventListener {
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-
-                recentList.clear()
-
-                for(snapshot in snapshot.children.reversed()){
-
-                    val post = snapshot.getValue(BoardDetail::class.java)
-
-                    if (post != null) {
-
-                        recentList.add(BoardDetail(
-
-                            post.postId,
-                            post.userId,
-                            post.userName,
-                            post.userImg,
-                            post.post,
-                            post.img,
-                            post.dateTime,
-
-                            //여기서 comment를 추가해준다.
-                        ))
-
-
-
-
-                    }
-
-                }
-
-
-
-                recentRecyclerView.adapter = RecentAdapter(recentList)
-
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("TAG",error.toString())
-            }
-
-
-        })
-
-
-
-
-
+        viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
+        viewModel.loadUserData()
+        viewModel.loadRecentData()
 
     }
 
@@ -112,14 +42,37 @@ class HomeFragment : Fragment() {
     ): View? {
 
 
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding?.root
     }
 
-    override fun onDestroyView() {
-
-        binding = null
-        super.onDestroyView()
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observeViewModel()
     }
 
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
+    }
+
+    private fun observeViewModel() {
+
+        viewModel.userName.observe(viewLifecycleOwner) { userName ->
+            binding?.userName?.text = userName
+        }
+
+        viewModel.userProfileImageUrl.observe(viewLifecycleOwner) { imageUrl ->
+            Glide.with(binding?.userProfile!!).load(imageUrl).circleCrop().into(binding?.userProfile!!)
+        }
+
+        viewModel.recentList.observe(viewLifecycleOwner) { recentList ->
+
+            Log.e("TAG",recentList.get(0).userName.toString())
+            //데이터는 정상적으로 가져옴
+
+            binding?.recentRecyclerview?.adapter = RecentAdapter(recentList)
+
+        }
+    }
 }
