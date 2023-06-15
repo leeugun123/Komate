@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kakao.sdk.user.UserApiClient
 
-class KakaoViewModel : ViewModel(){
+class KakaoViewModel : ViewModel() {
 
     private val _userName = MutableLiveData<String>()
     val userName: LiveData<String>
@@ -15,8 +15,8 @@ class KakaoViewModel : ViewModel(){
     val userProfileImageUrl: LiveData<String>
         get() = _userProfileImageUrl
 
-    private val _userId = MutableLiveData<String>()
-    val userId : LiveData<String>
+    private var _userId: String = ""
+    val userId: String
         get() = _userId
 
     fun loadUserData() {
@@ -31,8 +31,7 @@ class KakaoViewModel : ViewModel(){
                 _userProfileImageUrl.value = profileImageUrl!!
 
                 val id = it.id
-                _userId.value = id?.toString()
-
+                _userId = id?.toString() ?: ""
             }
 
         }
