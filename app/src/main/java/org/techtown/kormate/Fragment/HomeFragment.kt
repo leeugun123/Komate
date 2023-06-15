@@ -41,14 +41,31 @@ class HomeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
 
-
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding?.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeViewModel()
+
+
+
+        viewModel.userName.observe(viewLifecycleOwner) { userName ->
+            binding?.userName?.text = userName
+        }
+
+        viewModel.userProfileImageUrl.observe(viewLifecycleOwner) { imageUrl ->
+            Glide.with(binding?.userProfile!!).load(imageUrl).circleCrop().into(binding?.userProfile!!)
+        }
+
+        viewModel.recentList.observe(viewLifecycleOwner) { recentList ->
+
+            binding?.recentRecyclerview?.layoutManager = LinearLayoutManager(requireContext())
+            binding?.recentRecyclerview?.adapter = RecentAdapter(recentList)
+
+        }
+
     }
 
     override fun onDestroyView() {
