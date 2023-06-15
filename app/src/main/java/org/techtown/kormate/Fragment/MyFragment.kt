@@ -11,13 +11,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kakao.sdk.user.UserApiClient
+import org.techtown.kormate.Fragment.Adapter.RecentAdapter
 import org.techtown.kormate.Fragment.Data.UserIntel
+import org.techtown.kormate.Fragment.ViewModel.KakaoViewModel
 import org.techtown.kormate.LoginActivity
 import org.techtown.kormate.R
 import org.techtown.kormate.ReviseActivity
@@ -29,76 +33,75 @@ class MyFragment : Fragment() {
     private var binding : FragmentMyBinding? = null
 
     private var userIntel : UserIntel? = null
-
     private var userId : String? = null
 
     companion object {
         const val REQUEST_REVISE = 1
     }
 
+    lateinit var kakaoViewModel : KakaoViewModel
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        kakaoViewModel = ViewModelProvider(requireActivity()).get(KakaoViewModel::class.java)
 
-        UserApiClient.instance.me { user, error ->
+        userId = kakaoViewModel.userId
 
-            "${user?.kakaoAccount?.profile?.nickname}".also {
+        val database = FirebaseDatabase.getInstance()
+        val reference = database.reference.child("usersIntel").child(userId.toString())
 
-                if(it != null)
-                    binding!!.userName.text = it
+        reference.addListenerForSingleValueEvent(object : ValueEventListener {
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                userIntel = dataSnapshot.getValue(UserIntel::class.java)
+
+                var nation : String?
+
+                if(userIntel!!.nation.toString() == "한국"){
+                    nation = "Korea"
+                }else if(userIntel!!.nation.toString() == "중국"){
+                    nation = "China"
+                }
+                else if(userIntel!!.nation.toString() == "베트남"){
+                    nation = "Vietnam"
+                }
+                else if(userIntel!!.nation.toString() == "몽골"){
+                    nation = "Mongolia"
+                }else
+                    nation = "Uzbekistan"
+
+                binding!!.selfMajor.text = "서울과학기술대학교 | " + userIntel!!.major.toString()
+
+                binding!!.nation.text = nation
+
+                binding!!.selfIntroText.text = userIntel!!.selfIntro.toString()
+
+                binding!!.majorText.text = userIntel!!.major.toString()
+                binding!!.nationText.text = userIntel!!.nation.toString()
+                binding!!.genderText.text = userIntel!!.gender.toString()
 
             }
 
-            if(user?.kakaoAccount?.profile?.profileImageUrl != null)
-                Glide.with(binding!!.userProfile).load(user?.kakaoAccount?.profile?.profileImageUrl).circleCrop().into(binding!!.userProfile)
+            override fun onCancelled(databaseError: DatabaseError) {
 
-            userId = user!!.id.toString()
+            }
 
-
-            val database = FirebaseDatabase.getInstance()
-            val reference = database.reference.child("usersIntel").child(userId.toString())
-
-            reference.addListenerForSingleValueEvent(object : ValueEventListener {
-
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-
-                    userIntel = dataSnapshot.getValue(UserIntel::class.java)
-
-                    var nation : String?
-
-                    if(userIntel!!.nation.toString() == "한국"){
-                        nation = "Korea"
-                    }else if(userIntel!!.nation.toString() == "중국"){
-                        nation = "China"
-                    }
-                    else if(userIntel!!.nation.toString() == "베트남"){
-                        nation = "Vietnam"
-                    }
-                    else if(userIntel!!.nation.toString() == "몽골"){
-                        nation = "Mongolia"
-                    }else
-                        nation = "Uzbekistan"
-
-                    binding!!.selfMajor.text = "서울과학기술대학교 | " + userIntel!!.major.toString()
-
-                    binding!!.nation.text = nation
-
-                    binding!!.selfIntroText.text = userIntel!!.selfIntro.toString()
-
-                    binding!!.majorText.text = userIntel!!.major.toString()
-                    binding!!.nationText.text = userIntel!!.nation.toString()
-                    binding!!.genderText.text = userIntel!!.gender.toString()
-
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-
-                }
-
-            })
+        })
 
 
-        }//내 정보 카카오 oAuth로 가져오기
+
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        binding = FragmentMyBinding.inflate(inflater,container,false)
 
         binding!!.logoutButton.setOnClickListener {
 
@@ -145,21 +148,16 @@ class MyFragment : Fragment() {
             intent.putExtra("userIntel",userIntel)
             startActivityForResult(intent, REQUEST_REVISE)
 
-
         }//수정 버튼
 
 
-
-
+        return binding?.root
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observeViewModel()
 
-        binding = FragmentMyBinding.inflate(inflater,container,false)
-        return binding?.root
     }
 
     override fun onDestroyView() {
@@ -168,6 +166,26 @@ class MyFragment : Fragment() {
         super.onDestroyView()
 
     }
+
+    private fun observeViewModel() {
+
+        kakaoViewModel.userName.observe(viewLifecycleOwner) { userName ->
+            binding?.userName?.text = userName
+        }
+
+        kakaoViewModel.userProfileImageUrl.observe(viewLifecycleOwner) { imageUrl ->
+            Glide.with(binding?.userProfile!!).load(imageUrl).circleCrop().into(binding?.userProfile!!)
+        }
+
+
+
+
+    }
+
+
+
+
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
