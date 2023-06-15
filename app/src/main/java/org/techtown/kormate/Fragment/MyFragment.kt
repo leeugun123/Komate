@@ -33,7 +33,7 @@ class MyFragment : Fragment() {
 
     private var binding : FragmentMyBinding? = null
 
-    private var userIntel : UserIntel? = null
+    private var myUserIntel : UserIntel? = null
     private var userId : String? = null
 
     companion object {
@@ -110,7 +110,7 @@ class MyFragment : Fragment() {
         binding!!.reviseButt.setOnClickListener {
 
             val intent = Intent(requireContext(), ReviseActivity::class.java)
-            intent.putExtra("userIntel",userIntel)
+            intent.putExtra("userIntel",myUserIntel)
             startActivityForResult(intent, REQUEST_REVISE)
 
         }//수정 버튼
@@ -144,6 +144,8 @@ class MyFragment : Fragment() {
         }
 
         myIntelModel.userIntel.observe(viewLifecycleOwner){ userIntel ->
+
+            myUserIntel = userIntel
 
             //UI 업데이트
             binding?.selfMajor?.text = "서울과학기술대학교 | ${userIntel.major}"
