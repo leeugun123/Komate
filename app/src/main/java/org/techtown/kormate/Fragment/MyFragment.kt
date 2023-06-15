@@ -22,6 +22,7 @@ import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Adapter.RecentAdapter
 import org.techtown.kormate.Fragment.Data.UserIntel
 import org.techtown.kormate.Fragment.ViewModel.KakaoViewModel
+import org.techtown.kormate.Fragment.ViewModel.MyIntelModel
 import org.techtown.kormate.LoginActivity
 import org.techtown.kormate.R
 import org.techtown.kormate.ReviseActivity
@@ -40,56 +41,20 @@ class MyFragment : Fragment() {
     }
 
     lateinit var kakaoViewModel : KakaoViewModel
-
+    lateinit var myIntelModel : MyIntelModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         kakaoViewModel = ViewModelProvider(requireActivity()).get(KakaoViewModel::class.java)
+        myIntelModel = ViewModelProvider(requireActivity()).get(MyIntelModel::class.java)
 
         userId = kakaoViewModel.userId
 
-        val database = FirebaseDatabase.getInstance()
-        val reference = database.reference.child("usersIntel").child(userId.toString())
+        kakaoViewModel.loadUserData()
+        //꼭 있어야 하나?
+        myIntelModel.fetchUserIntel(userId.toString())
 
-        reference.addListenerForSingleValueEvent(object : ValueEventListener {
-
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-
-                userIntel = dataSnapshot.getValue(UserIntel::class.java)
-
-                var nation : String?
-
-                if(userIntel!!.nation.toString() == "한국"){
-                    nation = "Korea"
-                }else if(userIntel!!.nation.toString() == "중국"){
-                    nation = "China"
-                }
-                else if(userIntel!!.nation.toString() == "베트남"){
-                    nation = "Vietnam"
-                }
-                else if(userIntel!!.nation.toString() == "몽골"){
-                    nation = "Mongolia"
-                }else
-                    nation = "Uzbekistan"
-
-                binding!!.selfMajor.text = "서울과학기술대학교 | " + userIntel!!.major.toString()
-
-                binding!!.nation.text = nation
-
-                binding!!.selfIntroText.text = userIntel!!.selfIntro.toString()
-
-                binding!!.majorText.text = userIntel!!.major.toString()
-                binding!!.nationText.text = userIntel!!.nation.toString()
-                binding!!.genderText.text = userIntel!!.gender.toString()
-
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-
-            }
-
-        })
 
 
 
@@ -167,6 +132,7 @@ class MyFragment : Fragment() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observeViewModel() {
 
         kakaoViewModel.userName.observe(viewLifecycleOwner) { userName ->
@@ -177,13 +143,39 @@ class MyFragment : Fragment() {
             Glide.with(binding?.userProfile!!).load(imageUrl).circleCrop().into(binding?.userProfile!!)
         }
 
+        myIntelModel.userIntel.observe(viewLifecycleOwner){ userIntel ->
+
+            //UI 업데이트
+            binding?.selfMajor?.text = "서울과학기술대학교 | ${userIntel.major}"
+            binding?.selfIntroText?.text = userIntel.selfIntro
+            binding?.majorText?.text = userIntel.major
+
+            var nation : String?
+
+            if(userIntel!!.nation.toString() == "한국"){
+                nation = "Korea"
+            }else if(userIntel!!.nation.toString() == "중국"){
+                nation = "China"
+            }
+            else if(userIntel!!.nation.toString() == "베트남"){
+                nation = "Vietnam"
+            }
+            else if(userIntel!!.nation.toString() == "몽골"){
+                nation = "Mongolia"
+            }else
+                nation = "Uzbekistan"
+
+            binding!!.nation.text = nation
+
+            binding!!.nationText.text = userIntel.nation.toString()
+            binding!!.genderText.text = userIntel.gender.toString()
+
+        }
+
 
 
 
     }
-
-
-
 
 
 
