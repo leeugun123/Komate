@@ -10,9 +10,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.database.FirebaseDatabase
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Data.UserIntel
-import org.techtown.kormate.Fragment.MyFragment.Companion.RESULT_FAILURE
 import org.techtown.kormate.databinding.ActivityReviseBinding
-import org.techtown.kormate.databinding.FragmentMyBinding
 
 
 class ReviseActivity : AppCompatActivity() {

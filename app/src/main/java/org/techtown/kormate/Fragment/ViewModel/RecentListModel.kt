@@ -9,38 +9,13 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Data.BoardDetail
 
-class HomeViewModel : ViewModel() {
-
-    private val _userName = MutableLiveData<String>()
-    val userName: LiveData<String>
-        get() = _userName
-
-    private val _userProfileImageUrl = MutableLiveData<String>()
-    val userProfileImageUrl: LiveData<String>
-        get() = _userProfileImageUrl
+class RecentListModel : ViewModel(){
 
     private val _recentList = MutableLiveData<List<BoardDetail>>()
     val recentList: LiveData<List<BoardDetail>>
         get() = _recentList
-
-    fun loadUserData() {
-
-        UserApiClient.instance.me { user, error ->
-
-            user?.let {
-                val nickname = it.kakaoAccount?.profile?.nickname
-                _userName.value = nickname + " 님"
-
-                val profileImageUrl = it.kakaoAccount?.profile?.profileImageUrl
-                _userProfileImageUrl.value = profileImageUrl!!
-            }
-
-        }
-
-    }
 
     fun loadRecentData() {
 

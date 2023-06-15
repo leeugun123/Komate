@@ -34,14 +34,11 @@ class MyFragment : Fragment() {
 
     companion object {
         const val REQUEST_REVISE = 1
-        const val RESULT_SUCCESS = 1
-        const val RESULT_FAILURE = 2
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = FragmentMyBinding.inflate(layoutInflater)
 
         UserApiClient.instance.me { user, error ->
 
@@ -154,10 +151,6 @@ class MyFragment : Fragment() {
 
 
 
-
-
-
-
     }
 
     override fun onCreateView(
@@ -165,6 +158,7 @@ class MyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        binding = FragmentMyBinding.inflate(inflater,container,false)
         return binding?.root
     }
 
