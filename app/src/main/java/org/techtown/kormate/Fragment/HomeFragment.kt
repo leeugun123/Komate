@@ -27,7 +27,9 @@ class HomeFragment : Fragment() {
         recentListModel = ViewModelProvider(requireActivity()).get(RecentListModel::class.java)
 
         kakaoViewModel.loadUserData()
-        recentListModel.loadRecentData()
+        recentListModel.loadRecentData(true)
+        //limit 개수만큼 가져옴
+
 
 
     }

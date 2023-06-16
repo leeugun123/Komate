@@ -1,5 +1,6 @@
 package org.techtown.kormate.Fragment.ViewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,6 +23,8 @@ class KakaoViewModel : ViewModel() {
     fun loadUserData() {
 
         UserApiClient.instance.me { user, error ->
+
+            Log.e("TAG","데이터 가져옴 HomeFragment")
 
             user?.let {
                 val nickname = it.kakaoAccount?.profile?.nickname

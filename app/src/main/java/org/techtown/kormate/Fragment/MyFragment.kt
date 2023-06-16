@@ -54,11 +54,6 @@ class MyFragment : Fragment() {
         kakaoViewModel.loadUserData()
         //꼭 있어야 하나?
         myIntelModel.fetchUserIntel(userId.toString())
-
-
-
-
-
     }
 
     override fun onCreateView(

@@ -25,9 +25,6 @@ class previewAdapter(private val boardList : List<BoardDetail>) : RecyclerView.A
                 val context = itemView.context
 
                 val intent = Intent(context,BoardActivity::class.java)
-
-
-
                 intent.putExtra("postIntel",boardList[position])
                 context.startActivity(intent)
 

@@ -8,14 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import org.techtown.kormate.Fragment.Adapter.RecentAdapter
 import org.techtown.kormate.Fragment.Adapter.previewAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
+import org.techtown.kormate.Fragment.ViewModel.RecentListModel
 import org.techtown.kormate.databinding.FragmentBoardBinding
 
 
@@ -23,80 +27,17 @@ class BoardFragment : Fragment() {
 
     private var binding : FragmentBoardBinding? = null
 
+    private lateinit var recentListModel : RecentListModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = FragmentBoardBinding.inflate(layoutInflater)
+        recentListModel = ViewModelProvider(requireActivity()).get(RecentListModel::class.java)
 
-        binding!!.movePost.setOnClickListener {
-
-            val intent = Intent(activity,BoardPostActivity::class.java)
-            startActivity(intent)
-
-        }
-
-        val boardRecyclerView = binding!!.boardRecyclerview
-        boardRecyclerView.layoutManager = LinearLayoutManager(activity)
-
-        val postRef = Firebase.database.reference.child("posts")
-
-        val entireList : MutableList<BoardDetail> = mutableListOf()
-
-        //비동기 호출
-        postRef.addValueEventListener(object : ValueEventListener{
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-
-                entireList.clear()
-
-                for(snapshot in snapshot.children.reversed()){
-
-                    val post = snapshot.getValue(BoardDetail::class.java)
-
-                    if (post != null) {
-
-                        entireList.add(BoardDetail(
-
-                            post.postId,
-                            post.userId,
-                            post.userName,
-                            post.userImg,
-                            post.post,
-                            post.img,
-                            post.dateTime,
-
-
-                            //여기서 comment를 추가해준다.
-                        ))
-
-
-
-
-                    }
-
-                }
-
-
-                boardRecyclerView.adapter = previewAdapter(entireList)
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("TAG",error.toString())
-            }
-
-
-        })
-
-
-
-
-
-
+        recentListModel.loadRecentData(false)
+        //limit 개수만큼 가져옴
 
     }
-
-
 
 
     override fun onCreateView(
@@ -104,7 +45,23 @@ class BoardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        binding = FragmentBoardBinding.inflate(inflater,container,false)
+
+        binding!!.movePost.setOnClickListener {
+
+            val intent = Intent(activity,BoardPostActivity::class.java)
+            startActivity(intent)
+
+        }//게시글 작성
+
+
         return binding?.root
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observeViewModel()
 
     }
 
@@ -112,6 +69,18 @@ class BoardFragment : Fragment() {
 
         binding = null
         super.onDestroyView()
+
+    }
+
+    private fun observeViewModel() {
+
+        recentListModel.recentList.observe(viewLifecycleOwner) { recentList ->
+
+            binding!!.boardRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+            binding!!.boardRecyclerview.adapter = previewAdapter(recentList)
+
+        }
+
 
     }
 

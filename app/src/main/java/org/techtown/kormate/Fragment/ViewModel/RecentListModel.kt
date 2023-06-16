@@ -17,27 +17,55 @@ class RecentListModel : ViewModel(){
     val recentList: LiveData<List<BoardDetail>>
         get() = _recentList
 
-    fun loadRecentData() {
+    fun loadRecentData(limit : Boolean) {
 
         val postRef = Firebase.database.reference.child("posts")
 
-        postRef.limitToLast(4).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val recentList = mutableListOf<BoardDetail>()
+        if(limit){
 
-                for (snapshot in snapshot.children.reversed()) {
-                    val post = snapshot.getValue(BoardDetail::class.java)
-                    post?.let { recentList.add(it) }
+            postRef.limitToLast(4).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val recentList = mutableListOf<BoardDetail>()
+
+                    for (snapshot in snapshot.children.reversed()) {
+                        val post = snapshot.getValue(BoardDetail::class.java)
+                        post?.let { recentList.add(it) }
+                    }
+
+                    _recentList.value = recentList
                 }
 
-                _recentList.value = recentList
-            }
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("TAG", error.toString())
+                }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("TAG", error.toString())
-            }
+            })
+        }
+        else{
 
-        })
+            postRef.addValueEventListener(object : ValueEventListener {
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val recentList = mutableListOf<BoardDetail>()
+
+                    for (snapshot in snapshot.children.reversed()) {
+                        val post = snapshot.getValue(BoardDetail::class.java)
+                        post?.let { recentList.add(it) }
+                    }
+
+                    _recentList.value = recentList
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("TAG", error.toString())
+                }
+
+            })
+
+
+        }
+
+
 
 
     }
