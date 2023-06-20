@@ -16,8 +16,8 @@ class KakaoViewModel : ViewModel() {
     val userProfileImageUrl: LiveData<String>
         get() = _userProfileImageUrl
 
-    private var _userId: String = ""
-    val userId: String
+    private var _userId: Long = 0L
+    val userId: Long
         get() = _userId
 
     fun loadUserData() {
@@ -34,7 +34,7 @@ class KakaoViewModel : ViewModel() {
                 _userProfileImageUrl.value = profileImageUrl!!
 
                 val id = it.id
-                _userId = id?.toString() ?: ""
+                _userId = id ?: 0L
             }
 
         }
