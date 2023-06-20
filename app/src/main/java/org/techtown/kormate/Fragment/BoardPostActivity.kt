@@ -3,9 +3,7 @@ package org.techtown.kormate.Fragment
 import android.Manifest
 import android.app.Activity
 import android.app.ProgressDialog
-import android.content.ContentValues.TAG
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,19 +14,15 @@ import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
-import com.gun0912.tedpermission.provider.TedPermissionProvider.context
-import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.CurrentDateTime
 import org.techtown.kormate.Fragment.Adapter.GalaryAdapter
-import org.techtown.kormate.Fragment.Adapter.RecentAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
+import org.techtown.kormate.Fragment.ViewModel.BoardPostViewModel
 import org.techtown.kormate.Fragment.ViewModel.KakaoViewModel
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat
@@ -38,12 +32,15 @@ class BoardPostActivity : AppCompatActivity() {
 
     private var binding : ActivityBoardPostBinding? = null
     private lateinit var kakaoViewModel : KakaoViewModel
+    private lateinit var boardPostViewModel: BoardPostViewModel
+
 
     private val REQUEST_CODE_PICK_IMAGES = 1
     private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
 
     private var imageUris = mutableListOf<String>()
     private var adapter : GalaryAdapter? = null
+
     private var userName : String? = null
     private var userImg: String? = null
     private var userId : Long? = null
@@ -54,15 +51,16 @@ class BoardPostActivity : AppCompatActivity() {
 
         binding = ActivityBoardPostBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
+
         kakaoViewModel = ViewModelProvider(this).get(KakaoViewModel::class.java)
+        boardPostViewModel = ViewModelProvider(this).get(BoardPostViewModel::class.java)
 
         kakaoViewModel.loadUserData()
         observeKakaoModel()
-
+        //카카오 유저 정보 가져오기
 
         val postsRef = Firebase.database.reference.child("posts")
         val postId = postsRef.push().key
-
 
         binding!!.backBtn.setOnClickListener {
             finish()
@@ -129,6 +127,7 @@ class BoardPostActivity : AppCompatActivity() {
                 val imageFileNames = mutableListOf<String>()
 
                 for (i in 0 until imageUris.size) {
+
                     val imageFileName = "IMG_${
                         SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
                             Date()
@@ -143,19 +142,19 @@ class BoardPostActivity : AppCompatActivity() {
                                     imageFileNames.add(uri.toString())
 
                                     if (imageFileNames.size == imageUris.size) {
-                                        postsRef.child(postId!!).setValue(BoardDetail(postId, userId, userName, userImg, post, imageFileNames, CurrentDateTime.getPostTime()))
+
+                                        boardPostViewModel.uploadPost(postsRef, BoardDetail(postId, userId, userName, userImg, post, imageFileNames, CurrentDateTime.getPostTime()))
 
                                         progressDialog.dismiss()
 
-                                        complete()
                                     }
                                 }
                         }
                         .addOnFailureListener { e ->
-
                             Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
-
                         }
+
+
                 }
 
 
@@ -163,17 +162,23 @@ class BoardPostActivity : AppCompatActivity() {
             //비동기적으로 구현됨
             else {
 
-                val boardPost = BoardDetail(postId, userId, userName, userImg, post, picUri, CurrentDateTime.getPostTime())
-                postsRef.child(postId!!).setValue(boardPost)
+                boardPostViewModel.uploadPost(postsRef, BoardDetail(postId, userId, userName, userImg, post, picUri, CurrentDateTime.getPostTime()))
 
                 // ProgressDialog 닫기
                 progressDialog.dismiss()
 
-                complete()
-
             }
 
         }//작성 완료 버튼 클릭 시
+
+
+        boardPostViewModel.postLiveData.observe(this) { success ->
+
+            if (success) {
+                complete()
+            }
+
+        }
 
 
 
