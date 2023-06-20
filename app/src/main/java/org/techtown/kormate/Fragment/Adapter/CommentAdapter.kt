@@ -12,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
@@ -31,7 +32,7 @@ import org.techtown.kormate.R.drawable.ic_baseline_report_24
 import org.techtown.kormate.databinding.CommentimgBinding
 
 
-class CommentAdapter(private val comments : MutableList<Comment>, private var userId : Long, private val postId : String) :
+class CommentAdapter(private val comments: List<Comment>, private var userId: Long, private val postId: String) :
     RecyclerView.Adapter<CommentAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentAdapter.ViewHolder {
@@ -42,18 +43,19 @@ class CommentAdapter(private val comments : MutableList<Comment>, private var us
 
     override fun onBindViewHolder(holder: CommentAdapter.ViewHolder, position: Int) {
 
-       holder.bind(comments[position])
+        holder.bind(comments[position])
 
     }
 
-
-    override fun getItemCount(): Int = comments.size
+    override fun getItemCount(): Int  = comments.size
 
     inner class ViewHolder(private val binding : CommentimgBinding) :
 
         RecyclerView.ViewHolder(binding.root){
 
             val button : ImageButton = binding.Button
+
+
 
             fun bind(comment : Comment){
 

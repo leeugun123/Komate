@@ -5,13 +5,9 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -19,19 +15,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.gun0912.tedpermission.provider.TedPermissionProvider.context
-import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Adapter.CommentAdapter
 import org.techtown.kormate.Fragment.BoardEditActivity
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.Fragment.Data.Comment
 import org.techtown.kormate.Fragment.Data.Report
+import org.techtown.kormate.Fragment.ViewModel.CommentViewModel
 import org.techtown.kormate.Fragment.ViewModel.KakaoViewModel
 import org.techtown.kormate.databinding.ActivityBoardBinding
 
@@ -41,6 +34,7 @@ class BoardActivity : AppCompatActivity() {
     //액티비티 수정
 
     private lateinit var kakaoViewModel : KakaoViewModel
+    private lateinit var commentViewModel: CommentViewModel
 
     private var binding : ActivityBoardBinding? = null
 
@@ -59,6 +53,8 @@ class BoardActivity : AppCompatActivity() {
         setContentView(binding!!.root)
 
         kakaoViewModel = ViewModelProvider(this).get(KakaoViewModel::class.java)
+        commentViewModel = ViewModelProvider(this).get(CommentViewModel::class.java)
+
 
         kakaoViewModel.userId.observe(this){ userId ->
             this.userId = userId
@@ -321,42 +317,20 @@ class BoardActivity : AppCompatActivity() {
                     .circleCrop()
                     .into(binding!!.replyImg)
 
-                val commentsRef = Firebase.database.reference.child("posts").child(postId.toString()).child("comments")
 
-                commentsRef.addValueEventListener(object : ValueEventListener{
+                commentViewModel.loadComments(postId.toString())
 
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                commentViewModel.commentLiveData.observe(this) { commentList ->
 
-                        commentList.clear()
+                    commentSize = commentList.size
+                    commentRecyclerView!!.adapter = CommentAdapter(commentList, userId!!, postId.toString())
+                    commentRecyclerView!!.scrollToPosition(commentList.size - 1)
 
-                        for(shapshot in dataSnapshot.children){
-
-                            val comment = shapshot.getValue(Comment::class.java)
-
-                            if(comment != null){
-                                commentList.add(comment)
-                                Log.e("TAG","댓글 조회")
-                            }
-
-                        }
-
-                        Log.e("TAG","댓글 변경 감지")
-                        commentSize = commentList.size
-                        commentRecyclerView!!.adapter = CommentAdapter(commentList , userId!!, postId.toString())
-                        commentRecyclerView!!.scrollToPosition(commentList.size-1)
+                }
+                //댓글 최신화
 
 
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        Log.e("TAG","댓글 조회 실패")
-                    }
-
-                })//댓글 최신화
-
-            //게시판 최신화
-
-        }
+        }//게시판 최신화
 
 
     }
