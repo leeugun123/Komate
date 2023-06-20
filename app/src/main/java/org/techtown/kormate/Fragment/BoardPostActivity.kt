@@ -34,7 +34,6 @@ class BoardPostActivity : AppCompatActivity() {
     private lateinit var kakaoViewModel : KakaoViewModel
     private lateinit var boardPostViewModel: BoardPostViewModel
 
-
     private val REQUEST_CODE_PICK_IMAGES = 1
     private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
 
@@ -94,7 +93,6 @@ class BoardPostActivity : AppCompatActivity() {
 
         binding!!.updateButton.setOnClickListener {
 
-
             val post = binding!!.post.text.toString()
 
             if (post.isEmpty() && imageUris.isEmpty()) {
@@ -107,21 +105,17 @@ class BoardPostActivity : AppCompatActivity() {
                 return@setOnClickListener
             }//글의 내용이 없는 경우
 
-
-            // ProgressDialog 생성
             val progressDialog = ProgressDialog(this)
             progressDialog.setMessage("업로드 중")
             progressDialog.setCancelable(false) // 사용자가 대화 상자를 닫을 수 없도록 설정
             progressDialog.show()
 
-
             val storage = FirebaseStorage.getInstance()
             val storageRef = storage.reference
 
-
             var picUri: MutableList<String> = mutableListOf()
 
-            //사진이 1장인 경우
+            //사진이 1장 이상인 경우
             if (imageUris.size > 0) {
 
                 val imageFileNames = mutableListOf<String>()
@@ -159,18 +153,14 @@ class BoardPostActivity : AppCompatActivity() {
 
 
             }
-            //비동기적으로 구현됨
             else {
-
                 boardPostViewModel.uploadPost(postsRef, BoardDetail(postId, userId, userName, userImg, post, picUri, CurrentDateTime.getPostTime()))
-
-                // ProgressDialog 닫기
                 progressDialog.dismiss()
 
-            }
+            }//글만 올리는 경우
 
-        }//작성 완료 버튼 클릭 시
 
+        }
 
         boardPostViewModel.postLiveData.observe(this) { success ->
 
@@ -179,8 +169,6 @@ class BoardPostActivity : AppCompatActivity() {
             }
 
         }
-
-
 
 
     }

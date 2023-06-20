@@ -34,7 +34,6 @@ class MyFragment : Fragment() {
     private var binding : FragmentMyBinding? = null
 
     private var myUserIntel : UserIntel? = null
-    private var userId : Long? = null
 
     companion object {
         const val REQUEST_REVISE = 1
@@ -49,11 +48,11 @@ class MyFragment : Fragment() {
         kakaoViewModel = ViewModelProvider(requireActivity()).get(KakaoViewModel::class.java)
         myIntelModel = ViewModelProvider(requireActivity()).get(MyIntelModel::class.java)
 
-        userId = kakaoViewModel.userId
-
         kakaoViewModel.loadUserData()
         //꼭 있어야 하나?
-        myIntelModel.fetchUserIntel(userId!!)
+
+
+
 
     }
 
@@ -130,6 +129,10 @@ class MyFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun observeViewModel() {
+
+        kakaoViewModel.userId.observe(viewLifecycleOwner){ userId ->
+            myIntelModel.fetchUserIntel(userId!!)
+        }
 
         kakaoViewModel.userName.observe(viewLifecycleOwner) { userName ->
             binding?.userName?.text = userName
