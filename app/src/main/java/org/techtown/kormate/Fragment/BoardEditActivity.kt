@@ -10,6 +10,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.core.net.toUri
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -22,6 +23,7 @@ import com.gun0912.tedpermission.normal.TedPermission
 import org.techtown.kormate.Fragment.Adapter.GalaryAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.Fragment.Data.Comment
+import org.techtown.kormate.Fragment.ViewModel.CommentViewModel
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,6 +33,7 @@ import java.util.*
 class BoardEditActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBoardPostBinding
+    private lateinit var commentViewModel: CommentViewModel
 
     private val REQUEST_CODE_PICK_IMAGES = 1
     private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
@@ -41,12 +44,14 @@ class BoardEditActivity : AppCompatActivity() {
     private var list: BoardDetail? = null
 
     private val postsRef = Firebase.database.reference.child("posts")
-    private val commentList = mutableListOf<Comment>()
+    private var commentList = mutableListOf<Comment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBoardPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        commentViewModel = ViewModelProvider(this).get(CommentViewModel::class.java)
 
         binding.title.text = "게시물 수정"
         binding.updateButton.text = "수정하기"
@@ -65,29 +70,13 @@ class BoardEditActivity : AppCompatActivity() {
                     handleSelectedImages(picUri, binding)
                 }
 
-                val commentsRef =
-                    Firebase.database.reference.child("posts").child(list!!.postId.toString())
-                        .child("comments")
+                commentViewModel.loadComments(list!!.postId.toString())
 
-                commentsRef.addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        commentList.clear()
+                commentViewModel.commentLiveData.observe(this) { commentList ->
+                    this.commentList = commentList as MutableList<Comment>
+                }
 
-                        for (snapshot in dataSnapshot.children) {
-                            val comment = snapshot.getValue(Comment::class.java)
 
-                            if (comment != null) {
-                                commentList.add(comment)
-                            }
-                        }
-
-                        Log.e("TAG", commentList.size.toString())
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        Log.e("TAG", "댓글 조회 실패")
-                    }
-                })
             }
         }
 

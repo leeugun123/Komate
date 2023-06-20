@@ -24,6 +24,7 @@ class CommentViewModel : ViewModel() {
         commentsRef.addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+
                 val commentList = mutableListOf<Comment>()
 
                 for (snapshot in dataSnapshot.children) {

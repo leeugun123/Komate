@@ -229,7 +229,6 @@ class BoardActivity : AppCompatActivity() {
             //선택한 신고 사유들에 대한 처리 진행
             Firebase.database.reference.child("postReports").child(Firebase.database.reference.push().key.toString()).setValue(Report(userId,selectedReasons,receiveData?.userId,receiveData?.postId))
             //신고 넣기
-
             Toast.makeText(context, "게시물이 신고 되었습니다.", Toast.LENGTH_SHORT).show()
 
         }
@@ -328,6 +327,7 @@ class BoardActivity : AppCompatActivity() {
 
                 }
                 //댓글 최신화
+
 
 
         }//게시판 최신화
