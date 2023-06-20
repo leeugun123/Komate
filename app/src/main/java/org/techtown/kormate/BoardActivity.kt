@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -31,6 +32,7 @@ import org.techtown.kormate.Fragment.BoardEditActivity
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.Fragment.Data.Comment
 import org.techtown.kormate.Fragment.Data.Report
+import org.techtown.kormate.Fragment.ViewModel.KakaoViewModel
 import org.techtown.kormate.databinding.ActivityBoardBinding
 
 class BoardActivity : AppCompatActivity() {
@@ -38,12 +40,15 @@ class BoardActivity : AppCompatActivity() {
     private val REQUEST_CODE_EDIT_ACTIVITY = 2
     //액티비티 수정
 
+    private lateinit var kakaoViewModel : KakaoViewModel
+
     private var binding : ActivityBoardBinding? = null
-    private var commentSize : Int = 0
 
     private var postId : String? = null
     private var userId : Long? = null
     private var receiveData : BoardDetail? = null
+
+    private var commentSize : Int = 0
     private var commentRecyclerView : RecyclerView? = null
     private var commentList = mutableListOf<Comment>()
 
@@ -53,9 +58,12 @@ class BoardActivity : AppCompatActivity() {
         binding = ActivityBoardBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
 
-        binding!!.backBtn.setOnClickListener {
-            finish()
-        }//뒤로 가기
+        kakaoViewModel = ViewModelProvider(this).get(KakaoViewModel::class.java)
+
+        kakaoViewModel.userId.observe(this){ userId ->
+            this.userId = userId
+        }
+
 
         commentRecyclerView = binding!!.commentRecyclerView
         commentRecyclerView!!.layoutManager = LinearLayoutManager(this)
@@ -66,12 +74,11 @@ class BoardActivity : AppCompatActivity() {
         postBoardDetail()
         //게시판 최신화
 
-        UserApiClient.instance.me { user, _ ->
 
-            userId = user?.id
 
-        }//userId를 통해 확인하여 수정 아이콘 view 확인
-
+        binding!!.backBtn.setOnClickListener {
+            finish()
+        }//뒤로 가기
 
         binding!!.post.setOnClickListener {
 
@@ -88,8 +95,8 @@ class BoardActivity : AppCompatActivity() {
 
                 objCommentRef.setValue(comment)
 
-
                 binding!!.reply.text.clear()
+
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding!!.reply.windowToken, 0)
 
@@ -348,7 +355,6 @@ class BoardActivity : AppCompatActivity() {
                 })//댓글 최신화
 
             //게시판 최신화
-
 
         }
 
