@@ -14,7 +14,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -25,7 +27,9 @@ import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.CurrentDateTime
 import org.techtown.kormate.Fragment.Adapter.GalaryAdapter
+import org.techtown.kormate.Fragment.Adapter.RecentAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
+import org.techtown.kormate.Fragment.ViewModel.KakaoViewModel
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,12 +37,16 @@ import java.util.*
 class BoardPostActivity : AppCompatActivity() {
 
     private var binding : ActivityBoardPostBinding? = null
+    private lateinit var kakaoViewModel : KakaoViewModel
 
     private val REQUEST_CODE_PICK_IMAGES = 1
     private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
 
     private var imageUris = mutableListOf<String>()
     private var adapter : GalaryAdapter? = null
+    private var userName : String? = null
+    private var userImg: String? = null
+    private var userId : Long? = null
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,26 +54,19 @@ class BoardPostActivity : AppCompatActivity() {
 
         binding = ActivityBoardPostBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
+        kakaoViewModel = ViewModelProvider(this).get(KakaoViewModel::class.java)
+
+        kakaoViewModel.loadUserData()
+        observeKakaoModel()
 
 
         val postsRef = Firebase.database.reference.child("posts")
         val postId = postsRef.push().key
 
+
         binding!!.backBtn.setOnClickListener {
             finish()
         }//뒤로가기
-
-        var userName : String? = null
-        var userImg: String? = null
-        var userId : Long? = null
-
-        UserApiClient.instance.me { user, error ->
-
-            userName = user?.kakaoAccount?.profile?.nickname
-            userImg = user?.kakaoAccount?.profile?.profileImageUrl
-            userId = user?.id
-
-        }//카카오톡을 통해서 사용자 고유 id 가져오기
 
         binding!!.uploadImgButton.setOnClickListener {
 
@@ -172,11 +173,26 @@ class BoardPostActivity : AppCompatActivity() {
 
             }
 
-
-
-
         }//작성 완료 버튼 클릭 시
 
+
+
+
+    }
+
+    private fun observeKakaoModel() {
+
+        kakaoViewModel.userName.observe(this) { userName ->
+            this.userName = userName
+        }
+
+        kakaoViewModel.userProfileImageUrl.observe(this) { imageUrl ->
+            this.userImg = imageUrl
+        }
+
+        kakaoViewModel.userId.observe(this){ userId ->
+            this.userId = userId
+        }
 
 
     }

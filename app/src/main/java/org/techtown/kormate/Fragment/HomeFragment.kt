@@ -56,7 +56,7 @@ class HomeFragment : Fragment() {
     private fun observeViewModel() {
 
         kakaoViewModel.userName.observe(viewLifecycleOwner) { userName ->
-            binding?.userName?.text = userName
+            binding?.userName?.text = userName + " 님"
         }
 
         kakaoViewModel.userProfileImageUrl.observe(viewLifecycleOwner) { imageUrl ->

@@ -16,25 +16,24 @@ class KakaoViewModel : ViewModel() {
     val userProfileImageUrl: LiveData<String>
         get() = _userProfileImageUrl
 
-    private var _userId: Long = 0L
-    val userId: Long
+    private val _userId  = MutableLiveData<Long>()
+    val userId : LiveData<Long>
         get() = _userId
 
     fun loadUserData() {
 
         UserApiClient.instance.me { user, error ->
 
-            Log.e("TAG","데이터 가져옴 HomeFragment")
-
             user?.let {
                 val nickname = it.kakaoAccount?.profile?.nickname
-                _userName.value = nickname + " 님"
+                _userName.value = nickname
 
                 val profileImageUrl = it.kakaoAccount?.profile?.profileImageUrl
                 _userProfileImageUrl.value = profileImageUrl!!
 
                 val id = it.id
-                _userId = id ?: 0L
+                _userId.value = id
+
             }
 
         }

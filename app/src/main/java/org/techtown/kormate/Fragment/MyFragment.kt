@@ -34,7 +34,7 @@ class MyFragment : Fragment() {
     private var binding : FragmentMyBinding? = null
 
     private var myUserIntel : UserIntel? = null
-    private var userId : String? = null
+    private var userId : Long? = null
 
     companion object {
         const val REQUEST_REVISE = 1
@@ -53,7 +53,8 @@ class MyFragment : Fragment() {
 
         kakaoViewModel.loadUserData()
         //꼭 있어야 하나?
-        myIntelModel.fetchUserIntel(userId.toString())
+        myIntelModel.fetchUserIntel(userId!!)
+
     }
 
     override fun onCreateView(

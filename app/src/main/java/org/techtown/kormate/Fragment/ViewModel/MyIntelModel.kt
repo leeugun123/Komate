@@ -17,10 +17,10 @@ class MyIntelModel : ViewModel(){
     val userIntel: LiveData<UserIntel>
         get() = _userIntel
 
-    fun fetchUserIntel(userId : String) {
+    fun fetchUserIntel(userId : Long) {
 
         val database = FirebaseDatabase.getInstance()
-        val reference = database.reference.child("usersIntel").child(userId)
+        val reference = database.reference.child("usersIntel").child(userId.toString())
 
         reference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
