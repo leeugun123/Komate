@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
         setContentView(binding!!.root)
 
 
-
         supportFragmentManager.beginTransaction().add(R.id.linearLayout,HomeFragment()).commit()
 
         val bottomNavigationView = findViewById<View>(R.id.bottomNavigationView) as BottomNavigationView

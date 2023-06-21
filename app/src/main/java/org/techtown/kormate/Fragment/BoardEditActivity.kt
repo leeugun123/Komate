@@ -23,6 +23,7 @@ import com.gun0912.tedpermission.normal.TedPermission
 import org.techtown.kormate.Fragment.Adapter.GalaryAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.Fragment.Data.Comment
+import org.techtown.kormate.Fragment.ViewModel.BoardPostViewModel
 import org.techtown.kormate.Fragment.ViewModel.CommentViewModel
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat
@@ -34,6 +35,7 @@ class BoardEditActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBoardPostBinding
     private lateinit var commentViewModel: CommentViewModel
+    private lateinit var boardPostViewModel: BoardPostViewModel
 
     private val REQUEST_CODE_PICK_IMAGES = 1
     private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
@@ -42,6 +44,7 @@ class BoardEditActivity : AppCompatActivity() {
     private var adapter: GalaryAdapter? = null
     private var picUri = mutableListOf<String>()
     private var list: BoardDetail? = null
+    private var reviseList : BoardDetail? = null
 
     private val postsRef = Firebase.database.reference.child("posts")
     private var commentList = mutableListOf<Comment>()
@@ -52,6 +55,7 @@ class BoardEditActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         commentViewModel = ViewModelProvider(this).get(CommentViewModel::class.java)
+        boardPostViewModel = ViewModelProvider(this).get(BoardPostViewModel::class.java)
 
         binding.title.text = "게시물 수정"
         binding.updateButton.text = "수정하기"
@@ -60,9 +64,11 @@ class BoardEditActivity : AppCompatActivity() {
 
 
         if (receiveData != null) {
+
             list = receiveData
 
             if (list != null) {
+
                 binding.post.setText(list!!.post.toString())
                 picUri = list!!.img
 
@@ -146,7 +152,7 @@ class BoardEditActivity : AppCompatActivity() {
 
                                     if (imageFileNames.size == imageUris.size) {
 
-                                        val boardDetail = BoardDetail(
+                                        reviseList = BoardDetail(
                                             list!!.postId,
                                             list!!.userId,
                                             list!!.userName,
@@ -156,12 +162,10 @@ class BoardEditActivity : AppCompatActivity() {
                                             list!!.dateTime
                                         )
 
-                                        postsRef.child(list!!.postId!!).setValue(boardDetail)
-                                        uploadComment()
-                                        //댓글 정보 유지하기
+                                        boardPostViewModel.uploadPost(postsRef, reviseList!!)
 
                                         progressDialog.dismiss()
-                                        complete(boardDetail)
+
                                     }
                                 }
                         }
@@ -170,7 +174,8 @@ class BoardEditActivity : AppCompatActivity() {
                         }
                 }
             } else {
-                val boardDetail = BoardDetail(
+
+                reviseList = BoardDetail(
                     list!!.postId,
                     list!!.userId,
                     list!!.userName,
@@ -180,17 +185,27 @@ class BoardEditActivity : AppCompatActivity() {
                     list!!.dateTime
                 )
 
-                postsRef.child(list!!.postId!!).setValue(boardDetail)
-                uploadComment()
-                //댓글 정보 유지하기
+                boardPostViewModel.uploadPost(postsRef, reviseList!!)
 
                 progressDialog.dismiss()
-                complete(boardDetail)
+
             }
         }
 
         binding.backBtn.setOnClickListener {
             finish()
+        }
+
+        boardPostViewModel.postLiveData.observe(this) { success ->
+
+            if (success) {
+
+                uploadComment()
+                //댓글 복구
+
+                complete(reviseList!!)
+            }
+
         }
 
     }

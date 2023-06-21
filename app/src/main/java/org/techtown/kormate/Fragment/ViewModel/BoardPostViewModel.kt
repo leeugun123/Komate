@@ -12,6 +12,7 @@ import org.techtown.kormate.Fragment.Data.BoardDetail
 class BoardPostViewModel : ViewModel() {
 
     private val _postLiveData = MutableLiveData<Boolean>()
+
     val postLiveData: LiveData<Boolean>
         get() = _postLiveData
 

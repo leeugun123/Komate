@@ -19,6 +19,7 @@ class CommentViewModel : ViewModel() {
         get() = _commentLiveData
 
     fun loadComments(postId: String) {
+
         val commentsRef = Firebase.database.reference.child("posts").child(postId).child("comments")
 
         commentsRef.addValueEventListener(object : ValueEventListener {
@@ -28,10 +29,13 @@ class CommentViewModel : ViewModel() {
                 val commentList = mutableListOf<Comment>()
 
                 for (snapshot in dataSnapshot.children) {
+
                     val comment = snapshot.getValue(Comment::class.java)
+
                     comment?.let {
                         commentList.add(it)
                     }
+
                 }
 
                 _commentLiveData.value = commentList
