@@ -48,7 +48,7 @@ class BoardEditActivity : AppCompatActivity() {
 
     private var prior_adapter: ReviseGalaryAdapter? = null
     private var new_adapter : ReviseGalaryAdapter? = null
-    //각 리스트와 어뎁터를 따로 ena
+    //각 리스트와 어뎁터를 따로 분리
 
 
     private var receiveList: BoardDetail? = null
@@ -216,18 +216,17 @@ class BoardEditActivity : AppCompatActivity() {
 
                 restoreComment()
                 //댓글 복구
+                complete()
 
-                complete(reviseList!!)
             }
 
         }
 
     }
 
-    private fun complete(boardDetail: BoardDetail) {
+    private fun complete() {
 
         val resIntent = Intent()
-        resIntent.putExtra("resIntent", boardDetail)
         setResult(Activity.RESULT_OK, resIntent)
         finish()
 
@@ -272,7 +271,6 @@ class BoardEditActivity : AppCompatActivity() {
                         val uri = clipData.getItemAt(i).uri
 
                         imageUris.add(uri.toString())
-
 
 
                     }

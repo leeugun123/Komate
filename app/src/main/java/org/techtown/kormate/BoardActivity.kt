@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -194,14 +195,12 @@ class BoardActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == REQUEST_CODE_EDIT_ACTIVITY && resultCode == Activity.RESULT_OK) {
-
-            receiveData = data?.getParcelableExtra<BoardDetail>("resIntent")
-
-            postBoardDetail()
-
+            finish()
         }
 
-    }//수정하고 난 후 최신화
+    }//수정하고 난 후 액티비티 종료
+
+
 
     private fun showReportDialog() {
 
@@ -258,6 +257,7 @@ class BoardActivity : AppCompatActivity() {
                 binding!!.userName.text = receiveData!!.userName
                 binding!!.dateTime.text = receiveData!!.dateTime
 
+
                 if(receiveData!!.img.size == 0){
 
                     val parentView1 = binding!!.uploadImageView1.parent as ViewGroup
@@ -275,6 +275,8 @@ class BoardActivity : AppCompatActivity() {
 
                 }
                 else{
+
+                    Log.e("TAG","여기로 들어옴")
 
                     val imageViewList = listOf(binding!!.uploadImageView1, binding!!.uploadImageView2, binding!!.uploadImageView3)
 
