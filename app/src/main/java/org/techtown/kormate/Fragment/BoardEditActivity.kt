@@ -262,7 +262,10 @@ class BoardEditActivity : AppCompatActivity() {
                         }
 
                         val uri = clipData.getItemAt(i).uri
+
                         imageUris.add(uri.toString())
+
+
 
                     }
 
@@ -270,8 +273,8 @@ class BoardEditActivity : AppCompatActivity() {
 
             }//다중 이미지
 
-
             handleSelectedImages(mergeTwoLists(picUri, imageUris), binding)
+
 
         }
 
@@ -294,11 +297,11 @@ class BoardEditActivity : AppCompatActivity() {
 
     private fun mergeTwoLists(list1: MutableList<String>, list2: MutableList<String>): MutableList<String> {
 
-        //List의 앏은 복사 파악
+        var mergeList = mutableListOf<String>()
+        mergeList.addAll(list1)
+        mergeList.addAll(list2)
 
-        list1.addAll(list2)
-
-        return list1
+        return mergeList
 
     }
 
