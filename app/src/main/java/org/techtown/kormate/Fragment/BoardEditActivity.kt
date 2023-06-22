@@ -3,6 +3,7 @@ package org.techtown.kormate.Fragment
 import android.Manifest
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.ContentUris
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import org.techtown.kormate.Fragment.Adapter.GalaryAdapter
+import org.techtown.kormate.Fragment.Adapter.ReviseGalaryAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.Fragment.Data.Comment
 import org.techtown.kormate.Fragment.ViewModel.BoardPostViewModel
@@ -42,8 +44,12 @@ class BoardEditActivity : AppCompatActivity() {
     private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
 
     private val imageUris = mutableListOf<String>()
-    private var adapter: GalaryAdapter? = null
     private var picUri = mutableListOf<String>()
+
+    private var prior_adapter: ReviseGalaryAdapter? = null
+    private var new_adapter : ReviseGalaryAdapter? = null
+    //각 리스트와 어뎁터를 따로 ena
+
 
     private var receiveList: BoardDetail? = null
     private var reviseList : BoardDetail? = null
@@ -75,7 +81,7 @@ class BoardEditActivity : AppCompatActivity() {
                 picUri = receiveList!!.img
 
                 if (picUri.size > 0) {
-                    handleSelectedImages(picUri, binding)
+                    handleSelectedImages(picUri,imageUris,binding)
                 }//원래 있던 이미지 갤러리 adapter에 띄우기
 
                 commentViewModel.loadComments(receiveList!!.postId.toString())
@@ -161,13 +167,15 @@ class BoardEditActivity : AppCompatActivity() {
 
                                     if (imageFileNames.size == imageUris.size) {
 
+                                        picUri.addAll(imageFileNames)
+
                                         reviseList = BoardDetail(
                                             receiveList!!.postId,
                                             receiveList!!.userId,
                                             receiveList!!.userName,
                                             receiveList!!.userImg,
                                             post,
-                                            mergeTwoLists(picUri, imageFileNames),
+                                            picUri,
                                             receiveList!!.dateTime
                                         )
 
@@ -273,7 +281,7 @@ class BoardEditActivity : AppCompatActivity() {
 
             }//다중 이미지
 
-            handleSelectedImages(mergeTwoLists(picUri, imageUris), binding)
+            handleSelectedImages(picUri, imageUris, binding)
 
 
         }
@@ -282,28 +290,34 @@ class BoardEditActivity : AppCompatActivity() {
     }
 
 
-    private fun handleSelectedImages(imageUris: MutableList<String>, acBinding: ActivityBoardPostBinding) {
+    private fun handleSelectedImages(picUris : MutableList<String> ,imageUris: MutableList<String>, acBinding: ActivityBoardPostBinding) {
 
-        adapter = GalaryAdapter(imageUris, acBinding)
-        adapter!!.notifyDataSetChanged()
+        prior_adapter = ReviseGalaryAdapter(picUris,imageUris,acBinding)
+        prior_adapter!!.notifyDataSetChanged()
 
-        binding.uploadImgButton.text = "사진 올리기(${imageUris.size}/3)"
-        binding.imgRecyclerView.layoutManager = GridLayoutManager(this, 3)
-        binding.imgRecyclerView.adapter = adapter
+        new_adapter = ReviseGalaryAdapter(imageUris,picUris,acBinding)
+        new_adapter!!.notifyDataSetChanged()
 
+        binding.uploadImgButton.text = "사진 올리기(${ picUris.size + imageUris.size}/3)"
+
+
+        if(picUris.size == 0)
+            binding.priorImgRecyclerView.layoutManager = GridLayoutManager(this,1)
+        else
+            binding.priorImgRecyclerView.layoutManager = GridLayoutManager(this, picUri.size)
+
+
+        if(imageUris.size == 0)
+            binding.newImgRecyclerView.layoutManager = GridLayoutManager(this,1)
+        else
+            binding.newImgRecyclerView.layoutManager = GridLayoutManager(this,imageUris.size)
+
+
+        binding.newImgRecyclerView.adapter = new_adapter
+        binding.priorImgRecyclerView.adapter = prior_adapter
 
     }
 
-
-    private fun mergeTwoLists(list1: MutableList<String>, list2: MutableList<String>): MutableList<String> {
-
-        var mergeList = mutableListOf<String>()
-        mergeList.addAll(list1)
-        mergeList.addAll(list2)
-
-        return mergeList
-
-    }
 
 
 }

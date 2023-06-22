@@ -38,7 +38,10 @@ class BoardPostActivity : AppCompatActivity() {
     private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
 
     private var imageUris = mutableListOf<String>()
+
     private var adapter : GalaryAdapter? = null
+
+
 
     private var userName : String? = null
     private var userImg: String? = null
@@ -242,10 +245,9 @@ class BoardPostActivity : AppCompatActivity() {
 
         binding!!.uploadImgButton.text = "사진 올리기(" + imageUris.size.toString() + "/3)"
 
-        Log.e("TAG","갤러리 선택됨")
 
-        binding!!.imgRecyclerView.layoutManager = GridLayoutManager(this,3)
-        binding!!.imgRecyclerView.adapter = adapter
+        binding!!.priorImgRecyclerView.layoutManager = GridLayoutManager(this,3)
+        binding!!.priorImgRecyclerView.adapter = adapter
 
 
     }// 선택한 이미지들을 처리하는 코드를 작성
