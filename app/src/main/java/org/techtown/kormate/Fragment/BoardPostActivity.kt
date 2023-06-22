@@ -224,14 +224,6 @@ class BoardPostActivity : AppCompatActivity() {
                     }
                 }
 
-            } else if (data?.data != null) {
-                // 단일 이미지를 선택한 경우
-                val uri = data.data
-
-                if (uri != null) {
-                    imageUris.add(uri.toString())
-                }
-
             }
 
             //정상적으로 사진을 골랐을때

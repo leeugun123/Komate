@@ -34,6 +34,7 @@ import java.util.*
 class BoardEditActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBoardPostBinding
+
     private lateinit var commentViewModel: CommentViewModel
     private lateinit var boardPostViewModel: BoardPostViewModel
 
@@ -43,7 +44,8 @@ class BoardEditActivity : AppCompatActivity() {
     private val imageUris = mutableListOf<String>()
     private var adapter: GalaryAdapter? = null
     private var picUri = mutableListOf<String>()
-    private var list: BoardDetail? = null
+
+    private var receiveList: BoardDetail? = null
     private var reviseList : BoardDetail? = null
 
     private val postsRef = Firebase.database.reference.child("posts")
@@ -62,31 +64,36 @@ class BoardEditActivity : AppCompatActivity() {
 
         val receiveData = intent.getParcelableExtra<BoardDetail>("postIntel")
 
-
         if (receiveData != null) {
 
-            list = receiveData
+            receiveList = receiveData
 
-            if (list != null) {
+            if (receiveList != null) {
 
-                binding.post.setText(list!!.post.toString())
-                picUri = list!!.img
+                binding.post.setText(receiveList!!.post.toString())
+
+                picUri = receiveList!!.img
 
                 if (picUri.size > 0) {
                     handleSelectedImages(picUri, binding)
-                }
+                }//원래 있던 이미지 갤러리 adapter에 띄우기
 
-                commentViewModel.loadComments(list!!.postId.toString())
+                commentViewModel.loadComments(receiveList!!.postId.toString())
 
                 commentViewModel.commentLiveData.observe(this) { commentList ->
                     this.commentList = commentList as MutableList<Comment>
-                }
-
+                }//변하지 않는 데이터
 
             }
+
+        }
+
+        binding.backBtn.setOnClickListener {
+            finish()
         }
 
         binding.uploadImgButton.setOnClickListener {
+
             TedPermission.create()
                 .setPermissionListener(object : PermissionListener {
                     override fun onPermissionGranted() {
@@ -113,6 +120,7 @@ class BoardEditActivity : AppCompatActivity() {
 
 
         binding.updateButton.setOnClickListener {
+
             val post = binding.post.text.toString()
 
             if (post.isEmpty() && imageUris.isEmpty()) {
@@ -134,6 +142,7 @@ class BoardEditActivity : AppCompatActivity() {
             val storageRef = storage.reference
 
             if (imageUris.size > 0) {
+
                 val imageFileNames = mutableListOf<String>()
 
                 for (i in 0 until imageUris.size) {
@@ -153,13 +162,13 @@ class BoardEditActivity : AppCompatActivity() {
                                     if (imageFileNames.size == imageUris.size) {
 
                                         reviseList = BoardDetail(
-                                            list!!.postId,
-                                            list!!.userId,
-                                            list!!.userName,
-                                            list!!.userImg,
+                                            receiveList!!.postId,
+                                            receiveList!!.userId,
+                                            receiveList!!.userName,
+                                            receiveList!!.userImg,
                                             post,
                                             mergeTwoLists(picUri, imageFileNames),
-                                            list!!.dateTime
+                                            receiveList!!.dateTime
                                         )
 
                                         boardPostViewModel.uploadPost(postsRef, reviseList!!)
@@ -176,13 +185,13 @@ class BoardEditActivity : AppCompatActivity() {
             } else {
 
                 reviseList = BoardDetail(
-                    list!!.postId,
-                    list!!.userId,
-                    list!!.userName,
-                    list!!.userImg,
+                    receiveList!!.postId,
+                    receiveList!!.userId,
+                    receiveList!!.userName,
+                    receiveList!!.userImg,
                     post,
                     picUri,
-                    list!!.dateTime
+                    receiveList!!.dateTime
                 )
 
                 boardPostViewModel.uploadPost(postsRef, reviseList!!)
@@ -192,15 +201,12 @@ class BoardEditActivity : AppCompatActivity() {
             }
         }
 
-        binding.backBtn.setOnClickListener {
-            finish()
-        }
 
         boardPostViewModel.postLiveData.observe(this) { success ->
 
             if (success) {
 
-                uploadComment()
+                restoreComment()
                 //댓글 복구
 
                 complete(reviseList!!)
@@ -216,14 +222,15 @@ class BoardEditActivity : AppCompatActivity() {
         resIntent.putExtra("resIntent", boardDetail)
         setResult(Activity.RESULT_OK, resIntent)
         finish()
+
         Toast.makeText(this, "게시글이 수정되었습니다.", Toast.LENGTH_SHORT).show()
 
     }
 
-    private fun uploadComment(){
+    private fun restoreComment(){
 
         for (i in 0 until commentList.size) {
-            postsRef.child(list!!.postId!!)
+            postsRef.child(receiveList!!.postId!!)
                 .child("comments")
                 .child(commentList[i].id.toString())
                 .setValue(commentList[i])
@@ -235,57 +242,64 @@ class BoardEditActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
+
+            Log.e("TAG",picUri.size.toString()+"picUrl 이미지")
+
+
             if (data?.clipData != null) {
+
                 val clipData = data.clipData
 
                 if (clipData != null) {
+
                     for (i in 0 until clipData.itemCount) {
+
                         if (picUri.size + imageUris.size == 3) {
-                            Toast.makeText(
-                                this,
-                                "사진은 최대 3장까지 업로드 가능합니다.",
-                                Toast.LENGTH_SHORT
-                            ).show()
+
+                            Toast.makeText(this, "사진은 최대 3장까지 업로드 가능합니다.", Toast.LENGTH_SHORT).show()
                             break
+
                         }
+
                         val uri = clipData.getItemAt(i).uri
                         imageUris.add(uri.toString())
-                    }
-                }
-            } else if (data?.data != null) {
-                val uri = data.data
 
-                if (picUri.size + imageUris.size < 3 && uri != null) {
-                    imageUris.add(uri.toString())
-                } else {
-                    Toast.makeText(
-                        this,
-                        "사진은 최대 3장까지 업로드 가능합니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    }
+
                 }
-            }
+
+            }//다중 이미지
+
 
             handleSelectedImages(mergeTwoLists(picUri, imageUris), binding)
+
         }
+
+
     }
 
 
     private fun handleSelectedImages(imageUris: MutableList<String>, acBinding: ActivityBoardPostBinding) {
+
         adapter = GalaryAdapter(imageUris, acBinding)
         adapter!!.notifyDataSetChanged()
 
         binding.uploadImgButton.text = "사진 올리기(${imageUris.size}/3)"
         binding.imgRecyclerView.layoutManager = GridLayoutManager(this, 3)
         binding.imgRecyclerView.adapter = adapter
+
+
     }
 
 
     private fun mergeTwoLists(list1: MutableList<String>, list2: MutableList<String>): MutableList<String> {
-        val mergedList = mutableListOf<String>()
-        mergedList.addAll(list1)
-        mergedList.addAll(list2)
-        return mergedList
+
+        //List의 앏은 복사 파악
+
+        list1.addAll(list2)
+
+        return list1
+
     }
 
 
