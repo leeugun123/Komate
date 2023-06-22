@@ -39,9 +39,9 @@ class BoardEditActivity : AppCompatActivity() {
     private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
 
     private var imageUris = mutableListOf<String>()
-    private var adapter: GalaryAdapter? = null
+    private lateinit var adapter: GalaryAdapter
 
-    private var receiveList: BoardDetail? = null
+    private lateinit var receiveList: BoardDetail
 
     private val postsRef = Firebase.database.reference.child("posts")
     private var commentList = mutableListOf<Comment>()
@@ -57,31 +57,26 @@ class BoardEditActivity : AppCompatActivity() {
         binding.title.text = "게시물 수정"
         binding.updateButton.text = "수정하기"
 
-        val receiveData = intent.getParcelableExtra<BoardDetail>("postIntel")
+        receiveList = intent.getParcelableExtra("postIntel")!!
 
-        if (receiveData != null) {
+        receiveList?.let {
 
-            receiveList = receiveData
+            binding.post.setText(receiveList!!.post.toString())
 
-            if (receiveList != null) {
+            imageUris = receiveList!!.img
 
-                binding.post.setText(receiveList!!.post.toString())
+            if (imageUris.size > 0) {
+                handleSelectedImages(imageUris,binding)
+            }//원래 있던 이미지 갤러리 adapter에 띄우기
 
-                imageUris = receiveList!!.img
+            commentViewModel.loadComments(receiveList!!.postId.toString())
 
-                if (imageUris.size > 0) {
-                    handleSelectedImages(imageUris,binding)
-                }//원래 있던 이미지 갤러리 adapter에 띄우기
-
-                commentViewModel.loadComments(receiveList!!.postId.toString())
-
-                commentViewModel.commentLiveData.observe(this) { commentList ->
-                    this.commentList = commentList as MutableList<Comment>
-                }//변하지 않는 데이터
-
-            }
+            commentViewModel.commentLiveData.observe(this) { commentList ->
+                this.commentList = commentList as MutableList<Comment>
+            }//변하지 않는 데이터
 
         }
+
 
         binding.backBtn.setOnClickListener {
             finish()
@@ -143,69 +138,75 @@ class BoardEditActivity : AppCompatActivity() {
                 upload(post,imageFileNames)
                 progressDialog.dismiss()
 
-
             }//글만 있는 경우
             else{
+
                 for (i in 0 until imageUris.size) {
 
-                    if(imageUris[i].startsWith("https")){
-                        imageFileNames.add(imageUris[i])
+                        if (!imageUris[i].startsWith("https")) {
 
-                        if(i == imageUris.size - 1){
+                            val imageFileName = "IMG_${
+                                SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
+                                    Date()
+                                )
+                            }_${UUID.randomUUID()}"
 
-                            upload(post,imageFileNames)
-                            progressDialog.dismiss()
+                            val imageRef = storageRef.child("images/$imageFileName")
+
+                            imageRef.putFile(imageUris[i].toUri())
+                                .addOnSuccessListener {
+                                    imageRef.downloadUrl
+                                        .addOnSuccessListener { uri ->
+
+                                            imageFileNames.add(uri.toString())
+
+                                            if (imageFileNames.size == imageUris.size) {
+
+                                                upload(post,imageFileNames)
+                                                progressDialog.dismiss()
+
+                                            }
+
+
+                                        }
+
+                                }
+                                .addOnFailureListener { e ->
+                                    Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+                                }
+
 
                         }
+                        else {
 
-                        continue
-                    }//이미 만들어진 경우, 변형 없이 그냥 넣기
+                                imageFileNames.add(imageUris[i])
 
-                    val imageFileName = "IMG_${
-                        SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
-                            Date()
-                        )
-                    }_${UUID.randomUUID()}"
+                                if (i == imageUris.size - 1) {
 
-                    val imageRef = storageRef.child("images/$imageFileName")
-
-                    imageRef.putFile(imageUris[i].toUri())
-                        .addOnSuccessListener {
-                            imageRef.downloadUrl
-                                .addOnSuccessListener { uri ->
-
-                                    imageFileNames.add(uri.toString())
-
-                                    if (imageFileNames.size == imageUris.size) {
-
-                                        upload(post,imageFileNames)
-                                        progressDialog.dismiss()
-
-                                    }
-
+                                    upload(post, imageFileNames)
+                                    progressDialog.dismiss()
 
                                 }
 
                         }
-                        .addOnFailureListener { e ->
-                            Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
-                        }
 
                 }
+
 
             }
 
 
-
-        }
+        }//업로드 버튼
 
 
         boardPostViewModel.postLiveData.observe(this) { success ->
 
             if (success) {
+
                 restoreComment()
                 //댓글 복구
                 complete()
+
             }
 
         }
@@ -226,11 +227,11 @@ class BoardEditActivity : AppCompatActivity() {
 
     private fun restoreComment(){
 
-        for (i in 0 until commentList.size) {
+        commentList.forEach { comment ->
             postsRef.child(receiveList!!.postId!!)
                 .child("comments")
-                .child(commentList[i].id.toString())
-                .setValue(commentList[i])
+                .child(comment.id.toString())
+                .setValue(comment)
         }
 
     }
@@ -256,31 +257,22 @@ class BoardEditActivity : AppCompatActivity() {
 
         if (requestCode == REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
 
-            if (data?.clipData != null) {
+            data?.clipData?.let { clipData ->
+                for (i in 0 until clipData.itemCount) {
 
-                val clipData = data.clipData
+                    if (imageUris.size == 3) {
 
-                if (clipData != null) {
-
-                    for (i in 0 until clipData.itemCount) {
-
-                        if (imageUris.size == 3) {
-
-                            Toast.makeText(this, "사진은 최대 3장까지 업로드 가능합니다.", Toast.LENGTH_SHORT).show()
-                            break
-
-                        }
-
-                        val uri = clipData.getItemAt(i).uri
-
-                        imageUris.add(uri.toString())
-
+                        Toast.makeText(this, "사진은 최대 3장까지 업로드 가능합니다.", Toast.LENGTH_SHORT).show()
+                        break
 
                     }
 
-                }
+                    val uri = clipData.getItemAt(i).uri
 
-            }//다중 이미지
+                    imageUris.add(uri.toString())
+
+                }
+            }
 
             handleSelectedImages(imageUris, binding)
 
@@ -295,8 +287,7 @@ class BoardEditActivity : AppCompatActivity() {
 
 
         adapter = GalaryAdapter(imageUris,acBinding)
-        adapter!!.notifyDataSetChanged()
-
+        adapter.notifyDataSetChanged()
 
         binding.uploadImgButton.text = "사진 올리기(${imageUris.size}/3)"
 
