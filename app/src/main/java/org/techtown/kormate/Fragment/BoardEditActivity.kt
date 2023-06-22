@@ -3,7 +3,6 @@ package org.techtown.kormate.Fragment
 import android.Manifest
 import android.app.Activity
 import android.app.ProgressDialog
-import android.content.ContentUris
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,16 +12,12 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import org.techtown.kormate.Fragment.Adapter.GalaryAdapter
-import org.techtown.kormate.Fragment.Adapter.ReviseGalaryAdapter
 import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.Fragment.Data.Comment
 import org.techtown.kormate.Fragment.ViewModel.BoardPostViewModel
@@ -43,11 +38,9 @@ class BoardEditActivity : AppCompatActivity() {
     private val REQUEST_CODE_PICK_IMAGES = 1
     private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
 
-    private val imageUris = mutableListOf<String>()
-    private var picUri = mutableListOf<String>()
+    private var imageUris = mutableListOf<String>()
+    private var adapter: GalaryAdapter? = null
 
-    private var prior_adapter: ReviseGalaryAdapter? = null
-    private var new_adapter : ReviseGalaryAdapter? = null
     //각 리스트와 어뎁터를 따로 분리
 
 
@@ -78,10 +71,10 @@ class BoardEditActivity : AppCompatActivity() {
 
                 binding.post.setText(receiveList!!.post.toString())
 
-                picUri = receiveList!!.img
+                imageUris = receiveList!!.img
 
-                if (picUri.size > 0) {
-                    handleSelectedImages(picUri,imageUris,binding)
+                if (imageUris.size > 0) {
+                    handleSelectedImages(imageUris,binding)
                 }//원래 있던 이미지 갤러리 adapter에 띄우기
 
                 commentViewModel.loadComments(receiveList!!.postId.toString())
@@ -147,27 +140,69 @@ class BoardEditActivity : AppCompatActivity() {
             val storage = FirebaseStorage.getInstance()
             val storageRef = storage.reference
 
-            if (imageUris.size > 0) {
+            val imageFileNames = mutableListOf<String>()
 
-                val imageFileNames = mutableListOf<String>()
+            if(imageUris.size == 0){
 
+                reviseList = BoardDetail(
+                    receiveList!!.postId,
+                    receiveList!!.userId,
+                    receiveList!!.userName,
+                    receiveList!!.userImg,
+                    post,
+                    imageFileNames,
+                    receiveList!!.dateTime
+                )
+
+                boardPostViewModel.uploadPost(postsRef, reviseList!!)
+
+                progressDialog.dismiss()
+
+
+            }//글만 있는 경우
+            else{
                 for (i in 0 until imageUris.size) {
+
+                    if(imageUris[i].startsWith("https")){
+                        imageFileNames.add(imageUris[i])
+
+                        if(i == imageUris.size - 1){
+
+                            reviseList = BoardDetail(
+                                receiveList!!.postId,
+                                receiveList!!.userId,
+                                receiveList!!.userName,
+                                receiveList!!.userImg,
+                                post,
+                                imageFileNames,
+                                receiveList!!.dateTime
+                            )
+
+                            boardPostViewModel.uploadPost(postsRef, reviseList!!)
+
+                            progressDialog.dismiss()
+
+                        }
+
+                        continue
+                    }//이미 만들어진 경우, 변형 없이 그냥 넣기
+
                     val imageFileName = "IMG_${
                         SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
                             Date()
                         )
                     }_${UUID.randomUUID()}"
+
                     val imageRef = storageRef.child("images/$imageFileName")
 
                     imageRef.putFile(imageUris[i].toUri())
                         .addOnSuccessListener {
                             imageRef.downloadUrl
                                 .addOnSuccessListener { uri ->
+
                                     imageFileNames.add(uri.toString())
 
                                     if (imageFileNames.size == imageUris.size) {
-
-                                        picUri.addAll(imageFileNames)
 
                                         reviseList = BoardDetail(
                                             receiveList!!.postId,
@@ -175,7 +210,7 @@ class BoardEditActivity : AppCompatActivity() {
                                             receiveList!!.userName,
                                             receiveList!!.userImg,
                                             post,
-                                            picUri,
+                                            imageFileNames,
                                             receiveList!!.dateTime
                                         )
 
@@ -184,43 +219,35 @@ class BoardEditActivity : AppCompatActivity() {
                                         progressDialog.dismiss()
 
                                     }
+
+
                                 }
+
                         }
                         .addOnFailureListener { e ->
                             Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
                         }
+
                 }
-            } else {
-
-                reviseList = BoardDetail(
-                    receiveList!!.postId,
-                    receiveList!!.userId,
-                    receiveList!!.userName,
-                    receiveList!!.userImg,
-                    post,
-                    picUri,
-                    receiveList!!.dateTime
-                )
-
-                boardPostViewModel.uploadPost(postsRef, reviseList!!)
-
-                progressDialog.dismiss()
 
             }
+
+
+
         }
 
 
         boardPostViewModel.postLiveData.observe(this) { success ->
 
             if (success) {
-
                 restoreComment()
                 //댓글 복구
                 complete()
-
             }
 
         }
+
+
 
     }
 
@@ -250,9 +277,6 @@ class BoardEditActivity : AppCompatActivity() {
 
         if (requestCode == REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
 
-            Log.e("TAG",picUri.size.toString()+"picUrl 이미지")
-
-
             if (data?.clipData != null) {
 
                 val clipData = data.clipData
@@ -261,7 +285,7 @@ class BoardEditActivity : AppCompatActivity() {
 
                     for (i in 0 until clipData.itemCount) {
 
-                        if (picUri.size + imageUris.size == 3) {
+                        if (imageUris.size == 3) {
 
                             Toast.makeText(this, "사진은 최대 3장까지 업로드 가능합니다.", Toast.LENGTH_SHORT).show()
                             break
@@ -279,7 +303,7 @@ class BoardEditActivity : AppCompatActivity() {
 
             }//다중 이미지
 
-            handleSelectedImages(picUri, imageUris, binding)
+            handleSelectedImages(imageUris, binding)
 
 
         }
@@ -288,31 +312,17 @@ class BoardEditActivity : AppCompatActivity() {
     }
 
 
-    private fun handleSelectedImages(picUris : MutableList<String> ,imageUris: MutableList<String>, acBinding: ActivityBoardPostBinding) {
-
-        prior_adapter = ReviseGalaryAdapter(picUris,imageUris,acBinding)
-        prior_adapter!!.notifyDataSetChanged()
-
-        new_adapter = ReviseGalaryAdapter(imageUris,picUris,acBinding)
-        new_adapter!!.notifyDataSetChanged()
-
-        binding.uploadImgButton.text = "사진 올리기(${ picUris.size + imageUris.size}/3)"
+    private fun handleSelectedImages(imageUris: MutableList<String>, acBinding: ActivityBoardPostBinding) {
 
 
-        if(picUris.size == 0)
-            binding.priorImgRecyclerView.layoutManager = GridLayoutManager(this,1)
-        else
-            binding.priorImgRecyclerView.layoutManager = GridLayoutManager(this, picUri.size)
+        adapter = GalaryAdapter(imageUris,acBinding)
+        adapter!!.notifyDataSetChanged()
 
 
-        if(imageUris.size == 0)
-            binding.newImgRecyclerView.layoutManager = GridLayoutManager(this,1)
-        else
-            binding.newImgRecyclerView.layoutManager = GridLayoutManager(this,imageUris.size)
+        binding.uploadImgButton.text = "사진 올리기(${imageUris.size}/3)"
 
-
-        binding.newImgRecyclerView.adapter = new_adapter
-        binding.priorImgRecyclerView.adapter = prior_adapter
+        binding.ImgRecyclerView.layoutManager = GridLayoutManager(this,3)
+        binding.ImgRecyclerView.adapter = adapter
 
     }
 

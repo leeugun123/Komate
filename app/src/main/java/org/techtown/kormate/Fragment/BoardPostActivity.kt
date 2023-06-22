@@ -136,6 +136,8 @@ class BoardPostActivity : AppCompatActivity() {
                             imageRef.downloadUrl
                                 .addOnSuccessListener { uri ->
 
+                                    Log.e("TAG",uri.toString())
+
                                     imageFileNames.add(uri.toString())
 
                                     if (imageFileNames.size == imageUris.size) {
@@ -246,8 +248,8 @@ class BoardPostActivity : AppCompatActivity() {
         binding!!.uploadImgButton.text = "사진 올리기(" + imageUris.size.toString() + "/3)"
 
 
-        binding!!.priorImgRecyclerView.layoutManager = GridLayoutManager(this,3)
-        binding!!.priorImgRecyclerView.adapter = adapter
+        binding!!.ImgRecyclerView.layoutManager = GridLayoutManager(this,3)
+        binding!!.ImgRecyclerView.adapter = adapter
 
 
     }// 선택한 이미지들을 처리하는 코드를 작성
