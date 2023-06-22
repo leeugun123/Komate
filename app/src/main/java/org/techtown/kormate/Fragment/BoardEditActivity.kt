@@ -41,11 +41,7 @@ class BoardEditActivity : AppCompatActivity() {
     private var imageUris = mutableListOf<String>()
     private var adapter: GalaryAdapter? = null
 
-    //각 리스트와 어뎁터를 따로 분리
-
-
     private var receiveList: BoardDetail? = null
-    private var reviseList : BoardDetail? = null
 
     private val postsRef = Firebase.database.reference.child("posts")
     private var commentList = mutableListOf<Comment>()
@@ -144,18 +140,7 @@ class BoardEditActivity : AppCompatActivity() {
 
             if(imageUris.size == 0){
 
-                reviseList = BoardDetail(
-                    receiveList!!.postId,
-                    receiveList!!.userId,
-                    receiveList!!.userName,
-                    receiveList!!.userImg,
-                    post,
-                    imageFileNames,
-                    receiveList!!.dateTime
-                )
-
-                boardPostViewModel.uploadPost(postsRef, reviseList!!)
-
+                upload(post,imageFileNames)
                 progressDialog.dismiss()
 
 
@@ -168,18 +153,7 @@ class BoardEditActivity : AppCompatActivity() {
 
                         if(i == imageUris.size - 1){
 
-                            reviseList = BoardDetail(
-                                receiveList!!.postId,
-                                receiveList!!.userId,
-                                receiveList!!.userName,
-                                receiveList!!.userImg,
-                                post,
-                                imageFileNames,
-                                receiveList!!.dateTime
-                            )
-
-                            boardPostViewModel.uploadPost(postsRef, reviseList!!)
-
+                            upload(post,imageFileNames)
                             progressDialog.dismiss()
 
                         }
@@ -204,18 +178,7 @@ class BoardEditActivity : AppCompatActivity() {
 
                                     if (imageFileNames.size == imageUris.size) {
 
-                                        reviseList = BoardDetail(
-                                            receiveList!!.postId,
-                                            receiveList!!.userId,
-                                            receiveList!!.userName,
-                                            receiveList!!.userImg,
-                                            post,
-                                            imageFileNames,
-                                            receiveList!!.dateTime
-                                        )
-
-                                        boardPostViewModel.uploadPost(postsRef, reviseList!!)
-
+                                        upload(post,imageFileNames)
                                         progressDialog.dismiss()
 
                                     }
@@ -269,6 +232,22 @@ class BoardEditActivity : AppCompatActivity() {
                 .child(commentList[i].id.toString())
                 .setValue(commentList[i])
         }
+
+    }
+
+    private fun upload(post : String, imageFileNames : MutableList<String>){
+
+        val reviseList = BoardDetail(
+            receiveList!!.postId,
+            receiveList!!.userId,
+            receiveList!!.userName,
+            receiveList!!.userImg,
+            post,
+            imageFileNames,
+            receiveList!!.dateTime
+        )
+
+        boardPostViewModel.uploadPost(postsRef, reviseList!!)
 
     }
 
