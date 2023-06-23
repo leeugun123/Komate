@@ -238,17 +238,23 @@ class BoardEditActivity : AppCompatActivity() {
 
     private fun upload(post : String, imageFileNames : MutableList<String>){
 
-        val reviseList = BoardDetail(
-            receiveList!!.postId,
-            receiveList!!.userId,
-            receiveList!!.userName,
-            receiveList!!.userImg,
-            post,
-            imageFileNames,
-            receiveList!!.dateTime
-        )
+        receiveList.let {
 
-        boardPostViewModel.uploadPost(postsRef, reviseList!!)
+            val reviseList = BoardDetail(
+
+                receiveList.postId,
+                receiveList.userId,
+                receiveList.userName,
+                receiveList.userImg,
+                post,
+                imageFileNames,
+                receiveList.dateTime
+
+            )
+
+            boardPostViewModel.uploadPost(postsRef, reviseList)
+
+        }
 
     }
 
