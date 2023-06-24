@@ -104,7 +104,8 @@ class BoardActivity : AppCompatActivity() {
 
             }else{
                 Toast.makeText(this@BoardActivity, "글이 없습니다. 다시 작성해주세요.", Toast.LENGTH_SHORT).show()
-            }
+            }//텍스트에 글이 없는 경우
+
 
 
 

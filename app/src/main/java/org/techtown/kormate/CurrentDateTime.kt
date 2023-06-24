@@ -14,7 +14,7 @@ import java.util.*
          }
 
          fun getPostTime(): String {
-             val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+             val dateFormat = SimpleDateFormat("yyyy-MM-dd  HH:mm", Locale.getDefault())
              val date = Date()
              return dateFormat.format(date)
          }
