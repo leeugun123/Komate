@@ -79,7 +79,7 @@ class BoardActivity : AppCompatActivity() {
 
         binding!!.post.setOnClickListener {
 
-            if(postId != null){
+            if(!binding!!.reply.text.isEmpty() && postId != null){
 
                 val objRef = Firebase.database.reference.child("posts").child(postId!!).child("comments")
 
@@ -102,7 +102,11 @@ class BoardActivity : AppCompatActivity() {
                 commentSize += 1
                 commentRecyclerView!!.scrollToPosition(commentSize-1)
 
+            }else{
+                Toast.makeText(this@BoardActivity, "글이 없습니다. 다시 작성해주세요.", Toast.LENGTH_SHORT).show()
             }
+
+
 
         }
         //댓글 등록
