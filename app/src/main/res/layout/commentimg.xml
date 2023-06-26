@@ -33,6 +33,7 @@
                 android:layout_marginLeft="5dp"
                 android:text="김남주"
                 android:textColor="@color/black"
+                android:textStyle="bold"
                 />
 
             <TextView
@@ -67,7 +68,6 @@
             android:id="@+id/commentText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:text="네 영업하고 있어요. 아마도 오늘 쉬는 날인가봐요."
             android:textColor="@color/black"
