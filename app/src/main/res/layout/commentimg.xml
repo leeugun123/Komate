@@ -55,7 +55,7 @@
                 android:id="@+id/Button"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/delete"
+                android:src="@drawable/ic_baseline_clear_24"
                 android:layout_gravity="right"
                 />
 
