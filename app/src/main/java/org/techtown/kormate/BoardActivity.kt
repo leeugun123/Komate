@@ -286,16 +286,21 @@ class BoardActivity : AppCompatActivity() {
 
                     val imageViewList = listOf(binding!!.uploadImageView1, binding!!.uploadImageView2, binding!!.uploadImageView3)
 
-                    for (i in receiveData!!.img.indices) {
 
-                        Glide.with(this)
-                            .load(receiveData!!.img[i])
-                            .override(1000,1000)
-                            .into(imageViewList[i])
 
-                        imageViewList[i].visibility = View.VISIBLE
+                        for (i in receiveData!!.img.indices) {
 
-                    }
+                            Glide.with(this)
+                                .load(receiveData!!.img[i])
+                                .override(1100,1000)
+                                .into(imageViewList[i])
+
+                            imageViewList[i].visibility = View.VISIBLE
+
+                        }
+
+
+
 
                     for (i in receiveData!!.img.size until imageViewList.size) {
                         imageViewList[i].visibility = View.GONE

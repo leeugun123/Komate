@@ -131,21 +131,20 @@
                         android:id="@+id/upload_imageView1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scaleType="centerCrop"
                         android:src="@drawable/seoultech_logo" />
 
                     <ImageView
                         android:id="@+id/upload_imageView2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scaleType="centerCrop"/>
+                        />
 
                     <ImageView
                         android:id="@+id/upload_imageView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:scaleType="centerCrop"/>
+                        />
 
                 </LinearLayout>
 
