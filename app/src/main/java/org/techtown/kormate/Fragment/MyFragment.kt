@@ -147,7 +147,7 @@ class MyFragment : Fragment() {
             myUserIntel = userIntel
 
             //UI 업데이트
-            binding?.selfMajor?.text = "서울과학기술대학교 | ${userIntel.major}"
+            binding?.selfMajor?.text = "${userIntel.major}"
             binding?.selfIntroText?.text = userIntel.selfIntro
             binding?.majorText?.text = userIntel.major
 

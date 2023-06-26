@@ -97,6 +97,7 @@ class BoardActivity : AppCompatActivity() {
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding!!.reply.windowToken, 0)
 
+
                 Toast.makeText(this@BoardActivity, "댓글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
 
                 commentSize += 1
