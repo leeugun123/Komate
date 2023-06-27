@@ -115,7 +115,7 @@ class LoginActivity : AppCompatActivity() {
 
         }//파이베이스에 데이터 올리기
 
-
+        //깃 테스트
     }
 
     private suspend fun checkDataExistence(userId: String): Boolean = withContext(Dispatchers.IO) {
