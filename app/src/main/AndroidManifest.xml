@@ -56,7 +56,7 @@
 
                 <data
                     android:host="oauth"
-                    android:scheme = "kakao1a9487af33c38144b391fffdf4e43f62"
+                    android:scheme = "@string/kakao_app_key"
                     tools:ignore="AppLinkUrlError" />
 
 

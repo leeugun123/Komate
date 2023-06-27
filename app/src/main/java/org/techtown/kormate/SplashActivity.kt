@@ -18,9 +18,6 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
 
-        val keyHash = Utility.getKeyHash(this)
-        Log.e("Hash", keyHash)
-
 
         Handler().postDelayed({
             val intent = Intent(this, LoginActivity::class.java)
