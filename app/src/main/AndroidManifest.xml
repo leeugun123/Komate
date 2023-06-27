@@ -48,7 +48,7 @@
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
-            <intent-filter>
+            <intent-filter tools:ignore="ExtraText">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -56,7 +56,10 @@
 
                 <data
                     android:host="oauth"
-                    android:scheme="kakao1a987af33c38144b391fffdf4e43f62" />
+                    android:scheme = "kakao1a9487af33c38144b391fffdf4e43f62"
+                    tools:ignore="AppLinkUrlError" />
+
+
             </intent-filter>
         </activity>
         <activity
