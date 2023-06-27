@@ -22,7 +22,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "KAKAO_API_KEY", properties['kakao_api_key']
-
+        buildConfigField "String", "GOOGLE_API_KEY", properties['google_api_key']
     }
 
     buildTypes {
