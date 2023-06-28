@@ -12,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Data.UserIntel
 import org.techtown.kormate.Fragment.ViewModel.KakaoViewModel
+import org.techtown.kormate.Fragment.ViewModel.MyIntelModel
 import org.techtown.kormate.databinding.ActivityReviseBinding
 
 
@@ -21,7 +22,8 @@ class ReviseActivity : AppCompatActivity() {
 
     private var receivedIntel : UserIntel? = null
 
-    lateinit var kakaoViewModel : KakaoViewModel
+    private lateinit var kakaoViewModel : KakaoViewModel
+    private lateinit var myIntelModel : MyIntelModel
 
     private var userId : Long? = null
 
@@ -35,9 +37,10 @@ class ReviseActivity : AppCompatActivity() {
         kakaoViewModel.loadUserData()
         observeKakaoModel()
 
+        myIntelModel = ViewModelProvider(this).get(MyIntelModel::class.java)
+
 
         receivedIntel = intent.getParcelableExtra("userIntel")
-
 
 
         binding!!.selfEdittext.setText(receivedIntel!!.selfIntro.toString())
@@ -61,18 +64,9 @@ class ReviseActivity : AppCompatActivity() {
         }
 
 
+        myIntelModel.postLiveData.observe(this){ success ->
 
-    }
-
-    private fun writeIntelFirebase(userIntel: UserIntel, userId: String) {
-
-        // Firebase Realtime Database의 레퍼런스를 가져옵니다.
-        val database = FirebaseDatabase.getInstance()
-        val reference = database.reference.child("usersIntel").child(userId)
-
-        // UserIntel 객체를 Firebase에 저장합니다.
-        reference.setValue(userIntel)
-            .addOnSuccessListener {
+            if(success){
 
                 val intent = Intent()
                 intent.putExtra("userIntel",receivedIntel)
@@ -81,12 +75,21 @@ class ReviseActivity : AppCompatActivity() {
                 Toast.makeText(this,"수정되었습니다.",Toast.LENGTH_SHORT).show()
                 finish()
 
-
-            }
-            .addOnFailureListener {
-
             }
 
+        }
+
+
+
+    }
+
+    private fun writeIntelFirebase(userIntel: UserIntel, userId: String) {
+
+        val reference = FirebaseDatabase.getInstance()
+                        .reference.child("usersIntel")
+                        .child(userId)
+
+        myIntelModel.uploadUserIntel(reference,userIntel)
 
     }
 
