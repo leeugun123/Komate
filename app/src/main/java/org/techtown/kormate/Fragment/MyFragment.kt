@@ -186,13 +186,7 @@ class MyFragment : Fragment() {
         if (requestCode == REQUEST_REVISE) {
             if (resultCode == Activity.RESULT_OK) {
 
-                val response = data?.getParcelableExtra<UserIntel>("userIntel")
-
-                binding!!.selfMajor.text = "서울과학기술대학교 | " + response!!.major.toString()
-
-                binding!!.selfIntroText.text = response!!.selfIntro.toString()
-
-                binding!!.majorText.text = response!!.major.toString()
+                observeViewModel()
 
             }
 
