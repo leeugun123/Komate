@@ -6,10 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.firebase.database.FirebaseDatabase
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Data.UserIntel
+import org.techtown.kormate.Fragment.ViewModel.KakaoViewModel
 import org.techtown.kormate.databinding.ActivityReviseBinding
 
 
@@ -19,34 +21,31 @@ class ReviseActivity : AppCompatActivity() {
 
     private var receivedIntel : UserIntel? = null
 
+    lateinit var kakaoViewModel : KakaoViewModel
+
+    private var userId : Long? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         binding = ActivityReviseBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
 
-        receivedIntel  = intent.getParcelableExtra("userIntel")
-
-        UserApiClient.instance.me { user, _ ->
-
-            "${user?.kakaoAccount?.profile?.nickname}".also {
-
-                if(it != null)
-                    binding!!.userName.text = it
-
-            }
-
-            if(user?.kakaoAccount?.profile?.profileImageUrl != null)
-                Glide.with(binding!!.userpic).load(user?.kakaoAccount?.profile?.profileImageUrl).circleCrop().into(binding!!.userpic)
+        kakaoViewModel = ViewModelProvider(this).get(KakaoViewModel::class.java)
+        kakaoViewModel.loadUserData()
+        observeKakaoModel()
 
 
-        }//내 프로필 사진 카카오 oAuth로 가져오기
+        receivedIntel = intent.getParcelableExtra("userIntel")
+
+
 
         binding!!.selfEdittext.setText(receivedIntel!!.selfIntro.toString())
         //자기소개 가져오기
 
         binding!!.majorIntel.setText(receivedIntel!!.major.toString())
         //전공 가져오기
+
 
         binding!!.backBtn.setOnClickListener {
             finish()
@@ -57,12 +56,7 @@ class ReviseActivity : AppCompatActivity() {
              receivedIntel!!.selfIntro = binding!!.selfEdittext.text.toString()
              receivedIntel!!.major = binding!!.majorIntel.text.toString()
 
-            UserApiClient.instance.me { user, error ->
-
-                writeIntelFirebase(receivedIntel!!, user?.id.toString())
-
-            }//파이베이스에 데이터 올리기
-
+            writeIntelFirebase(receivedIntel!!, userId.toString())
 
         }
 
@@ -92,6 +86,23 @@ class ReviseActivity : AppCompatActivity() {
             .addOnFailureListener {
 
             }
+
+
+    }
+
+    private fun observeKakaoModel(){
+
+        kakaoViewModel.userName.observe(this) { userName ->
+            binding?.userName?.text = userName
+        }
+
+        kakaoViewModel.userProfileImageUrl.observe(this) { imageUrl ->
+            Glide.with(binding!!.userpic).load(imageUrl).circleCrop().into(binding!!.userpic)
+        }
+
+        kakaoViewModel.userId.observe(this){ userId ->
+            this.userId = userId
+        }
 
 
     }

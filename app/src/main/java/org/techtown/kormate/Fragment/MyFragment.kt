@@ -187,7 +187,7 @@ class MyFragment : Fragment() {
             if (resultCode == Activity.RESULT_OK) {
 
                 observeViewModel()
-
+                //수정 시 데이터 동기화
             }
 
         }
