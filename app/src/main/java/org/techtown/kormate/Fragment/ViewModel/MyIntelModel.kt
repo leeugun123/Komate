@@ -3,19 +3,21 @@ package org.techtown.kormate.Fragment.ViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.kakao.sdk.user.model.User
+import org.techtown.kormate.Fragment.Data.BoardDetail
 import org.techtown.kormate.Fragment.Data.UserIntel
 
 class MyIntelModel : ViewModel(){
 
     private val _userIntel = MutableLiveData<UserIntel>()
-
     val userIntel: LiveData<UserIntel>
         get() = _userIntel
+
+    private val _postLiveData = MutableLiveData<Boolean>()
+
+    val postLiveData: LiveData<Boolean>
+        get() = _postLiveData
 
     fun fetchUserIntel(userId : Long) {
 
@@ -34,6 +36,16 @@ class MyIntelModel : ViewModel(){
         })
 
     }
+
+    fun uploadUserIntel(postsRef : DatabaseReference, userIntel: UserIntel){
+
+        postsRef.setValue(userIntel)
+        _postLiveData.value = true
+
+    }
+
+
+
 
 
 }
