@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Data.UserIntel
+import org.techtown.kormate.Fragment.ViewModel.KakaoViewModel
 import org.techtown.kormate.MainActivity
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivitySelfIntroBinding
@@ -17,30 +19,27 @@ class SelfIntroActivity : AppCompatActivity() {
 
     private var binding : ActivitySelfIntroBinding? = null
 
+    private lateinit var kakaoViewModel : KakaoViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySelfIntroBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
 
+        kakaoViewModel = ViewModelProvider(this).get(KakaoViewModel::class.java)
+        kakaoViewModel.loadUserData()
+
+        kakaoViewModel.userName.observe(this){ userName ->
+            binding!!.userName.text = userName.toString()
+        }
+
+        kakaoViewModel.userProfileImageUrl.observe(this){ userImg ->
+            Glide.with(binding!!.userpic).load(userImg.toString()).circleCrop().into(binding!!.userpic)
+        }
+
+
+
         var receivedIntel  = intent.getParcelableExtra<UserIntel>("userIntel")
-
-
-        UserApiClient.instance.me { user, _ ->
-
-            "${user?.kakaoAccount?.profile?.nickname}".also {
-
-                if(it != null)
-                    binding!!.userName.text = it
-
-            }
-
-            if(user?.kakaoAccount?.profile?.profileImageUrl != null)
-                Glide.with(binding!!.userpic).load(user?.kakaoAccount?.profile?.profileImageUrl).circleCrop().into(binding!!.userpic)
-
-
-        }//내 프로필 사진 카카오 oAuth로 가져오기
-
-
 
 
         binding!!.selfEdittext.addTextChangedListener(object : TextWatcher {

@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.database.FirebaseDatabase
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Fragment.Data.UserIntel
+import org.techtown.kormate.Fragment.ViewModel.KakaoViewModel
 import org.techtown.kormate.MainActivity
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivityGenderBinding
@@ -19,10 +21,23 @@ class GenderActivity : AppCompatActivity() {
 
     private var binding : ActivityGenderBinding? = null
 
+    private lateinit var kakaoViewModel : KakaoViewModel
+    private lateinit var userId : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGenderBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
+
+
+        kakaoViewModel = ViewModelProvider(this).get(KakaoViewModel::class.java)
+        kakaoViewModel.loadUserData()
+
+        kakaoViewModel.userId.observe(this){ userId ->
+            this.userId = userId.toString()
+        }
+
+
 
         var receivedIntel  = intent.getParcelableExtra<UserIntel>("userIntel")
 
@@ -63,11 +78,8 @@ class GenderActivity : AppCompatActivity() {
 
                 val intent = Intent(this, MainActivity::class.java)
 
-                UserApiClient.instance.me { user, error ->
-
-                    writeIntelFirebase(receivedIntel, user?.id.toString())
-
-                }//파이베이스에 데이터 올리기
+                writeIntelFirebase(receivedIntel, userId)
+                //파이베이스에 데이터 올리기
 
 
                 startActivity(intent)

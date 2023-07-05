@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
                 binding!!.password.text.toString() == "wntm00"
             ){
 
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, NationActivity::class.java)
                 startActivity(intent)
                 finish()
 
