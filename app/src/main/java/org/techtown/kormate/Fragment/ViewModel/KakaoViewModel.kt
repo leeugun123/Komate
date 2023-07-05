@@ -36,6 +36,15 @@ class KakaoViewModel : ViewModel() {
 
             }
 
+            if(error != null){
+
+                _userName.value = "마스터 계정"
+                _userProfileImageUrl.value = "https://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg"
+                _userId.value = 3333;
+
+            }
+
+
         }
 
     }
