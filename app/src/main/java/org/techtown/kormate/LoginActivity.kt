@@ -25,6 +25,24 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
 
+        //마스터 계정 추가
+        binding!!.loginButton.setOnClickListener {
+
+            if(binding!!.email.text.toString() == "leeugun123@naver.com" &&
+                binding!!.password.text.toString() == "wntm00"
+            ){
+
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+
+            }
+
+
+        }
+
+
+
         //----------------------카카오 로그인 api 관련 코드---------------------------------
 
 
