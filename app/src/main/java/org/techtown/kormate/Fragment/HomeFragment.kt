@@ -16,26 +16,19 @@ import org.techtown.kormate.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
-    private var binding: FragmentHomeBinding? = null
-    private lateinit var kakaoViewModel : KakaoViewModel
-    private lateinit var recentListModel : RecentListModel
+    private lateinit var binding : FragmentHomeBinding
+    private val kakaoViewModel by lazy { ViewModelProvider(requireActivity())[KakaoViewModel::class.java] }
+    private val recentListModel by lazy { ViewModelProvider(requireActivity())[RecentListModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        kakaoViewModel = ViewModelProvider(requireActivity()).get(KakaoViewModel::class.java)
-        recentListModel = ViewModelProvider(requireActivity()).get(RecentListModel::class.java)
-
         kakaoViewModel.loadUserData()
-        recentListModel.loadRecentData(true)
-        //limit 개수만큼 가져옴
-
-
+        recentListModel.loadRecentData(true) //limit 개수만큼 가져옴
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding?.root
@@ -48,27 +41,29 @@ class HomeFragment : Fragment() {
 
     }
 
-    override fun onDestroyView() {
-        binding = null
-        super.onDestroyView()
+    private fun observeViewModel() {
+        kakaoObserve()
+        fireBaseObserve()
     }
 
-    private fun observeViewModel() {
+    private fun fireBaseObserve() {
+        recentListModel.recentList.observe(viewLifecycleOwner) { recentList ->
+            binding.recentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+            binding.recentRecyclerview.adapter = RecentAdapter(recentList)
+        }
+    }
+
+    private fun kakaoObserve() {
 
         kakaoViewModel.userName.observe(viewLifecycleOwner) { userName ->
-            binding?.userName?.text = userName + " 님"
+            binding.userName.text = "$userName 님"
         }
 
         kakaoViewModel.userProfileImageUrl.observe(viewLifecycleOwner) { imageUrl ->
-            Glide.with(binding?.userProfile!!).load(imageUrl).circleCrop().into(binding?.userProfile!!)
-        }
-
-        recentListModel.recentList.observe(viewLifecycleOwner) { recentList ->
-
-            binding?.recentRecyclerview?.layoutManager = LinearLayoutManager(requireContext())
-            binding?.recentRecyclerview?.adapter = RecentAdapter(recentList)
-
+            Glide.with(binding.userProfile).load(imageUrl).circleCrop().into(binding.userProfile)
         }
 
     }
+
+
 }
