@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".GlobalApplication"
+        android:name=".Util.GlobalApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -18,32 +18,32 @@
         android:theme="@style/Theme.Kormate"
         tools:targetApi="31">
         <activity
-            android:name=".Profile.GenderActivity"
+            android:name=".UI.Activity.GenderActivity"
             android:exported="false" />
         <activity
-            android:name=".Profile.SelfIntroActivity"
+            android:name=".UI.Activity.SelfIntroActivity"
             android:exported="false" />
         <activity
-            android:name=".Profile.MajorActivity"
+            android:name=".UI.Activity.MajorActivity"
             android:exported="false" />
         <activity
-            android:name=".Profile.NationActivity"
+            android:name=".UI.Activity.NationActivity"
             android:exported="false" />
         <activity
-            android:name=".ReviseActivity"
+            android:name=".UI.Activity.ReviseActivity"
             android:exported="false" />
         <activity
-            android:name=".ImageDetailActivity"
+            android:name=".UI.Activity.ImageDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".Fragment.BoardEditActivity"
+            android:name=".UI.Activity.BoardEditActivity"
             android:exported="false" />
         <activity
-            android:name=".BoardActivity"
+            android:name=".UI.Activity.BoardActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".Fragment.BoardPostActivity"
+            android:name=".UI.Activity.BoardPostActivity"
             android:exported="false" />
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
@@ -63,10 +63,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".UI.Activity.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".UI.Activity.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -75,7 +75,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".UI.Activity.MainActivity"
             android:exported="true" />
     </application>
 
