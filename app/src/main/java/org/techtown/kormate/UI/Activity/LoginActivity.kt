@@ -16,20 +16,17 @@ import org.techtown.kormate.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
 
-    private var binding : ActivityLoginBinding? = null
+    private val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
+        setContentView(binding.root)
 
         //마스터 계정 추가
         binding!!.loginButton.setOnClickListener {
 
             if(binding!!.email.text.toString() == "leeugun123@naver.com" &&
-                binding!!.password.text.toString() == "wntm00"
-            ){
+                binding!!.password.text.toString() == "wntm00"){
 
                 val intent = Intent(this, NationActivity::class.java)
                 startActivity(intent)
@@ -37,10 +34,7 @@ class LoginActivity : AppCompatActivity() {
 
             }
 
-
         }
-
-
 
         //----------------------카카오 로그인 api 관련 코드---------------------------------
 
@@ -117,22 +111,20 @@ class LoginActivity : AppCompatActivity() {
 
     private fun moveNextActivity(){
 
-        UserApiClient.instance.me { user, error ->
+        UserApiClient.instance.me { user, _ ->
 
-            var intent : Intent?
-
-            if(checkId(user!!.id.toString())){
-                intent = Intent(this, MainActivity::class.java)
-            }
-            else
-                intent = Intent(this, NationActivity::class.java)
+            val intent = if(checkId(user!!.id.toString())){
+                Intent(this, MainActivity::class.java)
+            } else
+                Intent(this, NationActivity::class.java)
 
             startActivity(intent)
             finish()
 
-        }//파이베이스에 데이터 올리기
+        }
+        //파이베이스에 데이터 올리기
 
-        //깃 테스트
+
     }
 
     private suspend fun checkDataExistence(userId: String): Boolean = withContext(Dispatchers.IO) {

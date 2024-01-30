@@ -8,33 +8,28 @@ import org.techtown.kormate.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
 
-    private var binding : ActivitySplashBinding? = null
+    private val binding by lazy { ActivitySplashBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivitySplashBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
-
+        setContentView(binding.root)
 
         Handler().postDelayed({
-            val intent = Intent(this, LoginActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            startActivity(intent)
-
-
-            finish()
-        }, DURATION)
+            moveToLoginActivity()
+        }, SPLASH_DURATION)
+        // 1.5초 후 이동
 
     }
+
+    private fun moveToLoginActivity() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        startActivity(intent)
+        finish()
+    }
+
     companion object {
-        private const val DURATION : Long = 1500
+        private const val SPLASH_DURATION : Long = 1500
     }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
-
-
 
 }
