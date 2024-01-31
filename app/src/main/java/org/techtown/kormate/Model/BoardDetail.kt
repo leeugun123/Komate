@@ -51,6 +51,7 @@ data class BoardDetail(
         override fun newArray(size: Int): Array<BoardDetail?> {
             return arrayOfNulls(size)
         }
+
     }
 
 }

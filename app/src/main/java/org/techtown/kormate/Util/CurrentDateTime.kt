@@ -6,18 +6,8 @@ import java.util.*
  class CurrentDateTime {
 
      companion object{
-
-         fun getCommentTime(): String {
-             val dateFormat = SimpleDateFormat("MM/dd  HH:mm", Locale.getDefault())
-             val date = Date()
-             return dateFormat.format(date)
-         }
-
-         fun getPostTime(): String {
-             val dateFormat = SimpleDateFormat("yyyy-MM-dd  HH:mm", Locale.getDefault())
-             val date = Date()
-             return dateFormat.format(date)
-         }
+         fun getCommentTime() = SimpleDateFormat("MM/dd  HH:mm", Locale.getDefault()).format(Date())!!
+         fun getPostTime() = SimpleDateFormat("yyyy-MM-dd  HH:mm", Locale.getDefault()).format(Date())!!
 
      }
 
