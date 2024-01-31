@@ -28,8 +28,6 @@ data class BoardDetail(
         parcel.createStringArrayList()?.toMutableList() as MutableList<String>,
         parcel.readString(),
 
-
-
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -42,13 +40,9 @@ data class BoardDetail(
         parcel.writeStringList(img)
         parcel.writeString(dateTime)
 
-
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
-
+    override fun describeContents() = 0
     companion object CREATOR : Parcelable.Creator<BoardDetail> {
         override fun createFromParcel(parcel: Parcel): BoardDetail {
             return BoardDetail(parcel)
@@ -58,5 +52,6 @@ data class BoardDetail(
             return arrayOfNulls(size)
         }
     }
+
 }
 

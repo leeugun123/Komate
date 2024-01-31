@@ -4,7 +4,11 @@
     package="org.techtown.kormate">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"
+        tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 
     <application
         android:name=".Util.GlobalApplication"
@@ -17,54 +21,63 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kormate"
         tools:targetApi="31">
+
         <activity
             android:name=".UI.Activity.GenderActivity"
             android:exported="false" />
+
         <activity
             android:name=".UI.Activity.SelfIntroActivity"
             android:exported="false" />
+
         <activity
             android:name=".UI.Activity.MajorActivity"
             android:exported="false" />
+
         <activity
             android:name=".UI.Activity.NationActivity"
             android:exported="false" />
+
         <activity
             android:name=".UI.Activity.ReviseActivity"
             android:exported="false" />
+
         <activity
             android:name=".UI.Activity.ImageDetailActivity"
             android:exported="false" />
+
         <activity
             android:name=".UI.Activity.BoardEditActivity"
             android:exported="false" />
+
         <activity
             android:name=".UI.Activity.BoardActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".UI.Activity.BoardPostActivity"
             android:exported="false" />
+
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
-            android:exported="true">
-            <intent-filter tools:ignore="ExtraText">
+            android:exported="true"
+            tools:ignore="Instantiatable">
+
+            <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="oauth"
-                    android:scheme = "@string/kakao_app_key"
-                    tools:ignore="AppLinkUrlError" />
-
-
             </intent-filter>
+
         </activity>
+
         <activity
             android:name=".UI.Activity.LoginActivity"
             android:exported="false" />
+
         <activity
             android:name=".UI.Activity.SplashActivity"
             android:exported="true">
@@ -74,9 +87,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".UI.Activity.MainActivity"
             android:exported="true" />
+
     </application>
+
 
 </manifest>
