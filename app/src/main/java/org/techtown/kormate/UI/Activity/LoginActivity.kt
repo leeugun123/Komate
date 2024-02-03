@@ -49,44 +49,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private fun kakaoLoginProcess() {
-
-        UserApiClient.instance.me { user: User?, _ ->
-            userKakaoAccount = user!!
-        }
-
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            if (error != null) {
-                Toast.makeText(this, "카카오 로그인 실패", Toast.LENGTH_SHORT).show()
-            } else if (tokenInfo != null) {
-                kakaoLoginSuccess()
-            }
-        }
-
-    }
-
-
-    private suspend fun checkDataExistence(userId: String): Boolean = withContext(Dispatchers.IO) {
-
-        val firebaseInstance = FirebaseDatabase.getInstance()
-        val reference = firebaseInstance.reference.child("usersIntel").child(userId)
-
-        return@withContext try {
-            reference.get().await().exists()
-        } catch (e: Exception) { false }
-
-    }
-
-    private fun kakaoLoginSuccess(){
-        Toast.makeText(this, "카카오 로그인", Toast.LENGTH_SHORT).show()
-        lifecycleScope.launch(Dispatchers.Main) {
-            moveNextActivity()
-        }
-    }
-
-    private suspend fun checkId(userId: String) = checkDataExistence(userId)
-
-    private suspend fun handleKakaoLoginError(error: Throwable) = withContext(Dispatchers.Main) {
+    private fun handleKakaoLoginError(error: Throwable): () -> Unit = {
         when {
             error.toString() == AuthErrorCause.AccessDenied.toString() -> {
                 Toast.makeText(this@LoginActivity, "접근이 거부 됨(동의 취소)", Toast.LENGTH_SHORT).show()
@@ -102,15 +65,56 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    private fun kakaoLoginProcess() {
+
+        UserApiClient.instance.me { user: User?, _ ->
+            userKakaoAccount = user!!
+            decideLogin()
+        }
+
+    }
+
+    private fun decideLogin(){
+
+        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+            if (error != null) {
+                Toast.makeText(this, "카카오 로그인 실패", Toast.LENGTH_SHORT).show()
+            } else if (tokenInfo != null) {
+                kakaoLoginSuccess()
+            }
+        }
+
+    }
+
+
+    private fun kakaoLoginSuccess(){
+        Toast.makeText(this, "카카오 로그인", Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch(Dispatchers.Main) {
+            moveNextActivity()
+        }
+    }
+
     private suspend fun moveNextActivity() {
         startActivity(decideActivity())
         finish()
     }
 
-    private suspend fun decideActivity() = if(checkId(userKakaoAccount!!.id.toString())){
+    private suspend fun decideActivity() = if(checkId(userKakaoAccount.id.toString())){
         Intent(this@LoginActivity, MainActivity::class.java)
     } else
         Intent(this@LoginActivity, NationActivity::class.java)
 
+    private suspend fun checkId(userId: String) = checkDataExistence(userId)
+
+    private suspend fun checkDataExistence(userId: String) = withContext(Dispatchers.IO) {
+
+        val reference = FirebaseDatabase.getInstance().
+                                        reference.child("usersIntel")
+                                            .child(userId)
+        return@withContext try {
+            reference.get().await().exists()
+        } catch (e: Exception) { false }
+
+    }
 
 }

@@ -5,22 +5,22 @@ import android.os.Parcelable
 
 data class UserIntel(
 
-    var nation: String? = null,
+    var nation: String =  "",
 
-    var major: String? = null,
+    var major:  String = "",
 
-    var selfIntro: String? = null,
+    var selfIntro: String = "",
 
-    var gender: String? = null
+    var gender: String = ""
 
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
 
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString()
+        parcel.readString().toString(),
+        parcel.readString().toString(),
+        parcel.readString().toString(),
+        parcel.readString().toString()
 
     )
 

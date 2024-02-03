@@ -5,29 +5,29 @@ import android.os.Parcelable
 
 data class Comment(
 
-    var id : String? = null,
+    var id : String = "",
 
-    var userId: Long? = null,
+    var userId: Long  = 0,
 
-    var userName: String? = null,
+    var userName: String = "",
 
-    var userImg: String? = null,
+    var userImg: String = "",
 
-    var text: String? = null,
+    var text: String = "",
 
-    var createdTime: String? = null
+    var createdTime : String = ""
 
 
 ): Parcelable {
 
     constructor(parcel: Parcel) : this(
 
-        parcel.readString(),
+        parcel.readString().toString(),
         parcel.readLong(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString()
+        parcel.readString().toString(),
+        parcel.readString().toString(),
+        parcel.readString().toString(),
+        parcel.readString().toString()
 
     )
 
