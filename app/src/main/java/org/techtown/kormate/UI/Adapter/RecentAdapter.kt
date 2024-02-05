@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import org.techtown.kormate.FirebasePathConstant.FIREBASE_UPLOAD_POST_PATH
 import org.techtown.kormate.UI.Activity.BoardActivity
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.databinding.RecentpreviewBinding
@@ -20,7 +21,7 @@ class RecentAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Ad
 
         override fun onClick(v : View){
             val intent = Intent(itemView.context, BoardActivity::class.java)
-            intent.putExtra("postIntel",boardList[adapterPosition])
+            intent.putExtra(FIREBASE_UPLOAD_POST_PATH,boardList[adapterPosition])
             itemView.context.startActivity(intent)
         }
 
