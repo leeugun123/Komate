@@ -16,61 +16,50 @@ class RecentAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Ad
     inner class ViewHolder(val binding : RecentpreviewBinding) : RecyclerView.ViewHolder(binding.root),
         View.OnClickListener{
 
-        init {
-            itemView.setOnClickListener(this)
-        }
+        init { itemView.setOnClickListener(this) }
 
         override fun onClick(v : View){
-
-            val position = adapterPosition
-            val context = itemView.context
-
-            val intent = Intent(context, BoardActivity::class.java)
-
-            intent.putExtra("postIntel",boardList[position])
-            context.startActivity(intent)
-
+            val intent = Intent(itemView.context, BoardActivity::class.java)
+            intent.putExtra("postIntel",boardList[adapterPosition])
+            itemView.context.startActivity(intent)
         }
 
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
-        val binding = RecentpreviewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return ViewHolder(binding)
-
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ViewHolder(RecentpreviewBinding.inflate(LayoutInflater.from(parent.context),parent,false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        syncAdapterUi(boardList[position] , holder)
+    }
 
-        val list = boardList[position]
+    private fun syncAdapterUi(list : BoardDetail , holder : ViewHolder) {
 
         holder.binding.dateTime.text = list.dateTime
 
-        var concetPost : String? = null
-
-        if(list.post.toString().length > 53){
-            concetPost = list.post?.substring(0,52)+"..."
-        }
-        else
-            concetPost = list.post.toString()
-
-        holder.binding.post.text = concetPost
+        holder.binding.post.text = if(list.post.toString().length > 53){
+            list.post?.substring(0,52)+"..."
+        } else
+            list.post.toString()
 
         holder.binding.userName.text = list.userName
 
         Glide.with(holder.itemView.context)
             .load(list.userImg)
-            .override(100,100)
+            .override(profileWidthSize, profileHeightSize)
             .circleCrop()
             .into(holder.binding.userImg)
 
     }
 
-    override fun getItemCount(): Int {
-        return boardList.size
+    override fun getItemCount() = boardList.size
+
+    companion object{
+        private const val profileWidthSize = 100
+        private const val profileHeightSize = 100
     }
+
 
 
 }
