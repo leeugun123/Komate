@@ -14,7 +14,6 @@ import org.techtown.kormate.databinding.ActivityMajorBinding
 class MajorActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMajorBinding.inflate(layoutInflater) }
-    private val receivedIntel by lazy {intent.getParcelableExtra<UserIntel>("userIntel")}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +28,7 @@ class MajorActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                val userInput = s?.toString()?.trim() // 사용자의 입력값
+                val userInput = s?.toString()?.trim()
 
                 if ((userInput?.length ?: 0) >= 1)
                     binding.checkButton.setBackgroundResource(R.color.blue) // 입력한 글자가 1글자 이상인 경우 버튼의 색상 변경
@@ -40,29 +39,27 @@ class MajorActivity : AppCompatActivity() {
 
         })
 
-
         binding.checkButton.setOnClickListener {
             checkMajorText()
         }
 
-
-
     }
 
     private fun checkMajorText() {
-
         if(binding.editMajor.text.toString().isNotEmpty())
             moveToSelfIntroActivity()
         else
-            Toast.makeText(this,"전공을 입력해주세요.",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, INPUT_MAJOR_GUIDE, Toast.LENGTH_SHORT).show()
     }
 
     private fun moveToSelfIntroActivity() {
-        val intent = Intent(this, SelfIntroActivity::class.java)
-        receivedIntel!!.major = binding.editMajor.text.toString()
-        intent.putExtra("userIntel",receivedIntel)
-        startActivity(intent)
+        UserIntel.major = binding.editMajor.text.toString()
+        startActivity(Intent(this, SelfIntroActivity::class.java))
         finish()
+    }
+
+    companion object{
+        private const val INPUT_MAJOR_GUIDE = "전공을 입력해주세요."
     }
 
 

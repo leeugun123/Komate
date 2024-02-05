@@ -25,13 +25,13 @@ class KakaoViewModel : ViewModel() {
 
             user?.let {
                 val nickname = it.kakaoAccount?.profile?.nickname
-                _userName.value = nickname
+                _userName.value = nickname!!
 
                 val profileImageUrl = it.kakaoAccount?.profile?.profileImageUrl
                 _userProfileImageUrl.value = profileImageUrl!!
 
                 val id = it.id
-                _userId.value = id
+                _userId.value = id!!
 
             }
 

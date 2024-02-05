@@ -1,53 +1,13 @@
 package org.techtown.kormate.Model
 
-import android.os.Parcel
-import android.os.Parcelable
+ object UserIntel{
 
-data class UserIntel(
+     var nation: String = ""
 
-    var nation: String =  "",
+     var major: String = ""
 
-    var major:  String = "",
+     var selfIntro: String = ""
 
-    var selfIntro: String = "",
+     var gender : String = ""
 
-    var gender: String = ""
-
-) : Parcelable {
-
-    constructor(parcel: Parcel) : this(
-
-        parcel.readString().toString(),
-        parcel.readString().toString(),
-        parcel.readString().toString(),
-        parcel.readString().toString()
-
-    )
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-
-        parcel.writeString(nation)
-        parcel.writeString(major)
-        parcel.writeString(selfIntro)
-        parcel.writeString(gender)
-
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<UserIntel> {
-
-        override fun createFromParcel(parcel: Parcel): UserIntel {
-            return UserIntel(parcel)
-        }
-
-        override fun newArray(size: Int): Array<UserIntel?> {
-            return arrayOfNulls(size)
-        }
-
-    }
-
-
-}
+ }

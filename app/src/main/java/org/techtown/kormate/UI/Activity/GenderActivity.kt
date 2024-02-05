@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.database.FirebaseDatabase
+import com.kakao.sdk.user.model.User
+import org.techtown.kormate.FirebasePathConstant
 import org.techtown.kormate.Model.UserIntel
+import org.techtown.kormate.Model.UserKakaoIntel.userId
 import org.techtown.kormate.UI.ViewModel.KakaoViewModel
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivityGenderBinding
@@ -15,100 +18,59 @@ import org.techtown.kormate.databinding.ActivityGenderBinding
 
 class GenderActivity : AppCompatActivity() {
 
-    private var binding : ActivityGenderBinding? = null
-
-    private lateinit var kakaoViewModel : KakaoViewModel
-    private lateinit var userId : String
+    private val binding by lazy { ActivityGenderBinding.inflate(layoutInflater)}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityGenderBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
+        setContentView(binding.root)
 
-
-        kakaoViewModel = ViewModelProvider(this).get(KakaoViewModel::class.java)
-        kakaoViewModel.loadUserData()
-
-        kakaoViewModel.userId.observe(this){ userId ->
-            this.userId = userId.toString()
-        }
-
-
-
-        var receivedIntel  = intent.getParcelableExtra<UserIntel>("userIntel")
-
-        var gender : String = ""
-
-        binding!!.radioGroup.setOnCheckedChangeListener { group, checkId ->
+        binding.radioGroup.setOnCheckedChangeListener { _, checkId ->
 
             when(checkId) {
-
-                binding!!.maleButton.id -> {
-
-                    binding!!.checkButton.setBackgroundResource(R.color.blue)
-                    gender = "남성"
-
-                }//남성
-
-                binding!!.FemaleButton.id -> {
-
-                    binding!!.checkButton.setBackgroundResource(R.color.blue)
-                    gender = "여성"
-
-                }//여성
-
+                binding.maleButton.id -> syncCheckButton("남성")
+                binding.FemaleButton.id -> syncCheckButton("여성")
             }
 
         }
 
-        binding!!.checkButton.setOnClickListener {
+        binding.checkButton.setOnClickListener {
 
-            if(gender == ""){
-                Toast.makeText(this,"성별을 체크해주세요", Toast.LENGTH_SHORT).show()
-            }
+            if(UserIntel.gender.isBlank())
+                printCheckGenderToastMessage()
             else{
-
-                Toast.makeText(this,"정보가 입력되었습니다.", Toast.LENGTH_SHORT).show()
-
-                receivedIntel!!.gender = gender
-
-                val intent = Intent(this, MainActivity::class.java)
-
-                writeIntelFirebase(receivedIntel, userId)
-                //파이베이스에 데이터 올리기
-
-
-                startActivity(intent)
-                finish()
-
-
-
+                uploadUserInfo()
+                moveMainActivity()
             }
 
-
         }
-
 
     }
 
+    private fun syncCheckButton(gender : String) {
+        binding.checkButton.setBackgroundResource(R.color.blue)
+        UserIntel.gender = gender
+    }
 
-    fun writeIntelFirebase(userIntel: UserIntel, userId: String) {
+    private fun uploadUserInfo() {
+        FirebaseDatabase.getInstance().
+        reference.child(FirebasePathConstant.FIREBASE_USER_INTEL_PATH)
+            .child(userId.toString()).setValue(UserIntel)
+            .addOnSuccessListener { Toast.makeText(this, INPUT_INFO_COMPLETE_GUIDE, Toast.LENGTH_SHORT).show() }
+    }
 
-        // Firebase Realtime Database의 레퍼런스를 가져옵니다.
-        val database = FirebaseDatabase.getInstance()
-        val reference = database.reference.child("usersIntel").child(userId)
+    private fun moveMainActivity() {
+        Toast.makeText(this, INPUT_INFO_GUIDE, Toast.LENGTH_SHORT).show()
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+    private fun printCheckGenderToastMessage() {
+        Toast.makeText(this,CHECK_GENDER_GUIDE, Toast.LENGTH_SHORT).show()
+    }
 
-        // UserIntel 객체를 Firebase에 저장합니다.
-        reference.setValue(userIntel)
-
-            .addOnSuccessListener {
-                Toast.makeText(this, "정보가 입력되었습니다.", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener {
-
-            }
-
-
+    companion object{
+        private const val INPUT_INFO_COMPLETE_GUIDE = "정보가 입력 되었습니다."
+        private const val CHECK_GENDER_GUIDE = "성별을 체크 해주세요"
+        private const val INPUT_INFO_GUIDE = "정보가 입력 되었습니다."
     }
 
 }
