@@ -13,25 +13,20 @@ import org.techtown.kormate.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItemSelectedListener{
 
-    private var binding : ActivityMainBinding? = null
-
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
+        setContentView(binding.root)
 
+        bottomNaviInit()
+    }
 
+    private fun bottomNaviInit() {
         supportFragmentManager.beginTransaction().add(R.id.linearLayout, HomeFragment()).commit()
-
-        val bottomNavigationView = findViewById<View>(R.id.bottomNavigationView) as BottomNavigationView
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(this)
-
-
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener(this)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-
 
         when(item.itemId) {
             R.id.page_home -> {
@@ -48,7 +43,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
             }
         }
 
-
         return false
     }
+
 }

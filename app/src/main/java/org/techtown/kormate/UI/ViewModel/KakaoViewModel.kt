@@ -37,14 +37,20 @@ class KakaoViewModel : ViewModel() {
 
             if(error != null){
 
-                _userName.value = "마스터 계정"
-                _userProfileImageUrl.value = "https://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg"
-                _userId.value = 3333;
+                _userName.value = MASTER_ACCOUNT_NAME
+                _userProfileImageUrl.value = MASTER_ACCOUNT_PROFILE_IMG_URI
+                _userId.value = MASTER_ACCOUNT_USER_ID
 
             }
-
 
         }
 
     }
+
+    companion object{
+        private const val MASTER_ACCOUNT_NAME = "마스터 계정"
+        private const val MASTER_ACCOUNT_PROFILE_IMG_URI = "https://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg"
+        private const val MASTER_ACCOUNT_USER_ID : Long = 3333
+    }
+
 }

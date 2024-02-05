@@ -17,53 +17,33 @@ import org.techtown.kormate.databinding.FragmentHomeBinding
 class HomeFragment : Fragment() {
 
     private lateinit var binding : FragmentHomeBinding
-    private val kakaoViewModel by lazy { ViewModelProvider(requireActivity())[KakaoViewModel::class.java] }
     private val recentListModel by lazy { ViewModelProvider(requireActivity())[RecentListModel::class.java] }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        kakaoViewModel.loadUserData()
-        recentListModel.loadRecentData(true) //limit 개수만큼 가져옴
-
-    }
+    override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding?.root
+        return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeViewModel()
-
+        recentListObserve()
     }
 
-    private fun observeViewModel() {
-        kakaoObserve()
-        fireBaseObserve()
-    }
+    private fun recentListObserve() {
 
-    private fun fireBaseObserve() {
+        recentListModel.loadRecentData(true) //limit 개수만큼 가져옴
+
         recentListModel.recentList.observe(viewLifecycleOwner) { recentList ->
             binding.recentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             binding.recentRecyclerview.adapter = RecentAdapter(recentList)
         }
-    }
-
-    private fun kakaoObserve() {
-
-        kakaoViewModel.userName.observe(viewLifecycleOwner) { userName ->
-            binding.userName.text = "$userName 님"
-        }
-
-        kakaoViewModel.userProfileImageUrl.observe(viewLifecycleOwner) { imageUrl ->
-            Glide.with(binding.userProfile).load(imageUrl).circleCrop().into(binding.userProfile)
-        }
 
     }
+
 
 
 }
