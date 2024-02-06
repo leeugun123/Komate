@@ -7,26 +7,25 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class BoardDetail(
 
-    var postId: String? = null,
-    var userId: Long? = null,
-    var userName: String? = null,
-    var userImg: String? = null,
-    var post: String? = null,
+    var postId : String = "",
+    var userId : Long = 0,
+    var userName : String = "",
+    var userImg : String = "",
+    var post : String = "",
     var img: MutableList<String> = mutableListOf(),
-    var dateTime: String? = null,
-
+    var dateTime: String = ""
 
 ): Parcelable {
 
     constructor(parcel: Parcel) : this(
 
-        parcel.readString(),
+        parcel.readString().toString(),
         parcel.readLong(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
+        parcel.readString().toString(),
+        parcel.readString().toString(),
+        parcel.readString().toString(),
         parcel.createStringArrayList()?.toMutableList() as MutableList<String>,
-        parcel.readString(),
+        parcel.readString().toString(),
 
     )
 
