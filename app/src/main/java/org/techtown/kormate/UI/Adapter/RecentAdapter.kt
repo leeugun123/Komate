@@ -14,22 +14,12 @@ import org.techtown.kormate.databinding.RecentpreviewBinding
 
 class RecentAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Adapter<RecentAdapter.ViewHolder>() {
 
-    inner class ViewHolder(val binding : RecentpreviewBinding) : RecyclerView.ViewHolder(binding.root),
-        View.OnClickListener{
-
-        init { itemView.setOnClickListener(this) }
-
-        override fun onClick(v : View){
-            val intent = Intent(itemView.context, BoardActivity::class.java)
-            intent.putExtra(FIREBASE_UPLOAD_POST_PATH,boardList[adapterPosition])
-            itemView.context.startActivity(intent)
-        }
-
-    }
-
+    inner class ViewHolder(val binding : RecentpreviewBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(RecentpreviewBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+
+    override fun getItemCount() = boardList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         syncAdapterUi(boardList[position] , holder)
@@ -39,8 +29,8 @@ class RecentAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Ad
 
         holder.binding.dateTime.text = list.dateTime
 
-        holder.binding.post.text = if(list.post.toString().length > 53){
-            list.post?.substring(0,52)+"..."
+        holder.binding.post.text = if(list.post.toString().length > PREVIEW_POST_LIMIT - 1){
+            list.post!!.substring(PREVIEW_POST_START, PREVIEW_POST_LIMIT - 1)+"..."
         } else
             list.post.toString()
 
@@ -48,17 +38,26 @@ class RecentAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Ad
 
         Glide.with(holder.itemView.context)
             .load(list.userImg)
-            .override(profileWidthSize, profileHeightSize)
+            .override(PROFILE_WIDTH_SIZE, PROFILE_HEIGHT_SIZE)
             .circleCrop()
             .into(holder.binding.userImg)
 
+        holder.itemView.setOnClickListener {
+
+            val intent = Intent(holder.itemView.context, BoardActivity::class.java)
+            intent.putExtra(FIREBASE_UPLOAD_POST_PATH ,list)
+            holder.itemView.context.startActivity(intent)
+
+        }
+
     }
 
-    override fun getItemCount() = boardList.size
 
     companion object{
-        private const val profileWidthSize = 100
-        private const val profileHeightSize = 100
+        private const val PROFILE_WIDTH_SIZE = 100
+        private const val PROFILE_HEIGHT_SIZE = 100
+        private const val PREVIEW_POST_START = 0
+        private const val PREVIEW_POST_LIMIT = 53
     }
 
 
