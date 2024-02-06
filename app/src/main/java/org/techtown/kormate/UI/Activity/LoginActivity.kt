@@ -18,6 +18,7 @@ import org.techtown.kormate.FirebasePathConstant.USER_INTEL_PATH
 import org.techtown.kormate.Model.UserKakaoIntel.userId
 import org.techtown.kormate.Model.UserKakaoIntel.userNickName
 import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
+import org.techtown.kormate.UI.Activity.UserInfoRegister.NationActivity
 import org.techtown.kormate.UI.ViewModel.KakaoViewModel
 import org.techtown.kormate.databinding.ActivityLoginBinding
 

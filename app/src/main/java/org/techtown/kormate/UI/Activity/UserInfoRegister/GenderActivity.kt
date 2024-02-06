@@ -1,4 +1,4 @@
-package org.techtown.kormate.UI.Activity
+package org.techtown.kormate.UI.Activity.UserInfoRegister
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +9,7 @@ import org.techtown.kormate.FirebasePathConstant
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Model.UserKakaoIntel.userId
 import org.techtown.kormate.R
+import org.techtown.kormate.UI.Activity.MainActivity
 import org.techtown.kormate.databinding.ActivityGenderBinding
 
 
@@ -61,7 +62,7 @@ class GenderActivity : AppCompatActivity() {
         finish()
     }
     private fun printCheckGenderToastMessage() {
-        Toast.makeText(this,CHECK_GENDER_GUIDE, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, CHECK_GENDER_GUIDE, Toast.LENGTH_SHORT).show()
     }
 
     companion object{

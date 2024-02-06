@@ -1,4 +1,4 @@
-package org.techtown.kormate.UI.Activity
+package org.techtown.kormate.UI.Activity.UserInfoRegister
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,61 +6,61 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
-import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.R
-import org.techtown.kormate.databinding.ActivityMajorBinding
+import org.techtown.kormate.databinding.ActivitySelfIntroBinding
 
+class SelfIntroActivity : AppCompatActivity() {
 
-class MajorActivity : AppCompatActivity() {
-
-    private val binding by lazy { ActivityMajorBinding.inflate(layoutInflater) }
+    private val binding by lazy { ActivitySelfIntroBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.editMajor.addTextChangedListener(object : TextWatcher {
+
+        binding.selfEdittext.addTextChangedListener(object : TextWatcher {
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.checkButton.setBackgroundResource(R.color.blue)
             }
 
             override fun afterTextChanged(s: Editable?) {
+
                 val userInput = s?.toString()?.trim()
 
                 if ((userInput?.length ?: 0) >= 1)
                     binding.checkButton.setBackgroundResource(R.color.blue) // 입력한 글자가 1글자 이상인 경우 버튼의 색상 변경
                 else
                     binding.checkButton.setBackgroundResource(R.color.gray) // 입력한 글자가 없는 경우 버튼의 색상 초기화
-
             }
 
         })
 
         binding.checkButton.setOnClickListener {
-            checkMajorText()
+            checkSelfEditText()
         }
 
     }
 
-    private fun checkMajorText() {
-        if(binding.editMajor.text.toString().isNotEmpty())
-            moveToSelfIntroActivity()
+    private fun checkSelfEditText() {
+
+        if(binding.selfEdittext.text.toString().isNotEmpty())
+            moveToGenderActivity()
         else
-            Toast.makeText(this, INPUT_MAJOR_GUIDE, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, SELF_INTRO_GUIDE, Toast.LENGTH_SHORT).show()
     }
 
-    private fun moveToSelfIntroActivity() {
-        UserIntel.major = binding.editMajor.text.toString()
-        startActivity(Intent(this, SelfIntroActivity::class.java))
+    private fun moveToGenderActivity() {
+        startActivity(Intent(this, GenderActivity::class.java))
         finish()
     }
 
-    companion object{
-        private const val INPUT_MAJOR_GUIDE = "전공을 입력해주세요."
-    }
 
+    companion object{
+        private const val SELF_INTRO_GUIDE = "자기소개를 작성해주세요."
+    }
 
 }

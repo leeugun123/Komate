@@ -1,10 +1,9 @@
-package org.techtown.kormate.UI.Activity
+package org.techtown.kormate.UI.Activity.UserInfoRegister
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.kakao.sdk.user.model.User
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivityNationBinding
@@ -30,7 +29,7 @@ class NationActivity : AppCompatActivity() {
 
     private fun nationCheck() {
         if(UserIntel.nation.isBlank())
-            Toast.makeText(this,CHECK_NATION_GUIDE,Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, CHECK_NATION_GUIDE,Toast.LENGTH_SHORT).show()
         else
             moveToMajorActivity()
     }
