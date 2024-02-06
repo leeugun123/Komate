@@ -18,7 +18,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.gun0912.tedpermission.provider.TedPermissionProvider.context
-import org.techtown.kormate.FirebasePathConstant.FIREBASE_UPLOAD_POST_PATH
+import org.techtown.kormate.FirebasePathConstant.COMMENT_PATH
+import org.techtown.kormate.FirebasePathConstant.POSTS_PATH
+import org.techtown.kormate.FirebasePathConstant.POST_REPORT_PATH
+import org.techtown.kormate.FirebasePathConstant.UPLOAD_POST_PATH
 import org.techtown.kormate.UI.Adapter.CommentAdapter
 import org.techtown.kormate.Util.CurrentDateTime
 import org.techtown.kormate.Model.BoardDetail
@@ -32,14 +35,14 @@ class BoardActivity : AppCompatActivity() {
 
     private val commentViewModel by lazy { ViewModelProvider(this)[CommentViewModel::class.java] }
     private val binding by lazy { ActivityBoardBinding.inflate(layoutInflater) }
-    private val receiveData by lazy { intent.getParcelableExtra<BoardDetail>(FIREBASE_UPLOAD_POST_PATH) }
+    private val receiveData by lazy { intent.getParcelableExtra<BoardDetail>(UPLOAD_POST_PATH) }
     private val commentRecyclerView by lazy { binding.commentRecyclerView }
     private val postId by lazy { tempData.postId }
     private val userId by lazy { tempData.userId }
     private val tempData by lazy { receiveData!!}
 
     private var commentSize = 0
-    private var commentList = mutableListOf<Comment>()
+    private var commentList = listOf<Comment>()
     private val REQUEST_CODE_EDIT_ACTIVITY = 2
     //액티비티 수정
 
@@ -58,7 +61,7 @@ class BoardActivity : AppCompatActivity() {
             if(binding.reply.text.isNotEmpty())
                 handleComment()
             else
-                Toast.makeText(this@BoardActivity, "글이 없습니다. 다시 작성해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@BoardActivity, NO_POST_TRY_AGAIN, Toast.LENGTH_SHORT).show()
 
         } //댓글 등록
 
@@ -118,14 +121,14 @@ class BoardActivity : AppCompatActivity() {
 
     private fun moveBoardEditActivity() {
         val intent = Intent(this, BoardEditActivity::class.java)
-        intent.putExtra(FIREBASE_UPLOAD_POST_PATH , receiveData)
+        intent.putExtra(UPLOAD_POST_PATH , receiveData)
         startActivityForResult(intent,REQUEST_CODE_EDIT_ACTIVITY)
     }
 
     private fun showDeleteAlertDialog() {
 
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("이 게시물을 삭제하시겠습니까?")
+        builder.setTitle(REMOVE_POST_COMPLETE)
 
         builder.setPositiveButton("예") { _, _ ->
             removeBoard()
@@ -149,7 +152,7 @@ class BoardActivity : AppCompatActivity() {
 
     private fun uploadComment() {
 
-        val objRef = Firebase.database.reference.child("posts").child(postId).child("comments")
+        val objRef = Firebase.database.reference.child(POSTS_PATH).child(postId).child(COMMENT_PATH)
 
         val id = objRef.push().key.toString()
 
@@ -160,7 +163,7 @@ class BoardActivity : AppCompatActivity() {
 
         objCommentRef.setValue(comment)
 
-        Toast.makeText(this@BoardActivity, "댓글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@BoardActivity, POST_COMMENT_COMPLETE, Toast.LENGTH_SHORT).show()
     }
 
     private fun tossIntent(entirePage: Int, curPage: Int,imgUri : String) {
@@ -172,7 +175,6 @@ class BoardActivity : AppCompatActivity() {
         intent.putExtra("imgUrl",imgUri)
 
         startActivity(intent)
-
     }
 
     private fun showReportDialog() {
@@ -187,7 +189,7 @@ class BoardActivity : AppCompatActivity() {
             checkedReasons[which] = isChecked
         }
 
-        builder.setPositiveButton("확인") { _, _ ->
+        builder.setPositiveButton(CHECK) { _, _ ->
 
             val selectedReasons = mutableListOf<String>()
             for (i in reasons.indices) {
@@ -199,16 +201,16 @@ class BoardActivity : AppCompatActivity() {
             }
 
             //선택한 신고 사유들에 대한 처리 진행
-            Firebase.database.reference.child("postReports").
+            Firebase.database.reference.child(POST_REPORT_PATH).
                         child(Firebase.database.reference.push().key.toString()).setValue(
                 Report(userId , selectedReasons , tempData.userId , tempData.postId))
 
             //신고 넣기
-            Toast.makeText(context, "게시물이 신고 되었습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, REPORT_POST, Toast.LENGTH_SHORT).show()
 
         }
 
-        builder.setNegativeButton("취소") { dialog, _ ->
+        builder.setNegativeButton(CANCEL) { dialog, _ ->
             dialog.dismiss()
         }
 
@@ -233,13 +235,14 @@ class BoardActivity : AppCompatActivity() {
 
         commentViewModel.loadComments(postId)
 
-        commentViewModel.commentLiveData.observe(this) { commentList ->
-            commentAdapterSync()
+        commentViewModel.commentLiveData.observe(this) {
+            commentAdapterSync(it)
         }
 
     }
 
-    private fun commentAdapterSync() {
+    private fun commentAdapterSync(list : List<Comment>) {
+        commentList = list
         commentSize = commentList.size
         commentRecyclerView.layoutManager = LinearLayoutManager(this)
         commentRecyclerView.adapter = CommentAdapter(commentList, userId, postId)
@@ -247,7 +250,6 @@ class BoardActivity : AppCompatActivity() {
     }
 
     private fun postUiSync() {
-
         binding.postText.text = tempData.post
         imgUiSync()
     }
@@ -335,6 +337,15 @@ class BoardActivity : AppCompatActivity() {
             finish()
     }
     //수정 후 액티비티 종료
+
+    companion object{
+        private const val NO_POST_TRY_AGAIN = "글이 없습니다. 다시 작성해주세요."
+        private const val REMOVE_POST_COMPLETE = "게시물이 삭제 되었습니다."
+        private const val POST_COMMENT_COMPLETE = "댓글이 등록 되었습니다."
+        private const val CANCEL = "취소"
+        private const val CHECK = "확인"
+        private const val REPORT_POST = "게시물이 신고 되었습니다."
+    }
 
 
 

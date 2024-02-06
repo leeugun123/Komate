@@ -4,13 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.database.FirebaseDatabase
-import com.kakao.sdk.user.model.User
 import org.techtown.kormate.FirebasePathConstant
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Model.UserKakaoIntel.userId
-import org.techtown.kormate.UI.ViewModel.KakaoViewModel
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivityGenderBinding
 
@@ -53,7 +50,7 @@ class GenderActivity : AppCompatActivity() {
 
     private fun uploadUserInfo() {
         FirebaseDatabase.getInstance().
-        reference.child(FirebasePathConstant.FIREBASE_USER_INTEL_PATH)
+        reference.child(FirebasePathConstant.USER_INTEL_PATH)
             .child(userId.toString()).setValue(UserIntel)
             .addOnSuccessListener { Toast.makeText(this, INPUT_INFO_COMPLETE_GUIDE, Toast.LENGTH_SHORT).show() }
     }

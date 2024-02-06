@@ -2,11 +2,10 @@ package org.techtown.kormate.UI.Adapter
 
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import org.techtown.kormate.FirebasePathConstant.FIREBASE_UPLOAD_POST_PATH
+import org.techtown.kormate.FirebasePathConstant.UPLOAD_POST_PATH
 import org.techtown.kormate.UI.Activity.BoardActivity
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.databinding.RecentpreviewBinding
@@ -45,7 +44,7 @@ class RecentAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Ad
         holder.itemView.setOnClickListener {
 
             val intent = Intent(holder.itemView.context, BoardActivity::class.java)
-            intent.putExtra(FIREBASE_UPLOAD_POST_PATH ,list)
+            intent.putExtra(UPLOAD_POST_PATH ,list)
             holder.itemView.context.startActivity(intent)
 
         }

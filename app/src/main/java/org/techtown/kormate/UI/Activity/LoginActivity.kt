@@ -10,13 +10,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.user.UserApiClient
-import com.kakao.sdk.user.model.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import org.techtown.kormate.FirebasePathConstant.FIREBASE_USER_INTEL_PATH
-import org.techtown.kormate.Model.UserKakaoIntel
+import org.techtown.kormate.FirebasePathConstant.USER_INTEL_PATH
 import org.techtown.kormate.Model.UserKakaoIntel.userId
 import org.techtown.kormate.Model.UserKakaoIntel.userNickName
 import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
@@ -133,7 +131,7 @@ class LoginActivity : AppCompatActivity() {
 
         return@withContext try {
             FirebaseDatabase.getInstance().
-            reference.child(FIREBASE_USER_INTEL_PATH)
+            reference.child(USER_INTEL_PATH)
                 .child(userId).get().await().exists()
         } catch (e: Exception) { false }
 
