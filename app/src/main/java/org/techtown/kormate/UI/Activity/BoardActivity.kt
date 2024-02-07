@@ -21,7 +21,7 @@ import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import org.techtown.kormate.FirebasePathConstant.COMMENT_PATH
 import org.techtown.kormate.FirebasePathConstant.POSTS_PATH
 import org.techtown.kormate.FirebasePathConstant.POST_REPORT_PATH
-import org.techtown.kormate.FirebasePathConstant.UPLOAD_POST_PATH
+import org.techtown.kormate.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.UI.Adapter.CommentAdapter
 import org.techtown.kormate.Util.CurrentDateTime
 import org.techtown.kormate.Model.BoardDetail
@@ -35,7 +35,7 @@ class BoardActivity : AppCompatActivity() {
 
     private val commentViewModel by lazy { ViewModelProvider(this)[CommentViewModel::class.java] }
     private val binding by lazy { ActivityBoardBinding.inflate(layoutInflater) }
-    private val receiveData by lazy { intent.getParcelableExtra<BoardDetail>(UPLOAD_POST_PATH) }
+    private val receiveData by lazy { intent.getParcelableExtra<BoardDetail>(POST_PATH_INTENT) }
     private val commentRecyclerView by lazy { binding.commentRecyclerView }
     private val postId by lazy { tempData.postId }
     private val userId by lazy { tempData.userId }
@@ -44,8 +44,6 @@ class BoardActivity : AppCompatActivity() {
     private var commentSize = 0
     private var commentList = listOf<Comment>()
     private val REQUEST_CODE_EDIT_ACTIVITY = 2
-    //액티비티 수정
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,7 +119,7 @@ class BoardActivity : AppCompatActivity() {
 
     private fun moveBoardEditActivity() {
         val intent = Intent(this, BoardEditActivity::class.java)
-        intent.putExtra(UPLOAD_POST_PATH , receiveData)
+        intent.putExtra(POST_PATH_INTENT , receiveData)
         startActivityForResult(intent,REQUEST_CODE_EDIT_ACTIVITY)
     }
 

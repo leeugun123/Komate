@@ -16,6 +16,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
+import org.techtown.kormate.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.UI.Adapter.GalaryAdapter
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.Comment
@@ -29,53 +30,49 @@ import java.util.*
 
 class BoardEditActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityBoardPostBinding
-
-    private lateinit var commentViewModel: CommentViewModel
-    private lateinit var boardPostViewModel: BoardPostViewModel
+    private val binding by lazy { ActivityBoardPostBinding.inflate(layoutInflater) }
+    private val commentViewModel by lazy { ViewModelProvider(this)[CommentViewModel::class.java] }
+    private val boardPostViewModel by lazy { ViewModelProvider(this)[BoardPostViewModel::class.java] }
 
     private val REQUEST_CODE_PICK_IMAGES = 1
     private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
 
     private var imageUris = mutableListOf<String>()
-    private lateinit var adapter: GalaryAdapter
+    private lateinit var adapter : GalaryAdapter
 
-    private lateinit var receiveList: BoardDetail
+    private lateinit var receiveList : BoardDetail
 
     private val postsRef = Firebase.database.reference.child("posts")
     private var commentList = mutableListOf<Comment>()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityBoardPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        commentViewModel = ViewModelProvider(this).get(CommentViewModel::class.java)
-        boardPostViewModel = ViewModelProvider(this).get(BoardPostViewModel::class.java)
-
+        receiveList = intent.getParcelableExtra(POST_PATH_INTENT)!!
         binding.title.text = "게시물 수정"
         binding.updateButton.text = "수정하기"
 
-        receiveList = intent.getParcelableExtra("postIntel")!!
 
-        receiveList?.let {
+        receiveList.let {
 
-            binding.post.setText(receiveList!!.post.toString())
+            binding.post.setText(receiveList.post)
 
-            imageUris = receiveList!!.img
+            imageUris = receiveList.img
 
-            if (imageUris.size > 0) {
-                handleSelectedImages(imageUris,binding)
-            }//원래 있던 이미지 갤러리 adapter에 띄우기
+            if (imageUris.size > 0)
+                handleSelectedImages(imageUris , binding)
+            //원래 있던 이미지 갤러리 adapter에 띄우기
 
-            commentViewModel.loadComments(receiveList!!.postId.toString())
+            commentViewModel.loadComments(receiveList.postId)
 
             commentViewModel.commentLiveData.observe(this) { commentList ->
                 this.commentList = commentList as MutableList<Comment>
-            }//변하지 않는 데이터
+            }
+            //변하지 않는 데이터
 
         }
-
 
         binding.backBtn.setOnClickListener {
             finish()
@@ -98,10 +95,7 @@ class BoardEditActivity : AppCompatActivity() {
 
                     }
 
-                    override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-                        // 권한이 거부되면 처리합니다.
-                        // ...
-                    }
+                    override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {}
                 })
                 .setPermissions(PERMISSION_READ_EXTERNAL_STORAGE)
                 .check()

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import org.techtown.kormate.FirebasePathConstant.UPLOAD_POST_PATH
+import org.techtown.kormate.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.UI.Activity.BoardActivity
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.databinding.RecentpreviewBinding
@@ -28,10 +28,10 @@ class RecentAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Ad
 
         holder.binding.dateTime.text = list.dateTime
 
-        holder.binding.post.text = if(list.post.toString().length > PREVIEW_POST_LIMIT - 1){
-            list.post!!.substring(PREVIEW_POST_START, PREVIEW_POST_LIMIT - 1)+"..."
+        holder.binding.post.text = if(list.post.length > PREVIEW_POST_LIMIT - 1){
+            list.post.substring(PREVIEW_POST_START, PREVIEW_POST_LIMIT - 1)+"..."
         } else
-            list.post.toString()
+            list.post
 
         holder.binding.userName.text = list.userName
 
@@ -44,7 +44,7 @@ class RecentAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Ad
         holder.itemView.setOnClickListener {
 
             val intent = Intent(holder.itemView.context, BoardActivity::class.java)
-            intent.putExtra(UPLOAD_POST_PATH ,list)
+            intent.putExtra(POST_PATH_INTENT ,list)
             holder.itemView.context.startActivity(intent)
 
         }
