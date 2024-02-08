@@ -16,8 +16,12 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
-import org.techtown.kormate.CarmeraPermissionConstant.PERMISSION_READ_EXTERNAL_STORAGE
-import org.techtown.kormate.CarmeraPermissionConstant.REQUEST_CODE_PICK_IMAGES
+import org.techtown.kormate.Constant.BoardPostConstant
+import org.techtown.kormate.Constant.BoardPostConstant.MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE
+import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_MESSAGE
+import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
+import org.techtown.kormate.Constant.CarmeraPermissionConstant.PERMISSION_READ_EXTERNAL_STORAGE
+import org.techtown.kormate.Constant.CarmeraPermissionConstant.REQUEST_CODE_PICK_IMAGES
 import org.techtown.kormate.FirebasePathConstant.COMMENT_PATH
 import org.techtown.kormate.FirebasePathConstant.POSTS_PATH
 import org.techtown.kormate.FirebasePathConstant.POST_PATH_INTENT
@@ -66,12 +70,12 @@ class BoardEditActivity : AppCompatActivity() {
             val post = binding.post.text.toString()
 
             if (post.isEmpty() && receiveIntent.img.isEmpty()) {
-                showToast("내용이 없습니다. 내용을 입력해주세요")
+                showToast(NO_CONTENT_INPUT_CONTENT_MESSAGE)
                 return@setOnClickListener
             }
 
             if (post.isEmpty()) {
-                showToast("글의 내용이 없습니다.")
+                showToast(NO_CONTEXT_MESSAGE)
                 return@setOnClickListener
             }
 
@@ -133,7 +137,7 @@ class BoardEditActivity : AppCompatActivity() {
 
     private fun createProgressBar(): ProgressDialog {
         val progressBar = ProgressDialog(this)
-        progressBar.setMessage("수정하는 중")
+        progressBar.setMessage(REVISE_DOING_MESSAGE)
         progressBar.setCancelable(false)
         progressBar.show()
         return progressBar
@@ -211,7 +215,7 @@ class BoardEditActivity : AppCompatActivity() {
 
         setResult(Activity.RESULT_OK,  Intent())
         finish()
-        Toast.makeText(this, "게시글이 수정되었습니다.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, REVISE_POST_COMPLETE_MESSAGE, Toast.LENGTH_SHORT).show()
 
     }
 
@@ -262,7 +266,7 @@ class BoardEditActivity : AppCompatActivity() {
             for (i in 0 until clipData.itemCount) {
 
                 if (receiveIntent.img.size == 3) {
-                    Toast.makeText(this, "사진은 최대 3장까지 업로드 가능합니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE, Toast.LENGTH_SHORT).show()
                     break
                 }
 
@@ -293,7 +297,10 @@ class BoardEditActivity : AppCompatActivity() {
     }
 
 
-
+    companion object{
+        private const val REVISE_POST_COMPLETE_MESSAGE = "게시글이 수정 되었습니다."
+        private const val REVISE_DOING_MESSAGE = "업로드 중"
+    }
 
 
 }

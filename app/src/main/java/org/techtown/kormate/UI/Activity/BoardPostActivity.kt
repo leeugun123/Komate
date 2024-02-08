@@ -18,8 +18,11 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
-import org.techtown.kormate.CarmeraPermissionConstant
-import org.techtown.kormate.CarmeraPermissionConstant.REQUEST_CODE_PICK_IMAGES
+import org.techtown.kormate.Constant.BoardPostConstant.MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE
+import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_MESSAGE
+import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
+import org.techtown.kormate.Constant.CarmeraPermissionConstant
+import org.techtown.kormate.Constant.CarmeraPermissionConstant.REQUEST_CODE_PICK_IMAGES
 import org.techtown.kormate.Util.CurrentDateTime
 import org.techtown.kormate.UI.Adapter.GalaryAdapter
 import org.techtown.kormate.Model.BoardDetail
@@ -59,12 +62,12 @@ class BoardPostActivity : AppCompatActivity() {
             val post = binding.post.text.toString()
 
             if (post.isEmpty() && imageUris.isEmpty()) {
-                showToast("내용이 없습니다. 내용을 입력해주세요")
+                showToast(NO_CONTENT_INPUT_CONTENT_MESSAGE)
                 return@setOnClickListener
             }
 
             if (post.isEmpty()) {
-                showToast("글의 내용이 없습니다.")
+                showToast(NO_CONTEXT_MESSAGE)
                 return@setOnClickListener
             }
 
@@ -128,17 +131,20 @@ class BoardPostActivity : AppCompatActivity() {
     }
 
     private fun createProgressBar(): ProgressDialog {
+
         val progressBar = ProgressDialog(this)
-        progressBar.setMessage("업로드 중")
-        progressBar.setCancelable(false)
-        progressBar.show()
+        progressBar.let {
+            it.setMessage(UPLOAD_DOING_MESSAGE)
+            it.setCancelable(false)
+            it.show()
+        }
         return progressBar
     }
 
 
     private fun postComplete(){
         finish()
-        Toast.makeText(this, "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, POST_UPLOAD_COMPLETE_MESSAGE, Toast.LENGTH_SHORT).show()
     }
 
     private fun setImgPermission() {
@@ -189,7 +195,7 @@ class BoardPostActivity : AppCompatActivity() {
             for (i in 0 until clipData.itemCount) {
 
                 if (imageUris.size == 3) {
-                    Toast.makeText(this, "사진은 최대 3장까지 업로드 가능합니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE, Toast.LENGTH_SHORT).show()
                     break
                 } //사진 개수 제한
 
@@ -222,6 +228,11 @@ class BoardPostActivity : AppCompatActivity() {
 
     }
 
+    companion object{
+        private const val POST_UPLOAD_COMPLETE_MESSAGE = "게시글이 등록 되었습니다."
+        private const val UPLOAD_DOING_MESSAGE = "업로드 중"
+
+    }
 
 
 }

@@ -16,62 +16,46 @@ import org.techtown.kormate.databinding.FragmentBoardBinding
 
 class BoardFragment : Fragment() {
 
-    private var binding : FragmentBoardBinding? = null
-
-    private lateinit var recentListModel : RecentListModel
+    private lateinit var binding : FragmentBoardBinding
+    private val recentListModel by lazy { ViewModelProvider(requireActivity())[RecentListModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        recentListModel = ViewModelProvider(requireActivity()).get(RecentListModel::class.java)
-
-        recentListModel.loadRecentData(false)
-        //limit 개수만큼 가져옴
-
     }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentBoardBinding.inflate(inflater,container,false)
-
-        binding!!.movePost.setOnClickListener {
-
-            val intent = Intent(activity, BoardPostActivity::class.java)
-            startActivity(intent)
-
-        }//게시글 작성
-
-
-        return binding?.root
+        return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.movePost.setOnClickListener {
+            startActivity(Intent(activity, BoardPostActivity::class.java))
+        }
+
+        getRecentBoardData()
         observeViewModel()
 
     }
 
-    override fun onDestroyView() {
-
-        binding = null
-        super.onDestroyView()
-
+    private fun getRecentBoardData() {
+        recentListModel.loadRecentData(false)
     }
 
     private fun observeViewModel() {
 
         recentListModel.recentList.observe(viewLifecycleOwner) { recentList ->
 
-            binding!!.boardRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-            binding!!.boardRecyclerview.adapter = previewAdapter(recentList)
+            binding.boardRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+            binding.boardRecyclerview.adapter = previewAdapter(recentList)
 
         }
-
 
     }
 

@@ -1,4 +1,4 @@
-package org.techtown.kormate
+package org.techtown.kormate.Constant
 
 import android.Manifest
 
