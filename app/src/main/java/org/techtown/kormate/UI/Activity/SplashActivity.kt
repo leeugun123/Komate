@@ -17,7 +17,6 @@ class SplashActivity : AppCompatActivity() {
         Handler().postDelayed({
             moveToLoginActivity()
         }, SPLASH_DURATION)
-        // 1.5초 후 이동
 
     }
 
@@ -29,7 +28,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val SPLASH_DURATION : Long = 1500
+        private const val SPLASH_DURATION : Long = 1500 // 1.5초
     }
 
 }
