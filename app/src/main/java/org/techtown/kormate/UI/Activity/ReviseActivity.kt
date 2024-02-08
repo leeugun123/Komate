@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.firebase.database.FirebaseDatabase
 import org.techtown.kormate.Model.UserIntel
+import org.techtown.kormate.Model.UserKakaoIntel
+import org.techtown.kormate.Model.UserKakaoIntel.userId
 import org.techtown.kormate.UI.ViewModel.KakaoViewModel
 import org.techtown.kormate.UI.ViewModel.MyIntelModel
 import org.techtown.kormate.databinding.ActivityReviseBinding
@@ -16,63 +18,35 @@ import org.techtown.kormate.databinding.ActivityReviseBinding
 
 class ReviseActivity : AppCompatActivity() {
 
-    private var binding : ActivityReviseBinding? = null
-
-    private var receivedIntel : UserIntel? = null
-
-    private lateinit var kakaoViewModel : KakaoViewModel
-    private lateinit var myIntelModel : MyIntelModel
-
-    private var userId : Long? = null
+    private val binding by lazy { ActivityReviseBinding.inflate(layoutInflater) }
+    private val myIntelModel by lazy { ViewModelProvider(this)[MyIntelModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        binding = ActivityReviseBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
-
-        kakaoViewModel = ViewModelProvider(this).get(KakaoViewModel::class.java)
-        kakaoViewModel.loadUserData()
-        observeKakaoModel()
-
-        myIntelModel = ViewModelProvider(this).get(MyIntelModel::class.java)
+        setContentView(binding.root)
 
 
-        receivedIntel = intent.getParcelableExtra("userIntel")
+        binding.selfEdittext.setText(UserIntel.selfIntro)
+        binding.majorIntel.setText(UserIntel.major)
 
-
-        binding!!.selfEdittext.setText(receivedIntel!!.selfIntro.toString())
-        //자기소개 가져오기
-
-        binding!!.majorIntel.setText(receivedIntel!!.major.toString())
-        //전공 가져오기
-
-
-        binding!!.backBtn.setOnClickListener {
+        binding.backBtn.setOnClickListener {
             finish()
         }
 
-        binding!!.reviseButton.setOnClickListener {
+        binding.reviseButton.setOnClickListener {
 
-             receivedIntel!!.selfIntro = binding!!.selfEdittext.text.toString()
-             receivedIntel!!.major = binding!!.majorIntel.text.toString()
-
-            writeIntelFirebase(receivedIntel!!, userId.toString())
-
+            UserIntel.selfIntro = binding.selfEdittext.text.toString()
+            UserIntel.major = binding.majorIntel.text.toString()
+            writeIntelFirebase()
         }
 
 
         myIntelModel.postLiveData.observe(this){ success ->
 
             if(success){
-
-                val intent = Intent()
-                intent.putExtra("userIntel",receivedIntel)
-                setResult(Activity.RESULT_OK, intent)
-
-                Toast.makeText(this,"수정되었습니다.",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"수정 되었습니다.",Toast.LENGTH_SHORT).show()
                 finish()
-
             }
 
         }
@@ -81,32 +55,16 @@ class ReviseActivity : AppCompatActivity() {
 
     }
 
-    private fun writeIntelFirebase(userIntel: UserIntel, userId: String) {
+    private fun writeIntelFirebase() {
 
         val reference = FirebaseDatabase.getInstance()
                         .reference.child("usersIntel")
-                        .child(userId)
+                        .child(userId.toString())
 
-        myIntelModel.uploadUserIntel(reference,userIntel)
-
-    }
-
-    private fun observeKakaoModel(){
-
-        kakaoViewModel.userName.observe(this) { userName ->
-            binding?.userName?.text = userName
-        }
-
-        kakaoViewModel.userProfileImageUrl.observe(this) { imageUrl ->
-            Glide.with(binding!!.userpic).load(imageUrl).circleCrop().into(binding!!.userpic)
-        }
-
-        kakaoViewModel.userId.observe(this){ userId ->
-            this.userId = userId
-        }
-
+        myIntelModel.uploadUserIntel(reference , UserIntel)
 
     }
+
 
 
 }
