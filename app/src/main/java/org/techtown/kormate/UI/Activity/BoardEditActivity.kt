@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -16,6 +17,8 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
+import org.techtown.kormate.FirebasePathConstant.COMMENT_PATH
+import org.techtown.kormate.FirebasePathConstant.POSTS_PATH
 import org.techtown.kormate.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.UI.Adapter.GalaryAdapter
 import org.techtown.kormate.Model.BoardDetail
@@ -33,57 +36,36 @@ class BoardEditActivity : AppCompatActivity() {
     private val binding by lazy { ActivityBoardPostBinding.inflate(layoutInflater) }
     private val commentViewModel by lazy { ViewModelProvider(this)[CommentViewModel::class.java] }
     private val boardPostViewModel by lazy { ViewModelProvider(this)[BoardPostViewModel::class.java] }
+    private val postsRef by lazy { Firebase.database.reference.child(POSTS_PATH)}
 
-    private val REQUEST_CODE_PICK_IMAGES = 1
-    private val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
-
-    private var imageUris = mutableListOf<String>()
-    private lateinit var adapter : GalaryAdapter
-
-    private lateinit var receiveList : BoardDetail
-
-    private val postsRef = Firebase.database.reference.child("posts")
-    private var commentList = mutableListOf<Comment>()
+    private lateinit var commentList : MutableList<Comment>
+    private lateinit var receiveIntent : BoardDetail
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        receiveList = intent.getParcelableExtra(POST_PATH_INTENT)!!
-        binding.title.text = "게시물 수정"
-        binding.updateButton.text = "수정하기"
 
+        syncTitleUi()
+        getIntentHandling()
 
-        receiveList.let {
-
-            binding.post.setText(receiveList.post)
-
-            imageUris = receiveList.img
-
-            if (imageUris.size > 0)
-                handleSelectedImages(imageUris , binding)
-            //원래 있던 이미지 갤러리 adapter에 띄우기
-
-            commentViewModel.loadComments(receiveList.postId)
-
-            commentViewModel.commentLiveData.observe(this) { commentList ->
-                this.commentList = commentList as MutableList<Comment>
-            }
-            //변하지 않는 데이터
-
+        commentViewModel.commentLiveData.observe(this) { commentList ->
+            this.commentList = commentList as MutableList<Comment>
         }
 
-        binding.backBtn.setOnClickListener {
-            finish()
-        }
+
+        binding.backBtn.setOnClickListener { finish() }
 
         binding.uploadImgButton.setOnClickListener {
 
             TedPermission.create()
                 .setPermissionListener(object : PermissionListener {
                     override fun onPermissionGranted() {
+                        moveSelectGallery()
+                    }
 
+                    private fun moveSelectGallery() {
                         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                         intent.type = "image/*"
                         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
@@ -92,7 +74,6 @@ class BoardEditActivity : AppCompatActivity() {
                             Intent.createChooser(intent, "Select images"),
                             REQUEST_CODE_PICK_IMAGES
                         )
-
                     }
 
                     override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {}
@@ -106,109 +87,118 @@ class BoardEditActivity : AppCompatActivity() {
 
             val post = binding.post.text.toString()
 
-            if (post.isEmpty() && imageUris.isEmpty()) {
-                Toast.makeText(this, "내용이 없습니다. 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
+            if (post.isEmpty() && receiveIntent.img.isEmpty()) {
+                showToast("내용이 없습니다. 내용을 입력해주세요")
                 return@setOnClickListener
             }
 
             if (post.isEmpty()) {
-                Toast.makeText(this, "글의 내용이 없습니다.", Toast.LENGTH_SHORT).show()
+                showToast("글의 내용이 없습니다.")
                 return@setOnClickListener
             }
 
-            val progressDialog = ProgressDialog(this)
-            progressDialog.setMessage("수정하는 중")
-            progressDialog.setCancelable(false)
-            progressDialog.show()
+            val progressBar = createProgressBar()
 
-            val storage = FirebaseStorage.getInstance()
-            val storageRef = storage.reference
-
+            val storageRef = FirebaseStorage.getInstance().reference
             val imageFileNames = mutableListOf<String>()
 
-            if(imageUris.size == 0){
+            fun uploadImage(uri : Uri) {
 
-                upload(post,imageFileNames)
-                progressDialog.dismiss()
+                val imageFileName = "IMG_${getCurrentTimestamp()}_${UUID.randomUUID()}"
+                val imageRef = storageRef.child("images/$imageFileName")
 
-            }//글만 있는 경우
-            else{
-
-                for (i in 0 until imageUris.size) {
-
-                        if (!imageUris[i].startsWith("https")) {
-
-                            val imageFileName = "IMG_${
-                                SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
-                                    Date()
-                                )
-                            }_${UUID.randomUUID()}"
-
-                            val imageRef = storageRef.child("images/$imageFileName")
-
-                            imageRef.putFile(imageUris[i].toUri())
-                                .addOnSuccessListener {
-                                    imageRef.downloadUrl
-                                        .addOnSuccessListener { uri ->
-
-                                            imageFileNames.add(uri.toString())
-
-                                            if (imageFileNames.size == imageUris.size) {
-
-                                                upload(post,imageFileNames)
-                                                progressDialog.dismiss()
-
-                                            }
-
-
-                                        }
-
-                                }
-                                .addOnFailureListener { e ->
-                                    Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
-                                }
-
-
-                        }
-                        else {
-
-                                imageFileNames.add(imageUris[i])
-
-                                if (i == imageUris.size - 1) {
-
-                                    upload(post, imageFileNames)
-                                    progressDialog.dismiss()
-
-                                }
-
-                        }
-
-                }
-
-
+                imageRef.putFile(uri)
+                    .addOnSuccessListener { _ ->
+                        imageRef.downloadUrl
+                            .addOnSuccessListener { uri ->
+                                imageFileNames.add(uri.toString())
+                                checkUploadCompletion(imageFileNames.size, receiveIntent.img.size, post, imageFileNames, progressBar)
+                            }
+                    }
+                    .addOnFailureListener { e ->
+                        showToast(e.message.toString())
+                        progressBar.dismiss()
+                    }
             }
 
+            receiveIntent.img.forEach {imageUrl ->
 
-        }//업로드 버튼
-
-
-        boardPostViewModel.postLiveData.observe(this) { success ->
-
-            if (success) {
-
-                restoreComment()
-                //댓글 복구
-                complete()
+                if (!imageUrl.startsWith("https"))
+                    uploadImage(imageUrl.toUri())
+                else {
+                    imageFileNames.add(imageUrl)
+                    checkUploadCompletion(imageFileNames.size, receiveIntent.img.size, post, imageFileNames, progressBar)
+                }
 
             }
 
         }
 
+        boardPostViewModel.postLiveData.observe(this) { success ->
+
+            if (success) {
+                restoreComment()
+                reviseComplete()
+            }
+
+        }
 
 
     }
 
-    private fun complete() {
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun createProgressBar(): ProgressDialog {
+        val progressBar = ProgressDialog(this)
+        progressBar.setMessage("수정하는 중")
+        progressBar.setCancelable(false)
+        progressBar.show()
+        return progressBar
+    }
+
+    private fun getCurrentTimestamp(): String {
+        return SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+    }
+
+    private fun checkUploadCompletion(currentSize: Int, totalSize: Int, post: String, imageFileNames: MutableList<String>, progressBar: ProgressDialog) {
+        if (currentSize == totalSize) {
+            upload(post, imageFileNames)
+            progressBar.dismiss()
+        }
+    }
+
+    private fun getIntentHandling() {
+        receiveIntentInit()
+        receiveUiBinding()
+    }
+
+    private fun receiveUiBinding() {
+
+        receiveIntent.let { boardDetail ->
+
+            binding.post.setText(boardDetail.post)
+
+            if (boardDetail.img.isNotEmpty())
+                handleSelectedImages(boardDetail.img , binding)
+            //원래 있던 이미지 갤러리 adapter에 띄우기
+
+            commentViewModel.loadComments(boardDetail.postId)
+
+        }
+    }
+
+    private fun receiveIntentInit() {
+        receiveIntent = intent.getParcelableExtra(POST_PATH_INTENT)!!
+    }
+
+    private fun syncTitleUi() {
+        binding.title.text = "게시물 수정"
+        binding.updateButton.text = "수정하기"
+    }
+
+    private fun reviseComplete() {
 
         val resIntent = Intent()
         setResult(Activity.RESULT_OK, resIntent)
@@ -221,9 +211,9 @@ class BoardEditActivity : AppCompatActivity() {
     private fun restoreComment(){
 
         commentList.forEach { comment ->
-            postsRef.child(receiveList!!.postId!!)
-                .child("comments")
-                .child(comment.id.toString())
+            postsRef.child(receiveIntent.postId)
+                .child(COMMENT_PATH)
+                .child(comment.id)
                 .setValue(comment)
         }
 
@@ -231,18 +221,16 @@ class BoardEditActivity : AppCompatActivity() {
 
     private fun upload(post : String, imageFileNames : MutableList<String>){
 
-        receiveList.let {
+        receiveIntent.let {
 
             val reviseList = BoardDetail(
-
-                receiveList.postId,
-                receiveList.userId,
-                receiveList.userName,
-                receiveList.userImg,
+                receiveIntent.postId,
+                receiveIntent.userId,
+                receiveIntent.userName,
+                receiveIntent.userImg,
                 post,
                 imageFileNames,
-                receiveList.dateTime
-
+                receiveIntent.dateTime
             )
 
             boardPostViewModel.uploadPost(postsRef, reviseList)
@@ -255,46 +243,50 @@ class BoardEditActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
-
-            data?.clipData?.let { clipData ->
-                for (i in 0 until clipData.itemCount) {
-
-                    if (imageUris.size == 3) {
-
-                        Toast.makeText(this, "사진은 최대 3장까지 업로드 가능합니다.", Toast.LENGTH_SHORT).show()
-                        break
-
-                    }
-
-                    val uri = clipData.getItemAt(i).uri
-
-                    imageUris.add(uri.toString())
-
-                }
-            }
-
-            handleSelectedImages(imageUris, binding)
-
-
+            addUriImg(data)
+            handleSelectedImages(receiveIntent.img, binding)
         }
 
+    }
 
+    private fun addUriImg(data: Intent?) {
+        data?.clipData?.let { clipData ->
+            for (i in 0 until clipData.itemCount) {
+
+                if (receiveIntent.img.size == 3) {
+                    Toast.makeText(this, "사진은 최대 3장까지 업로드 가능합니다.", Toast.LENGTH_SHORT).show()
+                    break
+                }
+
+                val getUri = clipData.getItemAt(i).uri.toString()
+                receiveIntent.img.add(getUri)
+
+            }
+        }
     }
 
 
     private fun handleSelectedImages(imageUris: MutableList<String>, acBinding: ActivityBoardPostBinding) {
 
-
-        adapter = GalaryAdapter(imageUris,acBinding)
-        adapter.notifyDataSetChanged()
-
+        connectGalleryAdapter(imageUris , acBinding)
         binding.uploadImgButton.text = "사진 올리기(${imageUris.size}/3)"
 
+    }
+
+    private fun connectGalleryAdapter(imageUris: MutableList<String>, acBinding: ActivityBoardPostBinding ) {
+
+        val adapter = GalaryAdapter(imageUris , acBinding)
+        adapter.notifyDataSetChanged()
         binding.ImgRecyclerView.layoutManager = GridLayoutManager(this,3)
         binding.ImgRecyclerView.adapter = adapter
 
     }
 
+
+    companion object{
+        private const val REQUEST_CODE_PICK_IMAGES = 1
+        private const val PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
+    }
 
 
 }
