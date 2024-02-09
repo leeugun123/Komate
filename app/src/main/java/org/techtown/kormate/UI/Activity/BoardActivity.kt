@@ -302,7 +302,7 @@ class BoardActivity : AppCompatActivity() {
     private fun removeImgView() {
 
         val parentView1 = binding.uploadImageView1.parent as ViewGroup
-                parentView1.removeView(binding.uploadImageView1)
+        parentView1.removeView(binding.uploadImageView1)
 
         val parentView2 = binding.uploadImageView2.parent as ViewGroup
         parentView2.removeView(binding.uploadImageView2)

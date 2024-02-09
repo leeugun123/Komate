@@ -17,7 +17,7 @@ import org.techtown.kormate.R.drawable.ic_baseline_report_24
 import org.techtown.kormate.databinding.CommentimgBinding
 
 
-class CommentAdapter(private val comments: List<Comment>, private var userId: Long, private val postId: String) :
+class CommentAdapter(private val comments: List<Comment>, private var userId : String, private val postId: String) :
     RecyclerView.Adapter<CommentAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -112,7 +112,7 @@ class CommentAdapter(private val comments: List<Comment>, private var userId: Lo
 
                             //선택한 신고 사유들에 대한 처리 진행
                             Firebase.database.reference.child("commentsReports").child(Firebase.database.reference.push().key.toString()).setValue(
-                                Report(userId,selectedReasons,comment?.userId,comment?.id)
+                                Report(userId,selectedReasons, comment.userId ,comment.id)
                             )
                             //신고 넣기
 

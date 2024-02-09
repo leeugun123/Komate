@@ -84,7 +84,7 @@ class LoginActivity : AppCompatActivity() {
         kakaoViewModel.loadUserData()
 
         kakaoViewModel.userId.observe(this) {
-            userId = it
+            userId = it.toString()
         }
 
         kakaoViewModel.userProfileImageUrl.observe(this){

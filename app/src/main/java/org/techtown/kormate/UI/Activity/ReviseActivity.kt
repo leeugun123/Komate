@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.firebase.database.FirebaseDatabase
+import org.techtown.kormate.FirebasePathConstant.USER_INTEL_PATH
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Model.UserKakaoIntel
 import org.techtown.kormate.Model.UserKakaoIntel.userId
@@ -45,7 +46,7 @@ class ReviseActivity : AppCompatActivity() {
         myIntelModel.postLiveData.observe(this){ success ->
 
             if(success){
-                Toast.makeText(this,"수정 되었습니다.",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, REVISE_COMPLETE_MESSAGE ,Toast.LENGTH_SHORT).show()
                 finish()
             }
 
@@ -58,11 +59,15 @@ class ReviseActivity : AppCompatActivity() {
     private fun writeIntelFirebase() {
 
         val reference = FirebaseDatabase.getInstance()
-                        .reference.child("usersIntel")
+                        .reference.child(USER_INTEL_PATH)
                         .child(userId.toString())
 
         myIntelModel.uploadUserIntel(reference , UserIntel)
 
+    }
+
+    companion object{
+        private const val REVISE_COMPLETE_MESSAGE = "수정 되었습니다."
     }
 
 

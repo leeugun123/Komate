@@ -1,5 +1,6 @@
 package org.techtown.kormate.UI.Adapter
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -32,6 +33,7 @@ class GalaryAdapter(private val imageUris: MutableList<String>, private var acBi
 
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(uri: String) {
 
             Glide.with(itemView)
@@ -45,7 +47,7 @@ class GalaryAdapter(private val imageUris: MutableList<String>, private var acBi
                 imageUris.removeAt(position)
                 notifyItemRemoved(position)
 
-                acBinding.uploadImgButton.text = "사진 올리기(" + imageUris.size.toString() + "/3)"
+                acBinding.getImgButton.text = "사진 올리기(" + imageUris.size.toString() + "/3)"
 
             }
 
