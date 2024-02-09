@@ -2,8 +2,9 @@ plugins {
     id 'com.android.application'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-android-extensions'
     id 'org.jetbrains.kotlin.kapt'
+    id 'kotlin-parcelize'
+
 }
 
 Properties properties = new Properties()

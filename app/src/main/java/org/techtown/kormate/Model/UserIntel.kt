@@ -2,12 +2,12 @@ package org.techtown.kormate.Model
 
  object UserIntel{
 
-     var nation: String = ""
+     var nation = ""
 
-     var major: String = ""
+     var major = ""
 
-     var selfIntro: String = ""
+     var selfIntro = ""
 
-     var gender : String = ""
+     var gender = ""
 
  }
