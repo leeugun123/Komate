@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.database.*
+import org.techtown.kormate.Constant.FirebasePathConstant.USER_INTEL_PATH
 import org.techtown.kormate.Model.UserIntel
+import org.techtown.kormate.Model.UserKakaoIntel
 
 class MyIntelModel : ViewModel(){
 
@@ -17,29 +19,27 @@ class MyIntelModel : ViewModel(){
     val postLiveData: LiveData<Boolean>
         get() = _postLiveData
 
-    fun fetchUserIntel(userId : Long) {
+    fun fetchUserIntel() {
 
-        val database = FirebaseDatabase.getInstance()
-        val reference = database.reference.child("usersIntel").child(userId.toString())
+        val reference = FirebaseDatabase.getInstance()
+                            .reference.child(USER_INTEL_PATH)
+                            .child(UserKakaoIntel.userId)
 
         reference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val userIntel = dataSnapshot.getValue(UserIntel::class.java)
-                _userIntel.value = userIntel
+                _userIntel.value = userIntel!!
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle database error
-            }
+            override fun onCancelled(databaseError: DatabaseError) {}
+
         })
 
     }
 
     fun uploadUserIntel(postsRef : DatabaseReference, userIntel: UserIntel){
-
         postsRef.setValue(userIntel)
         _postLiveData.value = true
-
     }
 
 

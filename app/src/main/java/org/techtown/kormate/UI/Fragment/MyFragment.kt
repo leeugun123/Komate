@@ -45,8 +45,13 @@ class MyFragment : Fragment() {
             startActivity(Intent(requireContext(), ReviseActivity::class.java))
         }
 
+        getUserIntel()
         observeUserIntelViewModel()
 
+    }
+
+    private fun getUserIntel() {
+        myIntelModel.fetchUserIntel()
     }
 
     private fun showAlertDialog() {

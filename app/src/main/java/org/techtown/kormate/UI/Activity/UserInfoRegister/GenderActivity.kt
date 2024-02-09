@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
-import org.techtown.kormate.FirebasePathConstant
+import org.techtown.kormate.Constant.FirebasePathConstant
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Model.UserKakaoIntel.userId
 import org.techtown.kormate.R

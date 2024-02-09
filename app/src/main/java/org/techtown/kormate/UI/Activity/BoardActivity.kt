@@ -18,10 +18,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.gun0912.tedpermission.provider.TedPermissionProvider.context
-import org.techtown.kormate.FirebasePathConstant.COMMENT_PATH
-import org.techtown.kormate.FirebasePathConstant.POSTS_PATH
-import org.techtown.kormate.FirebasePathConstant.POST_REPORT_PATH
-import org.techtown.kormate.FirebasePathConstant.POST_PATH_INTENT
+import org.techtown.kormate.Constant.FirebasePathConstant.COMMENT_PATH
+import org.techtown.kormate.Constant.FirebasePathConstant.POSTS_PATH
+import org.techtown.kormate.Constant.FirebasePathConstant.POST_REPORT_PATH
+import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.UI.Adapter.CommentAdapter
 import org.techtown.kormate.Util.CurrentDateTime
 import org.techtown.kormate.Model.BoardDetail
@@ -34,12 +34,14 @@ import org.techtown.kormate.databinding.ActivityBoardBinding
 class BoardActivity : AppCompatActivity() {
 
     private val commentViewModel by lazy { ViewModelProvider(this)[CommentViewModel::class.java] }
-    private val binding by lazy { ActivityBoardBinding.inflate(layoutInflater) }
-    private val receiveData by lazy { intent.getParcelableExtra<BoardDetail>(POST_PATH_INTENT) }
     private val commentRecyclerView by lazy { binding.commentRecyclerView }
+
+    private val binding by lazy { ActivityBoardBinding.inflate(layoutInflater) }
+
+    private val receiveData by lazy { intent.getParcelableExtra<BoardDetail>(POST_PATH_INTENT) }
+    private val tempData by lazy { receiveData!!}
     private val postId by lazy { tempData.postId }
     private val userId by lazy { tempData.userId }
-    private val tempData by lazy { receiveData!!}
 
     private var commentSize = 0
     private var commentList = listOf<Comment>()

@@ -32,7 +32,6 @@ class KakaoViewModel : ViewModel() {
 
                 val id = it.id
                 _userId.value = id!!
-
             }
 
             if(error != null){
@@ -44,7 +43,6 @@ class KakaoViewModel : ViewModel() {
             }
 
         }
-
     }
 
     companion object{

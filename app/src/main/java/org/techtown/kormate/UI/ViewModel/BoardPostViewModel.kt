@@ -16,7 +16,7 @@ class BoardPostViewModel : ViewModel() {
 
     fun uploadPost(postsRef : DatabaseReference ,boardDetail: BoardDetail) {
 
-        postsRef.child(boardDetail.postId!!).setValue(boardDetail)
+        postsRef.child(boardDetail.postId).setValue(boardDetail)
         _postLiveData.value = true
 
     }

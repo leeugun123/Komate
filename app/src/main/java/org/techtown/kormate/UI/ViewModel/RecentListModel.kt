@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import org.techtown.kormate.Constant.FirebasePathConstant.POSTS_PATH
 import org.techtown.kormate.Model.BoardDetail
 
 class RecentListModel : ViewModel(){
@@ -17,57 +18,64 @@ class RecentListModel : ViewModel(){
     val recentList: LiveData<List<BoardDetail>>
         get() = _recentList
 
+    private val postRef by lazy { Firebase.database.reference.child(POSTS_PATH)}
+
     fun loadRecentData(limit : Boolean) {
 
-        val postRef = Firebase.database.reference.child("posts")
+        if(limit)
+            pageLimitLoad()
+        else
+            pageEntireLoad()
 
-        if(limit){
+    }
 
-            postRef.limitToLast(4).addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val recentList = mutableListOf<BoardDetail>()
+    private fun pageEntireLoad() {
 
-                    for (snapshot in snapshot.children.reversed()) {
-                        val post = snapshot.getValue(BoardDetail::class.java)
-                        post?.let { recentList.add(it) }
-                    }
+        postRef.addValueEventListener(object : ValueEventListener {
 
-                    _recentList.value = recentList
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val recentList = mutableListOf<BoardDetail>()
+
+                for (snapshot in snapshot.children.reversed()) {
+                    val post = snapshot.getValue(BoardDetail::class.java)
+                    post?.let { recentList.add(it) }
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                    Log.e("TAG", error.toString())
+                _recentList.value = recentList
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("TAG", error.toString())
+            }
+
+        })
+    }
+
+    private fun pageLimitLoad() {
+
+        postRef.limitToLast(PAGE_LOAD_LIMIT).addValueEventListener(object : ValueEventListener {
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                val recentList = mutableListOf<BoardDetail>()
+
+                for (snapshot in snapshot.children.reversed()) {
+                    val post = snapshot.getValue(BoardDetail::class.java)
+                    post?.let { recentList.add(it) }
                 }
 
-            })
-        }
-        else{
+                _recentList.value = recentList
+            }
 
-            postRef.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) { Log.e("TAG", error.toString()) }
+        })
 
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val recentList = mutableListOf<BoardDetail>()
-
-                    for (snapshot in snapshot.children.reversed()) {
-                        val post = snapshot.getValue(BoardDetail::class.java)
-                        post?.let { recentList.add(it) }
-                    }
-
-                    _recentList.value = recentList
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Log.e("TAG", error.toString())
-                }
-
-            })
-
-
-        }
+    }
 
 
 
-
+    companion object{
+        private const val PAGE_LOAD_LIMIT = 4
     }
 
 

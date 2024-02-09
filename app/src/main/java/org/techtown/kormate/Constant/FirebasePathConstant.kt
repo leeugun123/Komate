@@ -1,4 +1,4 @@
-package org.techtown.kormate
+package org.techtown.kormate.Constant
 
 object FirebasePathConstant {
     const val USER_INTEL_PATH = "usersIntel"

@@ -1,18 +1,13 @@
 package org.techtown.kormate.UI.Activity
 
-import android.app.Activity
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
 import com.google.firebase.database.FirebaseDatabase
-import org.techtown.kormate.FirebasePathConstant.USER_INTEL_PATH
+import org.techtown.kormate.Constant.FirebasePathConstant.USER_INTEL_PATH
 import org.techtown.kormate.Model.UserIntel
-import org.techtown.kormate.Model.UserKakaoIntel
 import org.techtown.kormate.Model.UserKakaoIntel.userId
-import org.techtown.kormate.UI.ViewModel.KakaoViewModel
 import org.techtown.kormate.UI.ViewModel.MyIntelModel
 import org.techtown.kormate.databinding.ActivityReviseBinding
 
