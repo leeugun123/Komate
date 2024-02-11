@@ -24,7 +24,7 @@ import org.techtown.kormate.Constant.CarmeraPermissionConstant.REQUEST_CODE_PICK
 import org.techtown.kormate.Constant.FirebasePathConstant.COMMENT_PATH
 import org.techtown.kormate.Constant.FirebasePathConstant.POSTS_PATH
 import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
-import org.techtown.kormate.UI.Adapter.GalaryAdapter
+import org.techtown.kormate.UI.Adapter.GalleryAdapter
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.Comment
 import org.techtown.kormate.UI.ViewModel.BoardPostViewModel
@@ -287,7 +287,7 @@ class BoardEditActivity : AppCompatActivity() {
     private fun connectGalleryAdapter(imageUris: MutableList<String>, acBinding: ActivityBoardPostBinding ) {
 
         binding.ImgRecyclerView.layoutManager = GridLayoutManager(this,3)
-        binding.ImgRecyclerView.adapter = GalaryAdapter(imageUris , acBinding)
+        binding.ImgRecyclerView.adapter = GalleryAdapter(imageUris , acBinding)
 
     }
 

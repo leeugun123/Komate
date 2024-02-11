@@ -24,7 +24,7 @@ import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
 import org.techtown.kormate.Constant.CarmeraPermissionConstant
 import org.techtown.kormate.Constant.CarmeraPermissionConstant.REQUEST_CODE_PICK_IMAGES
 import org.techtown.kormate.Util.CurrentDateTime
-import org.techtown.kormate.UI.Adapter.GalaryAdapter
+import org.techtown.kormate.UI.Adapter.GalleryAdapter
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.UserKakaoIntel.userId
 import org.techtown.kormate.Model.UserKakaoIntel.userNickName
@@ -224,7 +224,7 @@ class BoardPostActivity : AppCompatActivity() {
     private fun connectGalleryAdapter(imageUris: MutableList<String>, acBinding: ActivityBoardPostBinding ) {
 
         binding.ImgRecyclerView.layoutManager = GridLayoutManager(this,3)
-        binding.ImgRecyclerView.adapter = GalaryAdapter(imageUris , acBinding)
+        binding.ImgRecyclerView.adapter = GalleryAdapter(imageUris , acBinding)
 
     }
 

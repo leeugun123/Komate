@@ -21,15 +21,12 @@ class CommentAdapter(private val comments: List<Comment>, private var userId : S
     RecyclerView.Adapter<CommentAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
         val binding = CommentimgBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         holder.bind(comments[position])
-
     }
 
     override fun getItemCount(): Int  = comments.size
@@ -37,10 +34,6 @@ class CommentAdapter(private val comments: List<Comment>, private var userId : S
     inner class ViewHolder(private val binding : CommentimgBinding) :
 
         RecyclerView.ViewHolder(binding.root){
-
-            val button : ImageButton = binding.Button
-
-
 
             fun bind(comment : Comment){
 
@@ -57,7 +50,7 @@ class CommentAdapter(private val comments: List<Comment>, private var userId : S
 
                 if(userId == comment.userId){
 
-                    button.setOnClickListener {
+                    binding.Button.setOnClickListener {
 
                         val builder = AlertDialog.Builder(binding.root.context)
                         builder.setTitle("댓글을 삭제하시겠습니까?")
@@ -84,9 +77,9 @@ class CommentAdapter(private val comments: List<Comment>, private var userId : S
                 }
                 else{
 
-                    button.setImageResource(ic_baseline_report_24)
+                    binding.Button.setImageResource(ic_baseline_report_24)
 
-                    button.setOnClickListener {
+                    binding.Button.setOnClickListener {
 
                         val reasons = arrayOf("욕설", "도배", "인종 혐오 표현", "성적인 만남 유도")
                         val checkedReasons = booleanArrayOf(false, false, false, false, false)

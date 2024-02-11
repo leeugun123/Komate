@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.techtown.kormate.UI.Adapter.previewAdapter
+import org.techtown.kormate.UI.Adapter.PreviewAdapter
 import org.techtown.kormate.UI.Activity.BoardPostActivity
 import org.techtown.kormate.UI.ViewModel.RecentListModel
 import org.techtown.kormate.databinding.FragmentBoardBinding
@@ -53,7 +53,7 @@ class BoardFragment : Fragment() {
         recentListModel.recentList.observe(viewLifecycleOwner) { recentList ->
 
             binding.boardRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-            binding.boardRecyclerview.adapter = previewAdapter(recentList)
+            binding.boardRecyclerview.adapter = PreviewAdapter(recentList)
 
         }
 
