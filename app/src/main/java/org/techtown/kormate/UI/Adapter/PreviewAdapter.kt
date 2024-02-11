@@ -57,8 +57,7 @@ class PreviewAdapter(private val boardList : List<BoardDetail>) : RecyclerView.A
         }
 
 
-    }
-
-
-
 }
+
+
+
