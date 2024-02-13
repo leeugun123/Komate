@@ -14,7 +14,7 @@ class KakaoRepository(application : Application) {
 
     private var repoUserKakaoIntel = UserKakaoIntel
 
-    suspend fun repositoryLoadUserData(): UserKakaoIntel = withContext(Dispatchers.IO) {
+    suspend fun repoLoadUserData(): UserKakaoIntel = withContext(Dispatchers.IO) {
 
         suspendCoroutine { continuation ->
 

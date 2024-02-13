@@ -12,12 +12,15 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.techtown.kormate.Constant.BoardPostConstant.MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
@@ -125,8 +128,14 @@ class BoardPostActivity : AppCompatActivity() {
     }
 
     private fun uploadPost(post : String ,picUri : MutableList<String> , progressDialog : ProgressDialog) {
-        boardPostViewModel.uploadPost(postsRef, BoardDetail( postId.toString(), userId.toLong(), userNickName, userProfileImg
-            , post, picUri, CurrentDateTime.getPostTime() ))
+
+        val uploadBoardDetail = BoardDetail(postId.toString(), userId.toLong(), userNickName, userProfileImg
+            , post, picUri, CurrentDateTime.getPostTime() )
+
+        lifecycleScope.launch(Dispatchers.Main){
+            boardPostViewModel.uploadPost(uploadBoardDetail)
+        }
+
         progressDialog.dismiss()
     }
 

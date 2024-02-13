@@ -4,8 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Model.UserKakaoIntel
 import org.techtown.kormate.Repository.KakaoRepository
 
@@ -22,7 +20,7 @@ class KakaoViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     suspend fun loadUserData() {
-        _userKakaoIntel.value = kakaoRepository.repositoryLoadUserData()
+        _userKakaoIntel.value = kakaoRepository.repoLoadUserData()
     }
 
 
