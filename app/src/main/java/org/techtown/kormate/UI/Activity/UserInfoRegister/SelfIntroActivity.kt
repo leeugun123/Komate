@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import org.techtown.kormate.Model.UserKakaoIntel.userNickName
+import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivitySelfIntroBinding
 
@@ -17,6 +20,7 @@ class SelfIntroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        uiBinding()
 
         binding.selfEdittext.addTextChangedListener(object : TextWatcher {
 
@@ -43,6 +47,22 @@ class SelfIntroActivity : AppCompatActivity() {
             checkSelfEditText()
         }
 
+    }
+
+    private fun uiBinding() {
+        profileImgBinding()
+        userNameTextBinding()
+    }
+
+    private fun userNameTextBinding() {
+        binding.userName.text = userNickName
+    }
+
+    private fun profileImgBinding() {
+        Glide.with(this)
+            .load(userProfileImg)
+            .circleCrop()
+            .into(binding.userpic)
     }
 
     private fun checkSelfEditText() {

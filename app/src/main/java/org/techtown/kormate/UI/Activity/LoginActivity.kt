@@ -93,12 +93,13 @@ class LoginActivity : AppCompatActivity() {
         }
 
         kakaoViewModel.userProfileImageUrl.observe(this){
-            userProfileImg= it
+            userProfileImg = it
         }
 
         kakaoViewModel.userName.observe(this){
             userNickName = it
         }
+
     }
 
     private fun decideLogin(){
@@ -126,8 +127,8 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
-    private suspend fun decideActivity() = if(checkId(userId.toString())){
-        Intent(this@LoginActivity, MainActivity::class.java)
+    private suspend fun decideActivity() = if(checkId(userId)){
+        Intent(this@LoginActivity, NationActivity::class.java)
     } else
         Intent(this@LoginActivity, NationActivity::class.java)
 
