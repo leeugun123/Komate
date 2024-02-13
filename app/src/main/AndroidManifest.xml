@@ -66,13 +66,16 @@
 
             <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:host="oauth"
+                    android:scheme="kakao${KAKAO_API_KEY}" />
 
             </intent-filter>
 
         </activity>
+
 
         <activity
             android:name=".UI.Activity.LoginActivity"

@@ -4,13 +4,11 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.techtown.kormate.UI.Activity.BoardActivity
 import org.techtown.kormate.Model.BoardDetail
+import org.techtown.kormate.UI.Activity.BoardActivity
 import org.techtown.kormate.databinding.BoardpreviewBinding
 
 class PreviewAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Adapter<PreviewAdapter.ViewHolder>(){
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -31,33 +29,30 @@ class PreviewAdapter(private val boardList : List<BoardDetail>) : RecyclerView.A
 
         RecyclerView.ViewHolder(binding.root){
 
-            fun bind(boardDetail : BoardDetail){
+        fun bind(boardDetail : BoardDetail){
 
-                binding.dateTime.text = boardDetail.dateTime
+            binding.dateTime.text = boardDetail.dateTime
 
-                val concatPost = if(boardDetail.post.length > 105){
-                    boardDetail.post.substring(0,110)+"..."
-                } else
-                    boardDetail.post
+            val concatPost = if(boardDetail.post.length > 105){
+                boardDetail.post.substring(0,110)+"..."
+            } else
+                boardDetail.post
 
-                binding.post.text = concatPost
+            binding.post.text = concatPost
 
-                binding.root.setOnClickListener {
+            binding.root.setOnClickListener {
 
-                    val intent = Intent(itemView.context, BoardActivity::class.java)
-                    intent.putExtra("postIntel",boardDetail)
-                    itemView.context.startActivity(intent)
-
-                }
+                val intent = Intent(itemView.context, BoardActivity::class.java)
+                intent.putExtra("postIntel",boardDetail)
+                itemView.context.startActivity(intent)
 
             }
-
-
 
         }
 
 
+
+    }
+
+
 }
-
-
-

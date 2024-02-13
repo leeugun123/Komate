@@ -52,7 +52,7 @@ class GenderActivity : AppCompatActivity() {
     private fun uploadUserInfo() {
         FirebaseDatabase.getInstance().
         reference.child(FirebasePathConstant.USER_INTEL_PATH)
-            .child(userId.toString()).setValue(UserIntel)
+            .child(userId).setValue(UserIntel)
             .addOnSuccessListener { Toast.makeText(this, INPUT_INFO_COMPLETE_GUIDE, Toast.LENGTH_SHORT).show() }
     }
 

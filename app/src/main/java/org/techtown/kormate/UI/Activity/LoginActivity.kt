@@ -3,6 +3,7 @@ package org.techtown.kormate.UI.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -34,6 +35,9 @@ class LoginActivity : AppCompatActivity() {
         kakaoLoginProcess()
 
         val callback : (OAuthToken?, Throwable?) -> Unit = { token, error ->
+
+            Log.e("TAG",error!!.message.toString())
+            Log.e("TAG",error.toString())
             if (error != null) {
                 lifecycleScope.launch(Dispatchers.Main) { handleKakaoLoginError(error) }
             } else if (token != null) {
@@ -59,6 +63,7 @@ class LoginActivity : AppCompatActivity() {
     private fun handleKakaoLoginError(error: Throwable): () -> Unit = {
 
         when {
+
             error.toString() == AuthErrorCause.AccessDenied.toString() -> {
                 Toast.makeText(this@LoginActivity, ACCESS_DENIED, Toast.LENGTH_SHORT).show()
             }
