@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import org.techtown.kormate.Constant.FirebasePathConstant.USER_INTEL_PATH
+import org.techtown.kormate.Model.UserKakaoIntel
 import org.techtown.kormate.Model.UserKakaoIntel.userId
 import org.techtown.kormate.Model.UserKakaoIntel.userNickName
 import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
@@ -84,18 +85,14 @@ class LoginActivity : AppCompatActivity() {
 
     private fun bindingKakaoInfo() {
 
-        kakaoViewModel.loadUserData()
-
-        kakaoViewModel.userId.observe(this) {
-            userId = it.toString()
+        lifecycleScope.launch(Dispatchers.Main){
+            kakaoViewModel.loadUserData()
         }
 
-        kakaoViewModel.userProfileImageUrl.observe(this){
-            userProfileImg = it
-        }
-
-        kakaoViewModel.userName.observe(this){
-            userNickName = it
+        kakaoViewModel.userKakaoIntel.observe(this){
+            userNickName = it.userNickName
+            userProfileImg = it.userProfileImg
+            userId = it.userId
         }
 
     }
