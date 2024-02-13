@@ -36,8 +36,6 @@ class LoginActivity : AppCompatActivity() {
 
         val callback : (OAuthToken?, Throwable?) -> Unit = { token, error ->
 
-            Log.e("TAG",error!!.message.toString())
-            Log.e("TAG",error.toString())
             if (error != null) {
                 lifecycleScope.launch(Dispatchers.Main) { handleKakaoLoginError(error) }
             } else if (token != null) {
@@ -128,7 +126,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private suspend fun decideActivity() = if(checkId(userId)){
-        Intent(this@LoginActivity, NationActivity::class.java)
+        Intent(this@LoginActivity, MainActivity::class.java)
     } else
         Intent(this@LoginActivity, NationActivity::class.java)
 
