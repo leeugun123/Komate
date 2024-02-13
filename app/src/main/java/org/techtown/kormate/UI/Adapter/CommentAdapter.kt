@@ -48,7 +48,7 @@ class CommentAdapter(private val comments: List<Comment>, private var userId : S
                 binding.commentText.text= comment.text
 
 
-                if(userId == comment.userId){
+                if(userId == comment.userId.toString()){
 
                     binding.Button.setOnClickListener {
 
@@ -105,7 +105,7 @@ class CommentAdapter(private val comments: List<Comment>, private var userId : S
 
                             //선택한 신고 사유들에 대한 처리 진행
                             Firebase.database.reference.child("commentsReports").child(Firebase.database.reference.push().key.toString()).setValue(
-                                Report(userId,selectedReasons, comment.userId ,comment.id)
+                                Report(userId,selectedReasons, comment.userId.toString() ,comment.id)
                             )
                             //신고 넣기
 

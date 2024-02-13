@@ -203,7 +203,7 @@ class BoardActivity : AppCompatActivity() {
             //선택한 신고 사유들에 대한 처리 진행
             Firebase.database.reference.child(POST_REPORT_PATH).
                         child(Firebase.database.reference.push().key.toString()).setValue(
-                Report(userId , selectedReasons , tempData.userId , tempData.postId))
+                Report(userId.toString() , selectedReasons , tempData.userId.toString() , tempData.postId))
 
             //신고 넣기
             Toast.makeText(context, REPORT_POST, Toast.LENGTH_SHORT).show()
@@ -245,7 +245,7 @@ class BoardActivity : AppCompatActivity() {
         commentList = list
         commentSize = commentList.size
         commentRecyclerView.layoutManager = LinearLayoutManager(this)
-        commentRecyclerView.adapter = CommentAdapter(commentList, userId, postId)
+        commentRecyclerView.adapter = CommentAdapter(commentList, userId.toString(), postId)
         commentRecyclerView.scrollToPosition(commentList.size - 1)
     }
 

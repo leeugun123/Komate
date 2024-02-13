@@ -12,7 +12,7 @@ data class Comment(
     var id : String = "",
 
     @SerializedName("userId")
-    var userId: String = "",
+    var userId : Long = 0,
 
     @SerializedName("userName")
     var userName: String = "",

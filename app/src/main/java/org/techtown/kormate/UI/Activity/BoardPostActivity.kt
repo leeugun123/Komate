@@ -125,7 +125,7 @@ class BoardPostActivity : AppCompatActivity() {
     }
 
     private fun uploadPost(post : String ,picUri : MutableList<String> , progressDialog : ProgressDialog) {
-        boardPostViewModel.uploadPost(postsRef, BoardDetail( postId.toString(), userId, userNickName, userProfileImg
+        boardPostViewModel.uploadPost(postsRef, BoardDetail( postId.toString(), userId.toLong(), userNickName, userProfileImg
             , post, picUri, CurrentDateTime.getPostTime() ))
         progressDialog.dismiss()
     }
