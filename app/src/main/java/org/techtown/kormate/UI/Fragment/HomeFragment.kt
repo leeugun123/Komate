@@ -1,25 +1,24 @@
 package org.techtown.kormate.UI.Fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import org.techtown.kormate.Model.UserKakaoIntel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.techtown.kormate.UI.Adapter.RecentAdapter
-import org.techtown.kormate.UI.ViewModel.KakaoViewModel
-import org.techtown.kormate.UI.ViewModel.RecentListModel
+import org.techtown.kormate.UI.ViewModel.RecentListViewModel
 import org.techtown.kormate.databinding.FragmentHomeBinding
 
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding : FragmentHomeBinding
-    private val recentListModel by lazy { ViewModelProvider(requireActivity())[RecentListModel::class.java] }
+    private val recentListViewModel by lazy { ViewModelProvider(requireActivity())[RecentListViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) }
 
@@ -35,9 +34,11 @@ class HomeFragment : Fragment() {
 
     private fun recentListObserve() {
 
-        recentListModel.loadRecentData(true) //limit 개수만큼 가져옴
+        lifecycleScope.launch(Dispatchers.Main) {
+            recentListViewModel.loadRecentData(true) //limit 개수만큼 가져옴
+        }
 
-        recentListModel.recentList.observe(viewLifecycleOwner) { recentList ->
+        recentListViewModel.recentList.observe(viewLifecycleOwner) { recentList ->
             binding.recentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             binding.recentRecyclerview.adapter = RecentAdapter(recentList)
         }

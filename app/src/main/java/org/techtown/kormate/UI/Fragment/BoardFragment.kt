@@ -7,17 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.techtown.kormate.UI.Adapter.PreviewAdapter
 import org.techtown.kormate.UI.Activity.BoardPostActivity
-import org.techtown.kormate.UI.ViewModel.RecentListModel
+import org.techtown.kormate.UI.ViewModel.RecentListViewModel
 import org.techtown.kormate.databinding.FragmentBoardBinding
 
 
 class BoardFragment : Fragment() {
 
     private lateinit var binding : FragmentBoardBinding
-    private val recentListModel by lazy { ViewModelProvider(requireActivity())[RecentListModel::class.java] }
+    private val recentListViewModel by lazy { ViewModelProvider(requireActivity())[RecentListViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,12 +48,16 @@ class BoardFragment : Fragment() {
     }
 
     private fun getRecentBoardData() {
-        recentListModel.loadRecentData(false)
+
+        lifecycleScope.launch(Dispatchers.Main){
+            recentListViewModel.loadRecentData(false)
+        }
+
     }
 
     private fun observeViewModel() {
 
-        recentListModel.recentList.observe(viewLifecycleOwner) { recentList ->
+        recentListViewModel.recentList.observe(viewLifecycleOwner) { recentList ->
 
             binding.boardRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             binding.boardRecyclerview.adapter = PreviewAdapter(recentList)

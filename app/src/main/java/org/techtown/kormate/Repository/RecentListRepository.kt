@@ -1,26 +1,27 @@
-package org.techtown.kormate.UI.ViewModel
+package org.techtown.kormate.Repository
 
+import android.app.Application
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import org.techtown.kormate.Constant.FirebasePathConstant.POSTS_PATH
+import org.techtown.kormate.Constant.FirebasePathConstant
 import org.techtown.kormate.Model.BoardDetail
 
-class RecentListModel : ViewModel(){
+class RecentListRepository(application: Application) {
 
-    private val _recentList = MutableLiveData<List<BoardDetail>>()
-    val recentList: LiveData<List<BoardDetail>>
-        get() = _recentList
 
-    private val postRef by lazy { Firebase.database.reference.child(POSTS_PATH)}
+    private var recentList = mutableListOf<BoardDetail>()
 
-    fun loadRecentData(limit : Boolean) {
+    private val postRef by lazy { Firebase.database.reference.child(FirebasePathConstant.POSTS_PATH)}
+
+    fun getRecentData() = recentList
+
+    suspend fun loadRecentData(limit : Boolean) {
+
+        recentListInit()
 
         if(limit)
             pageLimitLoad()
@@ -29,26 +30,26 @@ class RecentListModel : ViewModel(){
 
     }
 
+    private fun recentListInit() {
+        recentList.clear()
+    }
+
     private fun pageEntireLoad() {
 
         postRef.addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                val recentList = mutableListOf<BoardDetail>()
 
-                for (snapshot in snapshot.children.reversed()) {
-                    val post = snapshot.getValue(BoardDetail::class.java)
+                snapshot.children.reversed().forEach { it ->
+                    val post = it.getValue(BoardDetail::class.java)
                     post?.let { recentList.add(it) }
                 }
 
-                _recentList.value = recentList
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("TAG", error.toString())
-            }
-
+            override fun onCancelled(error: DatabaseError) { Log.e("TAG", error.toString()) }
         })
+
     }
 
     private fun pageLimitLoad() {
@@ -57,14 +58,11 @@ class RecentListModel : ViewModel(){
 
             override fun onDataChange(snapshot: DataSnapshot) {
 
-                val recentList = mutableListOf<BoardDetail>()
-
-                for (snapshot in snapshot.children.reversed()) {
-                    val post = snapshot.getValue(BoardDetail::class.java)
+                snapshot.children.reversed().forEach { it ->
+                    val post = it.getValue(BoardDetail::class.java)
                     post?.let { recentList.add(it) }
                 }
 
-                _recentList.value = recentList
             }
 
             override fun onCancelled(error: DatabaseError) { Log.e("TAG", error.toString()) }
@@ -72,11 +70,8 @@ class RecentListModel : ViewModel(){
 
     }
 
-
-
     companion object{
         private const val PAGE_LOAD_LIMIT = 4
     }
-
 
 }
