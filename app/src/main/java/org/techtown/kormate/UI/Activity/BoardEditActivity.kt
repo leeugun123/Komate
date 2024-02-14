@@ -199,7 +199,9 @@ class BoardEditActivity : AppCompatActivity() {
                 handleSelectedImages(boardDetail.img , binding)
             //원래 있던 이미지 갤러리 adapter에 띄우기
 
-            commentViewModel.loadComments(boardDetail.postId)
+            lifecycleScope.launch(Dispatchers.Main){
+                commentViewModel.getComment(boardDetail.postId)
+            }
 
         }
     }

@@ -27,8 +27,4 @@ class BoardPostViewModel(application: Application) : AndroidViewModel(applicatio
         _postLiveData.value = boardPostRepository.repoUploadPost(boardDetail)
     }
 
-
-
-
-
 }

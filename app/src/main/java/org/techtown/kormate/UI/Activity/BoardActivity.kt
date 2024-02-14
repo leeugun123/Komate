@@ -12,12 +12,15 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.gun0912.tedpermission.provider.TedPermissionProvider.context
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.techtown.kormate.Constant.FirebasePathConstant.COMMENT_PATH
 import org.techtown.kormate.Constant.FirebasePathConstant.POSTS_PATH
 import org.techtown.kormate.Constant.FirebasePathConstant.POST_REPORT_PATH
@@ -233,7 +236,9 @@ class BoardActivity : AppCompatActivity() {
             .circleCrop()
             .into(binding.replyImg)
 
-        commentViewModel.loadComments(postId)
+        lifecycleScope.launch(Dispatchers.Main){
+            commentViewModel.getComment(postId)
+        }
 
         commentViewModel.commentLiveData.observe(this) {
             commentAdapterSync(it)
