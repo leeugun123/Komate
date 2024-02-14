@@ -14,16 +14,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Model.UserIntel
-import org.techtown.kormate.UI.ViewModel.MyIntelModel
 import org.techtown.kormate.UI.Activity.LoginActivity
 import org.techtown.kormate.UI.Activity.ReviseActivity
+import org.techtown.kormate.UI.ViewModel.MyIntelViewModel
 import org.techtown.kormate.databinding.FragmentMyBinding
 
 
 class MyFragment : Fragment() {
 
     private lateinit var binding : FragmentMyBinding
-    private val myIntelModel by lazy { ViewModelProvider(requireActivity())[MyIntelModel::class.java] }
+    private val myIntelViewModel by lazy { ViewModelProvider(requireActivity())[MyIntelViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +51,7 @@ class MyFragment : Fragment() {
     }
 
     private fun getUserIntel() {
-        myIntelModel.fetchUserIntel()
+        myIntelViewModel.fetchUserIntel()
     }
 
     private fun showAlertDialog() {
@@ -93,7 +93,7 @@ class MyFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun observeUserIntelViewModel(){
 
-        myIntelModel.userIntel.observe(viewLifecycleOwner){ userIntel ->
+        myIntelViewModel.userIntel.observe(viewLifecycleOwner){ userIntel ->
             syncUserIntel(userIntel)
             syncUserIntelUiBinding()
         }

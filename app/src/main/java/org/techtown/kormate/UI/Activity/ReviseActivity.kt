@@ -8,14 +8,14 @@ import com.google.firebase.database.FirebaseDatabase
 import org.techtown.kormate.Constant.FirebasePathConstant.USER_INTEL_PATH
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Model.UserKakaoIntel.userId
-import org.techtown.kormate.UI.ViewModel.MyIntelModel
+import org.techtown.kormate.UI.ViewModel.MyIntelViewModel
 import org.techtown.kormate.databinding.ActivityReviseBinding
 
 
 class ReviseActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityReviseBinding.inflate(layoutInflater) }
-    private val myIntelModel by lazy { ViewModelProvider(this)[MyIntelModel::class.java] }
+    private val myIntelViewModel by lazy { ViewModelProvider(this)[MyIntelViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -38,7 +38,7 @@ class ReviseActivity : AppCompatActivity() {
         }
 
 
-        myIntelModel.postLiveData.observe(this){ success ->
+        myIntelViewModel.postLiveData.observe(this){ success ->
 
             if(success){
                 Toast.makeText(this, REVISE_COMPLETE_MESSAGE ,Toast.LENGTH_SHORT).show()
@@ -53,11 +53,9 @@ class ReviseActivity : AppCompatActivity() {
 
     private fun writeIntelFirebase() {
 
-        val reference = FirebaseDatabase.getInstance()
-                        .reference.child(USER_INTEL_PATH)
-                        .child(userId.toString())
 
-        myIntelModel.uploadUserIntel(reference , UserIntel)
+
+        myIntelViewModel.uploadUserIntel(UserIntel)
 
     }
 

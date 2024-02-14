@@ -19,6 +19,8 @@ class CommentRepository(application: Application) {
 
     suspend fun requestComments(postId: String) = withContext(Dispatchers.IO) {
 
+        commentListInit()
+
         val commentsRef = Firebase.database.reference
             .child(FirebasePathConstant.POSTS_PATH)
             .child(postId).child(FirebasePathConstant.COMMENT_PATH)
@@ -35,6 +37,10 @@ class CommentRepository(application: Application) {
             override fun onCancelled(error: DatabaseError) {}
         })
 
+    }
+
+    private fun commentListInit() {
+        commentList.clear()
     }
 
 
