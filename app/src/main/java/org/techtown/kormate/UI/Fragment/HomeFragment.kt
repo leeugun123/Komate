@@ -27,7 +27,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -35,11 +35,21 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         uiBinding()
+        getRecentList()
+    }
+
+    private fun getRecentList() {
+        requestRecentList()
         recentListObserve()
     }
 
-    private fun uiBinding() {
+    private fun requestRecentList() {
+        lifecycleScope.launch(Dispatchers.Main){
+            recentListViewModel.loadRecentData(true)
+        } //limit 개수만큼 가져옴
+    }
 
+    private fun uiBinding() {
         profileImgBinding()
         nameBinding()
     }
@@ -59,11 +69,7 @@ class HomeFragment : Fragment() {
 
     private fun recentListObserve() {
 
-
-        recentListViewModel.loadRecentData(true) //limit 개수만큼 가져옴
-
         recentListViewModel.recentList.observe(viewLifecycleOwner) { recentList ->
-            Log.e("TAG",recentList.size.toString() + "  " + "사이즈의 개수")
             binding.recentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             binding.recentRecyclerview.adapter = RecentAdapter(recentList)
         }

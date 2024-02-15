@@ -22,17 +22,11 @@ class BoardFragment : Fragment() {
     private lateinit var binding : FragmentBoardBinding
     private val recentListViewModel by lazy { ViewModelProvider(requireActivity())[RecentListViewModel::class.java] }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState)
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentBoardBinding.inflate(inflater,container,false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,20 +36,22 @@ class BoardFragment : Fragment() {
             startActivity(Intent(activity, BoardPostActivity::class.java))
         }
 
-        getRecentBoardData()
-        observeViewModel()
+        getRecentList()
 
     }
 
-    private fun getRecentBoardData() {
+    private fun getRecentList() {
+        requestRecentList()
+        recentListObserve()
+    }
 
+    private fun requestRecentList() {
         lifecycleScope.launch(Dispatchers.Main){
             recentListViewModel.loadRecentData(false)
-        }
-
+        } //limit 개수만큼 가져옴
     }
 
-    private fun observeViewModel() {
+    private fun recentListObserve() {
 
         recentListViewModel.recentList.observe(viewLifecycleOwner) { recentList ->
 
