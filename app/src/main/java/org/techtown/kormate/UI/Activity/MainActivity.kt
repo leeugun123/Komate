@@ -11,39 +11,62 @@ import org.techtown.kormate.UI.Fragment.MyFragment
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItemSelectedListener{
+class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+
+    private val fa by lazy { HomeFragment() }
+    private val fb by lazy { BoardFragment() }
+    private val fc by lazy { MyFragment() }
+    private val fragmentManager by lazy { supportFragmentManager }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        bottomNaviInit()
-    }
+        addFragment()
+        
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
 
-    private fun bottomNaviInit() {
-        supportFragmentManager.beginTransaction().add(R.id.linearLayout, HomeFragment()).commit()
-        binding.bottomNavigationView.setOnNavigationItemSelectedListener(this)
-    }
+            when(menuItem.itemId){
+                R.id.page_home -> { showFa() }
+                R.id.page_board -> { showFb() }
+                //R.id.page_my -> { showFc() }
+                else -> throw IllegalArgumentException("유효하지 않습니다.")
+            }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+            true
 
-        when(item.itemId) {
-            R.id.page_home -> {
-                supportFragmentManager.beginTransaction().replace(R.id.linearLayout, HomeFragment()).commitAllowingStateLoss()
-                return true
-            }
-            R.id.page_board -> {
-                supportFragmentManager.beginTransaction().replace(R.id.linearLayout, BoardFragment()).commitAllowingStateLoss()
-                return true
-            }
-            R.id.page_my -> {
-                supportFragmentManager.beginTransaction().replace(R.id.linearLayout, MyFragment()).commitAllowingStateLoss()
-                return true
-            }
         }
 
-        return false
+
     }
+
+    private fun showFc() {
+        fragmentManager.beginTransaction().hide(fa).commit()
+        fragmentManager.beginTransaction().hide(fb).commit()
+        fragmentManager.beginTransaction().show(fc).commit()
+    }
+
+    private fun showFb() {
+        fragmentManager.beginTransaction().hide(fa).commit()
+        fragmentManager.beginTransaction().show(fb).commit()
+       // fragmentManager.beginTransaction().hide(fc).commit()
+    }
+
+    private fun showFa() {
+        fragmentManager.beginTransaction().show(fa).commit()
+        fragmentManager.beginTransaction().hide(fb).commit()
+        //fragmentManager.beginTransaction().hide(fc).commit()
+    }
+
+    private fun addFragment() {
+        fragmentManager.beginTransaction().add(R.id.main_frame, fa).commit()
+        fragmentManager.beginTransaction().add(R.id.main_frame, fb).commit()
+       // fragmentManager.beginTransaction().add(R.id.main_frame, fc).commit()
+    }
+
+
+
 
 }
