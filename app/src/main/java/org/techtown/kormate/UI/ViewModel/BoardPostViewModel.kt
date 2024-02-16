@@ -17,6 +17,10 @@ class BoardPostViewModel(application: Application) : AndroidViewModel(applicatio
     val postLiveData: LiveData<Boolean>
         get() = _postLiveData
 
+    private val _removeLiveData = MutableLiveData<Boolean>()
+    val removeLiveData  : LiveData<Boolean>
+        get() = _removeLiveData
+
     private var boardPostRepository : BoardPostRepository
 
     init {
@@ -25,6 +29,10 @@ class BoardPostViewModel(application: Application) : AndroidViewModel(applicatio
 
     suspend fun uploadPost(boardDetail : BoardDetail) {
         _postLiveData.value = boardPostRepository.repoUploadPost(boardDetail)
+    }
+
+    suspend fun removePost(postId : String){
+        _removeLiveData.value = boardPostRepository.repoRemovePost(postId)
     }
 
 }

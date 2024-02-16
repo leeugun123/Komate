@@ -32,11 +32,13 @@ import org.techtown.kormate.Model.Comment
 import org.techtown.kormate.Model.Report
 import org.techtown.kormate.UI.ViewModel.CommentViewModel
 import org.techtown.kormate.R
+import org.techtown.kormate.UI.ViewModel.BoardPostViewModel
 import org.techtown.kormate.databinding.ActivityBoardBinding
 
 class BoardActivity : AppCompatActivity() {
 
     private val commentViewModel by lazy { ViewModelProvider(this)[CommentViewModel::class.java] }
+    private val boardPostViewModel by lazy { ViewModelProvider(this)[BoardPostViewModel::class.java]}
     private val commentRecyclerView by lazy { binding.commentRecyclerView }
 
     private val binding by lazy { ActivityBoardBinding.inflate(layoutInflater) }
@@ -72,6 +74,13 @@ class BoardActivity : AppCompatActivity() {
         binding.edit.setOnClickListener {
             showPopUpMenu(it)
         }//수정 아이콘
+
+        boardPostViewModel.removeLiveData.observe(this){
+            if(it){
+                Toast.makeText(context, "게시물이 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
 
 
     }
@@ -142,10 +151,10 @@ class BoardActivity : AppCompatActivity() {
     }
 
     private fun removeBoard() {
-        val databaseReference = FirebaseDatabase.getInstance().reference.child("posts")
-        databaseReference.child(postId).removeValue()
-        Toast.makeText(context, "게시물이 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
-        finish()
+
+        lifecycleScope.launch(Dispatchers.Main){
+            boardPostViewModel.removePost(postId)
+        }
     }
 
     private fun commentPositionSync() {
