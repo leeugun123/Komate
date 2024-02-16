@@ -2,78 +2,71 @@ package org.techtown.kormate.Repository
 
 import android.app.Application
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import okhttp3.internal.wait
 import org.techtown.kormate.Constant.FirebasePathConstant
 import org.techtown.kormate.Model.BoardDetail
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
+
 
 class RecentListRepository(application: Application) {
 
     private val postRef = Firebase.database.reference.
     child(FirebasePathConstant.POSTS_PATH)
 
+    fun loadRecentLimitData(): LiveData<List<BoardDetail>> {
 
-    suspend fun loadRecentLimitData(): List<BoardDetail> = suspendCoroutine { continuation ->
-
-        val recentLimitList = mutableListOf<BoardDetail>()
+        val recentLimitListMutableLiveData = MutableLiveData<List<BoardDetail>>()
 
         postRef.limitToLast(PAGE_LOAD_LIMIT).addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
 
-                recentLimitList.clear()
+                val recentLimitList = mutableListOf<BoardDetail>()
 
-                snapshot.children.reversed().forEach { it ->
+                snapshot.children.reversed().forEach {
                     val boardPost = it.getValue(BoardDetail::class.java)
-                    boardPost?.let { recentLimitList.add(it) }
+                    recentLimitList.add(boardPost!!)
                 }
 
-                continuation.resume(recentLimitList)
+                recentLimitListMutableLiveData.value = recentLimitList
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("TAG", error.toString())
-                continuation.resumeWithException(error.toException())
-            }
+            override fun onCancelled(error: DatabaseError) {}
 
         })
+
+        return recentLimitListMutableLiveData
 
     }
 
 
-    suspend fun loadRecentData(): List<BoardDetail> = suspendCoroutine { continuation ->
+    fun loadRecentData(): LiveData<List<BoardDetail>> {
 
-        val recentList = mutableListOf<BoardDetail>()
+        val recentListMutableLiveData = MutableLiveData<List<BoardDetail>>()
 
         postRef.addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
 
-                recentList.clear()
+                val recentList = mutableListOf<BoardDetail>()
 
-                snapshot.children.reversed().forEach { it ->
+                snapshot.children.reversed().forEach {
                     val boardPost = it.getValue(BoardDetail::class.java)
-                    boardPost?.let { recentList.add(it) }
+                    recentList.add(boardPost!!)
                 }
 
-                continuation.resume(recentList)
+                recentListMutableLiveData.value = recentList
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("TAG", error.toString())
-                continuation.resumeWithException(error.toException())
-            }
-
+            override fun onCancelled(error: DatabaseError) {}
         })
+
+        return recentListMutableLiveData
 
     }
 

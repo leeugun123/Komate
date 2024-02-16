@@ -1,18 +1,13 @@
 package org.techtown.kormate.UI.Fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.techtown.kormate.Model.UserKakaoIntel
 import org.techtown.kormate.Model.UserKakaoIntel.userNickName
 import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
 import org.techtown.kormate.UI.Adapter.RecentAdapter
@@ -35,19 +30,9 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         uiBinding()
-        getRecentList()
+        recentLimitListObserve()
     }
 
-    private fun getRecentList() {
-        requestRecentList()
-        recentListObserve()
-    }
-
-    private fun requestRecentList() {
-        lifecycleScope.launch(Dispatchers.Main){
-            recentListViewModel.loadRecentLimitData()
-        } //limit 개수만큼 가져옴
-    }
 
     private fun uiBinding() {
         profileImgBinding()
@@ -67,11 +52,11 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun recentListObserve() {
+    private fun recentLimitListObserve() {
 
-        recentListViewModel.recentLimitList.observe(viewLifecycleOwner) { recentList ->
+        recentListViewModel.getRecentLimitData().observe(viewLifecycleOwner) { recentLimitList ->
             binding.recentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-            binding.recentRecyclerview.adapter = RecentAdapter(recentList)
+            binding.recentRecyclerview.adapter = RecentAdapter(recentLimitList)
         }
 
     }

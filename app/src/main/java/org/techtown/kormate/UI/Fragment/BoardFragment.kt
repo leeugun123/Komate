@@ -8,10 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.techtown.kormate.UI.Adapter.PreviewAdapter
 import org.techtown.kormate.UI.Activity.BoardPostActivity
 import org.techtown.kormate.UI.ViewModel.RecentListViewModel
@@ -37,25 +34,12 @@ class BoardFragment : Fragment() {
             startActivity(Intent(activity, BoardPostActivity::class.java))
         }
 
-        getRecentList()
-
-    }
-
-    private fun getRecentList() {
-        requestRecentList()
         recentListObserve()
-    }
-
-    private fun requestRecentList() {
-        lifecycleScope.launch(Dispatchers.Main){
-            recentListViewModel.loadRecentData()
-        } //limit 개수만큼 가져옴
     }
 
     private fun recentListObserve() {
 
-        recentListViewModel.recentList.observe(viewLifecycleOwner) { recentList ->
-
+        recentListViewModel.getRecentData().observe(viewLifecycleOwner) { recentList ->
             binding.boardRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             binding.boardRecyclerview.adapter = PreviewAdapter(recentList)
 
