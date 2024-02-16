@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
 
     private fun requestRecentList() {
         lifecycleScope.launch(Dispatchers.Main){
-            recentListViewModel.loadRecentData(true)
+            recentListViewModel.loadRecentLimitData()
         } //limit 개수만큼 가져옴
     }
 
@@ -69,7 +69,7 @@ class HomeFragment : Fragment() {
 
     private fun recentListObserve() {
 
-        recentListViewModel.recentList.observe(viewLifecycleOwner) { recentList ->
+        recentListViewModel.recentLimitList.observe(viewLifecycleOwner) { recentList ->
             binding.recentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             binding.recentRecyclerview.adapter = RecentAdapter(recentList)
         }

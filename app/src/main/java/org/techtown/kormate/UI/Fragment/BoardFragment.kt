@@ -2,6 +2,7 @@ package org.techtown.kormate.UI.Fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -47,7 +48,7 @@ class BoardFragment : Fragment() {
 
     private fun requestRecentList() {
         lifecycleScope.launch(Dispatchers.Main){
-            recentListViewModel.loadRecentData(false)
+            recentListViewModel.loadRecentData()
         } //limit 개수만큼 가져옴
     }
 

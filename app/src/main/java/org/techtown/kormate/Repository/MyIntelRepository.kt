@@ -12,7 +12,6 @@ import org.techtown.kormate.Model.UserKakaoIntel
 class MyIntelRepository(application: Application) {
 
     private lateinit var userIntel : UserIntel
-
     private var userIntelUploadSuccess = false
 
     fun repoGetUserIntel() = userIntel

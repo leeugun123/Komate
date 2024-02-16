@@ -9,9 +9,15 @@ import org.techtown.kormate.Repository.RecentListRepository
 
 class RecentListViewModel(application: Application) : AndroidViewModel(application){
 
+    private val _recentLimitList = MutableLiveData<List<BoardDetail>>()
+    val recentLimitList: LiveData<List<BoardDetail>>
+        get() = _recentLimitList
+
     private val _recentList = MutableLiveData<List<BoardDetail>>()
-    val recentList: LiveData<List<BoardDetail>>
+
+    val recentList : LiveData<List<BoardDetail>>
         get() = _recentList
+
 
     private var recentListRepository : RecentListRepository
 
@@ -19,11 +25,13 @@ class RecentListViewModel(application: Application) : AndroidViewModel(applicati
         recentListRepository = RecentListRepository(application)
     }
 
-    suspend fun loadRecentData(limit : Boolean){
-        recentListRepository.loadRecentData(limit)
-        _recentList.value = recentListRepository.getRecentData()
+    suspend fun loadRecentLimitData(){
+        _recentLimitList.value = recentListRepository.loadRecentLimitData()
     }
 
+    suspend fun loadRecentData(){
+        _recentList.value = recentListRepository.loadRecentData()
+    }
 
 
 }
