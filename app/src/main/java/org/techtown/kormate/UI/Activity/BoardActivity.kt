@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.gun0912.tedpermission.provider.TedPermissionProvider.context
@@ -32,13 +31,14 @@ import org.techtown.kormate.Model.Comment
 import org.techtown.kormate.Model.Report
 import org.techtown.kormate.UI.ViewModel.CommentViewModel
 import org.techtown.kormate.R
-import org.techtown.kormate.UI.ViewModel.BoardPostViewModel
+import org.techtown.kormate.UI.ViewModel.BoardViewModel
 import org.techtown.kormate.databinding.ActivityBoardBinding
 
 class BoardActivity : AppCompatActivity() {
 
     private val commentViewModel by lazy { ViewModelProvider(this)[CommentViewModel::class.java] }
-    private val boardPostViewModel by lazy { ViewModelProvider(this)[BoardPostViewModel::class.java]}
+    private val boardViewModel by lazy { ViewModelProvider(this)[BoardViewModel::class.java]}
+
     private val commentRecyclerView by lazy { binding.commentRecyclerView }
 
     private val binding by lazy { ActivityBoardBinding.inflate(layoutInflater) }
@@ -57,7 +57,6 @@ class BoardActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         boardUiSync()
-        //게시판 최신화
 
         binding.backBtn.setOnClickListener { finish() }
 
@@ -67,19 +66,27 @@ class BoardActivity : AppCompatActivity() {
                 handleComment()
             else
                 Toast.makeText(this@BoardActivity, NO_POST_TRY_AGAIN, Toast.LENGTH_SHORT).show()
-
-        } //댓글 등록
+        }
 
 
         binding.edit.setOnClickListener {
             showPopUpMenu(it)
-        }//수정 아이콘
+        }
 
-        boardPostViewModel.removeLiveData.observe(this){
+        boardViewModel.removeLiveData.observe(this){
             if(it){
-                Toast.makeText(context, "게시물이 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, REMOVE_POST_COMPLETE, Toast.LENGTH_SHORT).show()
                 finish()
             }
+        }
+
+        commentViewModel.commentLiveData.observe(this) {
+            commentAdapterSync(it)
+        }
+
+        boardViewModel.reportLiveData.observe(this){
+            if(it)
+                Toast.makeText(context, REPORT_POST, Toast.LENGTH_SHORT).show()
         }
 
 
@@ -99,13 +106,15 @@ class BoardActivity : AppCompatActivity() {
     private fun showPopUpMenu(view : View) {
 
         val popUpMenu = PopupMenu(this , view)
+        selectPopupMenu(popUpMenu)
+        popUpItemClick(popUpMenu)
+        popUpMenu.show()
 
-        if(userId != tempData.userId)
-            popUpMenu.menuInflater.inflate(R.menu.post_report,popUpMenu.menu)
-        else
-            popUpMenu.menuInflater.inflate(R.menu.post_menu, popUpMenu.menu)
+    }
 
-        popUpMenu.setOnMenuItemClickListener { menuItem ->
+    private fun popUpItemClick(popupMenu: PopupMenu) {
+
+        popupMenu.setOnMenuItemClickListener { menuItem ->
 
             when(menuItem.itemId){
                 R.id.action_report -> {
@@ -125,10 +134,14 @@ class BoardActivity : AppCompatActivity() {
                 else -> false
 
             }
-
         }
+    }
 
-        popUpMenu.show()
+    private fun selectPopupMenu(popupMenu: PopupMenu) {
+        if(userId != tempData.userId)
+            popupMenu.menuInflater.inflate(R.menu.post_report,popupMenu.menu)
+        else
+            popupMenu.menuInflater.inflate(R.menu.post_menu, popupMenu.menu)
     }
 
     private fun moveBoardEditActivity() {
@@ -147,13 +160,14 @@ class BoardActivity : AppCompatActivity() {
         }
 
         builder.setNegativeButton("아니오") { _, _ -> }
+
         builder.create().show()
     }
 
     private fun removeBoard() {
 
         lifecycleScope.launch(Dispatchers.Main){
-            boardPostViewModel.removePost(postId)
+            boardViewModel.removePost(postId)
         }
     }
 
@@ -193,7 +207,6 @@ class BoardActivity : AppCompatActivity() {
 
         val reasons = arrayOf("욕설", "도배", "인종 혐오 표현", "성적인 만남 유도")
         val checkedReasons = booleanArrayOf(false, false, false, false, false)
-
         val builder = AlertDialog.Builder(this)
         builder.setTitle("신고 사유를 선택하세요")
 
@@ -204,35 +217,33 @@ class BoardActivity : AppCompatActivity() {
         builder.setPositiveButton(CHECK) { _, _ ->
 
             val selectedReasons = mutableListOf<String>()
-            for (i in reasons.indices) {
 
-                if (checkedReasons[i]) {
-                    selectedReasons.add(reasons[i])
-                }
-
+            reasons.indices.forEach { idx ->
+                if (checkedReasons[idx])
+                    selectedReasons.add(reasons[idx])
             }
 
-            //선택한 신고 사유들에 대한 처리 진행
-            Firebase.database.reference.child(POST_REPORT_PATH).
-                        child(Firebase.database.reference.push().key.toString()).setValue(
-                Report(userId.toString() , selectedReasons , tempData.userId.toString() , tempData.postId))
-
-            //신고 넣기
-            Toast.makeText(context, REPORT_POST, Toast.LENGTH_SHORT).show()
-
+            userReport(selectedReasons)
         }
 
-        builder.setNegativeButton(CANCEL) { dialog, _ ->
-            dialog.dismiss()
-        }
+        builder.setNegativeButton(CANCEL) { dialog, _ -> dialog.dismiss() }
 
         val dialog = builder.create()
         dialog.show()
     }
 
+    private fun userReport(selectedReasons : MutableList<String>) {
+
+        val reportContent = Report(userId.toString() , selectedReasons , tempData.userId.toString() , tempData.postId)
+
+        lifecycleScope.launch(Dispatchers.Main){
+            boardViewModel.reportPost(reportContent)
+        }
+
+    }
+
 
     private fun boardUiSync(){
-
            userInfoUiSync()
            postUiSync()
            commentUiSync()
@@ -240,19 +251,24 @@ class BoardActivity : AppCompatActivity() {
 
     private fun commentUiSync() {
 
-        Glide.with(this)
-            .load(tempData.userImg)
-            .circleCrop()
-            .into(binding.replyImg)
+        commentProfileImgBinding()
+        requestComment()
+
+    }
+
+    private fun requestComment() {
 
         lifecycleScope.launch(Dispatchers.Main){
             commentViewModel.getComment(postId)
         }
 
-        commentViewModel.commentLiveData.observe(this) {
-            commentAdapterSync(it)
-        }
+    }
 
+    private fun commentProfileImgBinding() {
+        Glide.with(this)
+            .load(tempData.userImg)
+            .circleCrop()
+            .into(binding.replyImg)
     }
 
     private fun commentAdapterSync(list : List<Comment>) {

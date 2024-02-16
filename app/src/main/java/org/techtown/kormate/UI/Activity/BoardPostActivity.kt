@@ -32,7 +32,7 @@ import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.UserKakaoIntel.userId
 import org.techtown.kormate.Model.UserKakaoIntel.userNickName
 import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
-import org.techtown.kormate.UI.ViewModel.BoardPostViewModel
+import org.techtown.kormate.UI.ViewModel.BoardViewModel
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,7 +40,7 @@ import java.util.*
 class BoardPostActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityBoardPostBinding.inflate(layoutInflater) }
-    private val boardPostViewModel by lazy { ViewModelProvider(this)[BoardPostViewModel::class.java] }
+    private val boardViewModel by lazy { ViewModelProvider(this)[BoardViewModel::class.java] }
     private val postsRef by lazy { Firebase.database.reference.child("posts") }
     private val postId by lazy { postsRef.push().key }
 
@@ -120,7 +120,7 @@ class BoardPostActivity : AppCompatActivity() {
 
     private fun checkUploadPost() {
 
-        boardPostViewModel.postLiveData.observe(this) { success ->
+        boardViewModel.postLiveData.observe(this) { success ->
             if (success)
                 postComplete()
         }
@@ -133,7 +133,7 @@ class BoardPostActivity : AppCompatActivity() {
             , post, picUri, CurrentDateTime.getPostTime() )
 
         lifecycleScope.launch(Dispatchers.Main){
-            boardPostViewModel.uploadPost(uploadBoardDetail)
+            boardViewModel.uploadPost(uploadBoardDetail)
         }
 
         progressDialog.dismiss()

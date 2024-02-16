@@ -30,7 +30,7 @@ import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.UI.Adapter.GalleryAdapter
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.Comment
-import org.techtown.kormate.UI.ViewModel.BoardPostViewModel
+import org.techtown.kormate.UI.ViewModel.BoardViewModel
 import org.techtown.kormate.UI.ViewModel.CommentViewModel
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat
@@ -41,7 +41,7 @@ class BoardEditActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityBoardPostBinding.inflate(layoutInflater) }
     private val commentViewModel by lazy { ViewModelProvider(this)[CommentViewModel::class.java] }
-    private val boardPostViewModel by lazy { ViewModelProvider(this)[BoardPostViewModel::class.java] }
+    private val boardViewModel by lazy { ViewModelProvider(this)[BoardViewModel::class.java] }
     private val postsRef by lazy { Firebase.database.reference.child(POSTS_PATH)}
 
     private lateinit var commentList : MutableList<Comment>
@@ -119,7 +119,7 @@ class BoardEditActivity : AppCompatActivity() {
 
         }
 
-        boardPostViewModel.postLiveData.observe(this) { success ->
+        boardViewModel.postLiveData.observe(this) { success ->
 
             if (success) {
                 restoreComment()
@@ -249,7 +249,7 @@ class BoardEditActivity : AppCompatActivity() {
             )
 
             lifecycleScope.launch(Dispatchers.Main){
-                boardPostViewModel.uploadPost(reviseList)
+                boardViewModel.uploadPost(reviseList)
             }
 
 
