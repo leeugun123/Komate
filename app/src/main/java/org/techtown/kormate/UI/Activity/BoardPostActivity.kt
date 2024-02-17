@@ -1,5 +1,6 @@
 package org.techtown.kormate.UI.Activity
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
+import android.widget.Toast.makeText
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
@@ -24,7 +26,6 @@ import kotlinx.coroutines.launch
 import org.techtown.kormate.Constant.BoardPostConstant.MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
-import org.techtown.kormate.Constant.CarmeraPermissionConstant
 import org.techtown.kormate.Constant.CarmeraPermissionConstant.REQUEST_CODE_PICK_IMAGES
 import org.techtown.kormate.Util.CurrentDateTime
 import org.techtown.kormate.UI.Adapter.GalleryAdapter
@@ -56,9 +57,8 @@ class BoardPostActivity : AppCompatActivity() {
         }
 
         binding.getImgButton.setOnClickListener {
-            setImgPermission()
+            requestCameraPermission { moveToGallery() }
         }
-
 
         binding.updateButton.setOnClickListener {
 
@@ -108,14 +108,29 @@ class BoardPostActivity : AppCompatActivity() {
 
     }
 
+    private fun moveToGallery() {
+
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+
+        intent.let {
+            it.type = "image/*"
+            it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            it.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+        }
+
+        startActivityForResult(
+            Intent.createChooser(intent, "Select images"),
+            REQUEST_CODE_PICK_IMAGES
+        )
+
+    }
+
     private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
 
-    private fun getCurrentTimestamp(): String {
-        return SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-    }
+    private fun getCurrentTimestamp() = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
 
 
     private fun checkUploadPost() {
@@ -153,38 +168,39 @@ class BoardPostActivity : AppCompatActivity() {
 
     private fun postComplete(){
         finish()
-        Toast.makeText(this, POST_UPLOAD_COMPLETE_MESSAGE, Toast.LENGTH_SHORT).show()
+        makeText(this, POST_UPLOAD_COMPLETE_MESSAGE, Toast.LENGTH_SHORT).show()
     }
 
-    private fun setImgPermission() {
+    // ...
+
+    private fun requestCameraPermission(logic : () -> Unit){
 
         TedPermission.create()
             .setPermissionListener(object : PermissionListener {
                 override fun onPermissionGranted() {
-                    moveSelectGallery()
+                    logic()
                 }
+                override fun onPermissionDenied(deniedPermissions: List<String>) {}
 
-                private fun moveSelectGallery() {
-
-                    val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-
-                    intent.let {
-                        it.type = "image/*"
-                        it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                        it.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
-                    }
-
-                    startActivityForResult(
-                        Intent.createChooser(intent, "Select images"),
-                        REQUEST_CODE_PICK_IMAGES
-                    )
-                }
-
-                override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {}
             })
-            .setPermissions(CarmeraPermissionConstant.PERMISSION_READ_EXTERNAL_STORAGE)
+            .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
+            .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_CALENDAR )
             .check()
+
     }
+
+    fun selectImages() {
+        // Your image selection logic goes here
+        val cameraIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        cameraIntent.type = "image/*"
+        cameraIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+        startActivityForResult(Intent.createChooser(cameraIntent, "Select images"), REQUEST_CODE_PICK_IMAGES)
+    }
+
+// ...
+
 
 
     override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?){
@@ -204,7 +220,7 @@ class BoardPostActivity : AppCompatActivity() {
             for (i in 0 until clipData.itemCount) {
 
                 if (imageUris.size == 3) {
-                    Toast.makeText(this, MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE, Toast.LENGTH_SHORT).show()
+                    makeText(this, MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE, Toast.LENGTH_SHORT).show()
                     break
                 } //사진 개수 제한
 

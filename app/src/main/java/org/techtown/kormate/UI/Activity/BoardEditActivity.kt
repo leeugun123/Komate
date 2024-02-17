@@ -1,5 +1,6 @@
 package org.techtown.kormate.UI.Activity
 
+import android.Manifest
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
@@ -63,7 +64,7 @@ class BoardEditActivity : AppCompatActivity() {
         binding.backBtn.setOnClickListener { finish() }
 
         binding.getImgButton.setOnClickListener {
-            setImgPermission()
+            requestCameraPermission { moveToGallery() }
         }
 
 
@@ -145,34 +146,21 @@ class BoardEditActivity : AppCompatActivity() {
         return progressBar
     }
 
-    private fun setImgPermission() {
+    private fun moveToGallery() {
 
-        TedPermission.create()
-            .setPermissionListener(object : PermissionListener {
-                override fun onPermissionGranted() {
-                    moveSelectGallery()
-                }
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
 
-                private fun moveSelectGallery() {
+        intent.let {
+            it.type = "image/*"
+            it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            it.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+        }
 
-                    val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(
+            Intent.createChooser(intent, "Select images"),
+            REQUEST_CODE_PICK_IMAGES
+        )
 
-                    intent.let {
-                        it.type = "image/*"
-                        it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                        it.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
-                    }
-
-                    startActivityForResult(
-                        Intent.createChooser(intent, "Select images"),
-                        REQUEST_CODE_PICK_IMAGES
-                    )
-                }
-
-                override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {}
-            })
-            .setPermissions(PERMISSION_READ_EXTERNAL_STORAGE)
-            .check()
     }
 
     private fun getCurrentTimestamp() = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
@@ -255,6 +243,23 @@ class BoardEditActivity : AppCompatActivity() {
 
 
         }
+
+    }
+
+    private fun requestCameraPermission(logic : () -> Unit){
+
+        TedPermission.create()
+            .setPermissionListener(object : PermissionListener {
+                override fun onPermissionGranted() {
+                    logic()
+                }
+                override fun onPermissionDenied(deniedPermissions: List<String>) {}
+
+            })
+            .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
+            .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_CALENDAR )
+            .check()
 
     }
 

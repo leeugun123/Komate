@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        kakaoLoginProcess()
+      //  kakaoLoginProcess()
 
         val callback : (OAuthToken?, Throwable?) -> Unit = { token, error ->
 
@@ -46,6 +46,10 @@ class LoginActivity : AppCompatActivity() {
 
         binding.kakaoLogin.setOnClickListener {
 
+            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+            finish()
+
+            /*
             lifecycleScope.launch(Dispatchers.IO) {
                 if (UserApiClient.instance.isKakaoTalkLoginAvailable(this@LoginActivity)) {
                     UserApiClient.instance.loginWithKakaoTalk(this@LoginActivity, callback = callback)
@@ -53,6 +57,8 @@ class LoginActivity : AppCompatActivity() {
                     UserApiClient.instance.loginWithKakaoAccount(this@LoginActivity, callback = callback)
                 }
             }
+            */
+
 
         }
 
