@@ -148,16 +148,16 @@ class BoardEditActivity : AppCompatActivity() {
 
     private fun moveToGallery() {
 
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
 
-        intent.let {
+        galleryIntent.let {
             it.type = "image/*"
             it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             it.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         }
 
         startActivityForResult(
-            Intent.createChooser(intent, "Select images"),
+            Intent.createChooser(galleryIntent, "Select images"),
             REQUEST_CODE_PICK_IMAGES
         )
 
