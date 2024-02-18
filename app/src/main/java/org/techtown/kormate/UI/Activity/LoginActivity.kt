@@ -33,9 +33,11 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-      //  kakaoLoginProcess()
-
+        //kakaoLoginProcess()
+        /*
         val callback : (OAuthToken?, Throwable?) -> Unit = { token, error ->
+
+            Log.e("TAG","에러 출력  : " + error!!.message.toString())
 
             if (error != null) {
                 lifecycleScope.launch(Dispatchers.Main) { handleKakaoLoginError(error) }
@@ -43,13 +45,13 @@ class LoginActivity : AppCompatActivity() {
                 kakaoLoginSuccess()
             }
         }
-
+*/
         binding.kakaoLogin.setOnClickListener {
 
             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
             finish()
 
-            /*
+        /*
             lifecycleScope.launch(Dispatchers.IO) {
                 if (UserApiClient.instance.isKakaoTalkLoginAvailable(this@LoginActivity)) {
                     UserApiClient.instance.loginWithKakaoTalk(this@LoginActivity, callback = callback)
@@ -57,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
                     UserApiClient.instance.loginWithKakaoAccount(this@LoginActivity, callback = callback)
                 }
             }
-            */
+        */
 
 
         }
@@ -107,6 +109,7 @@ class LoginActivity : AppCompatActivity() {
 
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null) {
+                Log.e("TAG" , "에러 " + error.toString())
                 Toast.makeText(this, KAKAO_ACCESS_DENIED, Toast.LENGTH_SHORT).show()
             } else if (tokenInfo != null) {
                 kakaoLoginSuccess()
@@ -118,6 +121,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun kakaoLoginSuccess(){
         Toast.makeText(this, KAKAO_ACCESS_SUCCESS, Toast.LENGTH_SHORT).show()
+
         lifecycleScope.launch(Dispatchers.Main) {
             moveNextActivity()
         }
