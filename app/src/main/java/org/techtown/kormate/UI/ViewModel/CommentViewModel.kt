@@ -6,23 +6,28 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.techtown.kormate.Model.Comment
 import org.techtown.kormate.Repository.CommentRepository
+import org.techtown.kormate.UI.Activity.BoardActivity
 
 class CommentViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _commentLiveData = MutableLiveData<List<Comment>>()
+   var commentList : LiveData<List<Comment>>
 
-    val commentLiveData: LiveData<List<Comment>>
-        get() = _commentLiveData
+
+    private val _postCommentSuccess = MutableLiveData<Boolean>()
+
+    val postCommentSuccess : LiveData<Boolean>
+        get() = _postCommentSuccess
 
     private var commentRepository : CommentRepository
 
     init {
         commentRepository = CommentRepository(application)
+        commentList = commentRepository.loadComments("-NqwVjIaUWbxNU8u4RFT")
     }
 
-    suspend fun getComment(postId : String){
-        commentRepository.requestComments(postId)
-        _commentLiveData.value = commentRepository.getComments()
+
+    suspend fun uploadComment(comment : Comment , postId : String){
+        _postCommentSuccess.value = commentRepository.repoUploadComment(comment,postId)
     }
 
 

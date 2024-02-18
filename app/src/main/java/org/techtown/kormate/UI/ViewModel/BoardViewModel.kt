@@ -6,41 +6,41 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.Report
-import org.techtown.kormate.Repository.BoardPostRepository
+import org.techtown.kormate.Repository.BoardRepository
 
 class BoardViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _postLiveData = MutableLiveData<Boolean>()
+    private val _boardPostSuccess = MutableLiveData<Boolean>()
 
-    val postLiveData: LiveData<Boolean>
-        get() = _postLiveData
+    val boardPostSuccess: LiveData<Boolean>
+        get() = _boardPostSuccess
 
-    private val _removeLiveData = MutableLiveData<Boolean>()
-    val removeLiveData  : LiveData<Boolean>
-        get() = _removeLiveData
+    private val _boardRemoveSuccess = MutableLiveData<Boolean>()
+    val boardRemoveSuccess  : LiveData<Boolean>
+        get() = _boardRemoveSuccess
 
-    private val _reportLiveData = MutableLiveData<Boolean>()
+    private val _boardReportSuccess = MutableLiveData<Boolean>()
 
-    val reportLiveData: LiveData<Boolean>
-        get() = _reportLiveData
+    val boardReportSuccess: LiveData<Boolean>
+        get() = _boardReportSuccess
 
 
-    private var boardPostRepository : BoardPostRepository
+    private var boardRepository : BoardRepository
 
     init {
-        boardPostRepository = BoardPostRepository(application)
+        boardRepository = BoardRepository(application)
     }
 
     suspend fun uploadPost(boardDetail : BoardDetail) {
-        _postLiveData.value = boardPostRepository.repoUploadPost(boardDetail)
+        _boardPostSuccess.value = boardRepository.repoUploadPost(boardDetail)
     }
 
     suspend fun removePost(postId : String){
-        _removeLiveData.value = boardPostRepository.repoRemovePost(postId)
+        _boardRemoveSuccess.value = boardRepository.repoRemovePost(postId)
     }
 
     suspend fun reportPost(report : Report){
-        _reportLiveData.value = boardPostRepository.repoBoardReport(report)
+        _boardReportSuccess.value = boardRepository.repoBoardReport(report)
     }
 
 }

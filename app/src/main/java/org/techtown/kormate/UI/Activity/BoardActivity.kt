@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -22,7 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.techtown.kormate.Constant.FirebasePathConstant.COMMENT_PATH
 import org.techtown.kormate.Constant.FirebasePathConstant.POSTS_PATH
-import org.techtown.kormate.Constant.FirebasePathConstant.POST_REPORT_PATH
 import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.UI.Adapter.CommentAdapter
 import org.techtown.kormate.Util.CurrentDateTime
@@ -60,7 +60,7 @@ class BoardActivity : AppCompatActivity() {
 
         binding.backBtn.setOnClickListener { finish() }
 
-        binding.post.setOnClickListener {
+        binding.commentPost.setOnClickListener {
 
             if(binding.reply.text.isNotEmpty())
                 handleComment()
@@ -73,20 +73,25 @@ class BoardActivity : AppCompatActivity() {
             showPopUpMenu(it)
         }
 
-        boardViewModel.removeLiveData.observe(this){
+        boardViewModel.boardRemoveSuccess.observe(this){
             if(it){
                 Toast.makeText(context, REMOVE_POST_COMPLETE, Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
 
-        commentViewModel.commentLiveData.observe(this) {
+        boardViewModel.boardReportSuccess.observe(this){
+            if(it)
+                Toast.makeText(context, REPORT_POST, Toast.LENGTH_SHORT).show()
+        }
+
+        commentViewModel.commentList.observe(this) {
             commentAdapterSync(it)
         }
 
-        boardViewModel.reportLiveData.observe(this){
+        commentViewModel.postCommentSuccess.observe(this){
             if(it)
-                Toast.makeText(context, REPORT_POST, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@BoardActivity, POST_COMMENT_COMPLETE, Toast.LENGTH_SHORT).show()
         }
 
 
@@ -178,18 +183,13 @@ class BoardActivity : AppCompatActivity() {
 
     private fun uploadComment() {
 
-        val objRef = Firebase.database.reference.child(POSTS_PATH).child(postId).child(COMMENT_PATH)
-
-        val id = objRef.push().key.toString()
-
-        val objCommentRef = objRef.child(id)
-
-        val comment = Comment(id, tempData.userId,tempData.userName , tempData.userImg
+        val uploadComment = Comment("", tempData.userId,tempData.userName , tempData.userImg
             ,binding.reply.text.toString() , CurrentDateTime.getCommentTime())
 
-        objCommentRef.setValue(comment)
+        lifecycleScope.launch(Dispatchers.Main){
+            commentViewModel.uploadComment(uploadComment , postId)
+        }
 
-        Toast.makeText(this@BoardActivity, POST_COMMENT_COMPLETE, Toast.LENGTH_SHORT).show()
     }
 
     private fun tossIntent(entirePage: Int, curPage: Int,imgUri : String) {
@@ -250,19 +250,9 @@ class BoardActivity : AppCompatActivity() {
     }
 
     private fun commentUiSync() {
-
         commentProfileImgBinding()
-        requestComment()
-
     }
 
-    private fun requestComment() {
-
-        lifecycleScope.launch(Dispatchers.Main){
-            commentViewModel.getComment(postId)
-        }
-
-    }
 
     private fun commentProfileImgBinding() {
         Glide.with(this)
@@ -272,6 +262,7 @@ class BoardActivity : AppCompatActivity() {
     }
 
     private fun commentAdapterSync(list : List<Comment>) {
+        Log.e("TAG", list.size.toString() + "사이즈")
         commentList = list
         commentSize = commentList.size
         commentRecyclerView.layoutManager = LinearLayoutManager(this)

@@ -23,7 +23,6 @@ import kotlinx.coroutines.launch
 import org.techtown.kormate.Constant.BoardPostConstant.MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
-import org.techtown.kormate.Constant.CarmeraPermissionConstant.PERMISSION_READ_EXTERNAL_STORAGE
 import org.techtown.kormate.Constant.CarmeraPermissionConstant.REQUEST_CODE_PICK_IMAGES
 import org.techtown.kormate.Constant.FirebasePathConstant.COMMENT_PATH
 import org.techtown.kormate.Constant.FirebasePathConstant.POSTS_PATH
@@ -57,7 +56,7 @@ class BoardEditActivity : AppCompatActivity() {
         syncTitleUi()
         getIntentHandling()
 
-        commentViewModel.commentLiveData.observe(this) { commentList ->
+        commentViewModel.commentList.observe(this) { commentList ->
             this.commentList = commentList as MutableList<Comment>
         }//이전 댓글들 전부 불러와 동기화
 
@@ -120,7 +119,7 @@ class BoardEditActivity : AppCompatActivity() {
 
         }
 
-        boardViewModel.postLiveData.observe(this) { success ->
+        boardViewModel.boardPostSuccess.observe(this) { success ->
 
             if (success) {
                 restoreComment()
@@ -187,9 +186,6 @@ class BoardEditActivity : AppCompatActivity() {
                 handleSelectedImages(boardDetail.img , binding)
             //원래 있던 이미지 갤러리 adapter에 띄우기
 
-            lifecycleScope.launch(Dispatchers.Main){
-                commentViewModel.getComment(boardDetail.postId)
-            }
 
         }
     }

@@ -1,6 +1,8 @@
 package org.techtown.kormate.Repository
 
 import android.app.Application
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -9,39 +11,69 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.techtown.kormate.Constant.FirebasePathConstant
+import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.Comment
+import org.techtown.kormate.Util.CurrentDateTime
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class CommentRepository(application: Application) {
 
-    private var commentList = mutableListOf<Comment>()
 
-    fun getComments() = commentList
+    private val ref = Firebase.database.reference.child(FirebasePathConstant.POSTS_PATH)
 
-    suspend fun requestComments(postId: String) = withContext(Dispatchers.IO) {
+    fun loadComments(postId: String) : LiveData<List<Comment>> {
 
-        commentListInit()
-
-        val commentsRef = Firebase.database.reference
-            .child(FirebasePathConstant.POSTS_PATH)
-            .child(postId).child(FirebasePathConstant.COMMENT_PATH)
+        val commentListMutableLiveData = MutableLiveData<List<Comment>>()
+        val commentsRef = ref.child(postId).child(FirebasePathConstant.COMMENT_PATH)
 
         commentsRef.addValueEventListener(object : ValueEventListener {
 
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                dataSnapshot.children.forEach {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                val commentList = mutableListOf<Comment>()
+
+                snapshot.children.forEach {
                     val comment = it.getValue(Comment::class.java)
-                    comment?.let { commentList.add(it) }
+                    commentList.add(comment!!)
                 }
+
+                commentListMutableLiveData.value = commentList
+
             }
 
             override fun onCancelled(error: DatabaseError) {}
         })
 
+        return commentListMutableLiveData
+
     }
 
-    private fun commentListInit() {
-        commentList.clear()
+
+
+
+    suspend fun repoUploadComment(comment : Comment , postId : String) = withContext(Dispatchers.IO) {
+
+        val commentRef = ref.child(postId).child(FirebasePathConstant.COMMENT_PATH)
+        val commentId = commentRef.push().key.toString()
+        comment.id = commentId
+
+        suspendCoroutine { continuation ->
+
+            commentRef.child(commentId)
+                    .setValue(comment)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful)
+                            continuation.resume(true)
+                        else
+                            continuation.resume(false)
+                    }
+        }
+
+
     }
+
+
 
 
 }

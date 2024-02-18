@@ -135,7 +135,7 @@ class BoardPostActivity : AppCompatActivity() {
 
     private fun checkUploadPost() {
 
-        boardViewModel.postLiveData.observe(this) { success ->
+        boardViewModel.boardPostSuccess.observe(this) { success ->
             if (success)
                 postComplete()
         }
