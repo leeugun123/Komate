@@ -49,7 +49,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".UI.Activity.ReviseActivity"
+            android:name=".UI.Activity.MyIntelReviseActivity"
             android:exported="false" />
 
         <activity

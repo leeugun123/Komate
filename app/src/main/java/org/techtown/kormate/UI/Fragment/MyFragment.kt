@@ -12,10 +12,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Model.UserIntel
+import org.techtown.kormate.Model.UserKakaoIntel
 import org.techtown.kormate.UI.Activity.LoginActivity
-import org.techtown.kormate.UI.Activity.ReviseActivity
+import org.techtown.kormate.UI.Activity.MyIntelReviseActivity
 import org.techtown.kormate.UI.ViewModel.MyIntelViewModel
 import org.techtown.kormate.databinding.FragmentMyBinding
 
@@ -42,13 +44,29 @@ class MyFragment : Fragment() {
         }
 
         binding.reviseButt.setOnClickListener {
-            startActivity(Intent(requireContext(), ReviseActivity::class.java))
+            startActivity(Intent(requireContext(), MyIntelReviseActivity::class.java))
         }
 
+        kakaoIntelBinding()
         observeUserIntelViewModel()
 
     }
 
+    private fun kakaoIntelBinding() {
+        userImgProfileBinding()
+        userNameBinding()
+    }
+
+    private fun userNameBinding() {
+        binding.userName.text = UserKakaoIntel.userNickName
+    }
+
+    private fun userImgProfileBinding() {
+        Glide.with(this)
+            .load(UserKakaoIntel.userProfileImg)
+            .circleCrop()
+            .into(binding.userProfile)
+    }
 
     private fun showAlertDialog() {
 
