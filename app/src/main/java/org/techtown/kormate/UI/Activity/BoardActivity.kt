@@ -32,6 +32,7 @@ import org.techtown.kormate.Model.Report
 import org.techtown.kormate.UI.ViewModel.CommentViewModel
 import org.techtown.kormate.R
 import org.techtown.kormate.UI.ViewModel.BoardViewModel
+import org.techtown.kormate.Util.BoardData
 import org.techtown.kormate.databinding.ActivityBoardBinding
 
 class BoardActivity : AppCompatActivity() {
@@ -57,6 +58,8 @@ class BoardActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         boardUiSync()
+        boardPostIdSync()
+
 
         binding.backBtn.setOnClickListener { finish() }
 
@@ -85,8 +88,8 @@ class BoardActivity : AppCompatActivity() {
                 Toast.makeText(context, REPORT_POST, Toast.LENGTH_SHORT).show()
         }
 
-        commentViewModel.commentList.observe(this) {
-            commentAdapterSync(it)
+        commentViewModel.commentList.observe(this) {commentList ->
+            commentAdapterSync(commentList)
         }
 
         commentViewModel.postCommentSuccess.observe(this){
@@ -95,6 +98,12 @@ class BoardActivity : AppCompatActivity() {
         }
 
 
+
+
+    }
+
+    private fun boardPostIdSync() {
+        BoardData.boardPostId = postId
     }
 
     private fun handleComment() {

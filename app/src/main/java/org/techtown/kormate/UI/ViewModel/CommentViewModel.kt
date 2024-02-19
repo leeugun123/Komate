@@ -1,6 +1,7 @@
 package org.techtown.kormate.UI.ViewModel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,9 +23,8 @@ class CommentViewModel(application: Application) : AndroidViewModel(application)
 
     init {
         commentRepository = CommentRepository(application)
-        commentList = commentRepository.loadComments("-NqwVjIaUWbxNU8u4RFT")
+        commentList = commentRepository.loadComments()
     }
-
 
     suspend fun uploadComment(comment : Comment , postId : String){
         _postCommentSuccess.value = commentRepository.repoUploadComment(comment,postId)

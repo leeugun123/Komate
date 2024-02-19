@@ -32,6 +32,7 @@ import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.Comment
 import org.techtown.kormate.UI.ViewModel.BoardViewModel
 import org.techtown.kormate.UI.ViewModel.CommentViewModel
+import org.techtown.kormate.Util.BoardData
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -48,13 +49,13 @@ class BoardEditActivity : AppCompatActivity() {
     private lateinit var receiveIntent : BoardDetail
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-
         syncTitleUi()
         getIntentHandling()
+
 
         commentViewModel.commentList.observe(this) { commentList ->
             this.commentList = commentList as MutableList<Comment>
@@ -161,6 +162,8 @@ class BoardEditActivity : AppCompatActivity() {
         )
 
     }
+
+
 
     private fun getCurrentTimestamp() = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
 
