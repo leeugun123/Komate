@@ -4,6 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.techtown.kormate.Model.UserKakaoIntel
 import org.techtown.kormate.Repository.KakaoRepository
 
@@ -19,8 +22,12 @@ class KakaoViewModel(application: Application) : AndroidViewModel(application) {
         kakaoRepository = KakaoRepository(application)
     }
 
-    suspend fun loadUserData() {
-        _userKakaoIntel.value = kakaoRepository.repoLoadUserData()
+    fun loadUserData() {
+
+        viewModelScope.launch (Dispatchers.Main){
+            _userKakaoIntel.value = kakaoRepository.repoLoadUserData()
+        }
+
     }
 
 

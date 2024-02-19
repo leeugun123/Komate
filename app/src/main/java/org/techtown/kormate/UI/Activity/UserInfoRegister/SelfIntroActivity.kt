@@ -78,7 +78,6 @@ class SelfIntroActivity : AppCompatActivity() {
         finish()
     }
 
-
     companion object{
         private const val SELF_INTRO_GUIDE = "자기소개를 작성해주세요."
     }

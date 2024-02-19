@@ -192,9 +192,7 @@ class BoardActivity : AppCompatActivity() {
         val uploadComment = Comment("", tempData.userId,tempData.userName , tempData.userImg
             ,binding.reply.text.toString() , CurrentDateTime.getCommentTime())
 
-        lifecycleScope.launch(Dispatchers.Main){
-            commentViewModel.uploadComment(uploadComment , postId)
-        }
+        commentViewModel.uploadComment(uploadComment , postId)
 
     }
 
@@ -241,11 +239,7 @@ class BoardActivity : AppCompatActivity() {
     private fun userReport(selectedReasons : MutableList<String>) {
 
         val reportContent = Report(userId.toString() , selectedReasons , tempData.userId.toString() , tempData.postId)
-
-        lifecycleScope.launch(Dispatchers.Main){
-            boardViewModel.reportPost(reportContent)
-        }
-
+        boardViewModel.reportPost(reportContent)
     }
 
 

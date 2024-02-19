@@ -11,15 +11,12 @@ import android.provider.MediaStore
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.techtown.kormate.Constant.BoardPostConstant.MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
@@ -32,7 +29,6 @@ import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.Comment
 import org.techtown.kormate.UI.ViewModel.BoardViewModel
 import org.techtown.kormate.UI.ViewModel.CommentViewModel
-import org.techtown.kormate.Util.BoardData
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -47,8 +43,6 @@ class BoardEditActivity : AppCompatActivity() {
 
     private lateinit var commentList : MutableList<Comment>
     private lateinit var receiveIntent : BoardDetail
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -188,9 +182,8 @@ class BoardEditActivity : AppCompatActivity() {
             if (boardDetail.img.isNotEmpty())
                 handleSelectedImages(boardDetail.img , binding)
             //원래 있던 이미지 갤러리 adapter에 띄우기
-
-
         }
+
     }
 
     private fun receiveIntentInit() {
@@ -235,11 +228,7 @@ class BoardEditActivity : AppCompatActivity() {
                 receiveIntent.dateTime
             )
 
-            lifecycleScope.launch(Dispatchers.Main){
-                boardViewModel.uploadPost(reviseList)
-            }
-
-
+            boardViewModel.uploadPost(reviseList)
 
         }
 

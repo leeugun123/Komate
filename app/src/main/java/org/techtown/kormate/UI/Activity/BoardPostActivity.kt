@@ -190,19 +190,6 @@ class BoardPostActivity : AppCompatActivity() {
 
     }
 
-    fun selectImages() {
-        // Your image selection logic goes here
-        val cameraIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        cameraIntent.type = "image/*"
-        cameraIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
-        startActivityForResult(Intent.createChooser(cameraIntent, "Select images"), REQUEST_CODE_PICK_IMAGES)
-    }
-
-// ...
-
-
-
     override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?){
         super.onActivityResult(requestCode, resultCode, data)
 

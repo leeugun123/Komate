@@ -10,16 +10,18 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.techtown.kormate.Constant.FirebasePathConstant
+import org.techtown.kormate.Constant.FirebasePathConstant.USER_INTEL_PATH
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Model.UserKakaoIntel
+import org.techtown.kormate.Model.UserKakaoIntel.userId
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class MyIntelRepository(application: Application) {
 
     private val myIntelRef = FirebaseDatabase.getInstance()
-        .reference.child(FirebasePathConstant.USER_INTEL_PATH)
-        .child(UserKakaoIntel.userId)
+        .reference.child(USER_INTEL_PATH)
+        .child(userId)
 
 
     fun repoFetchUserIntel() : LiveData<UserIntel> {
@@ -54,7 +56,6 @@ class MyIntelRepository(application: Application) {
                 }
 
         }
-
 
     }
 
