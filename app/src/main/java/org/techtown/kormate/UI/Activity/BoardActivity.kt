@@ -97,9 +97,6 @@ class BoardActivity : AppCompatActivity() {
                 Toast.makeText(this@BoardActivity, POST_COMMENT_COMPLETE, Toast.LENGTH_SHORT).show()
         }
 
-
-
-
     }
 
     private fun boardPostIdSync() {

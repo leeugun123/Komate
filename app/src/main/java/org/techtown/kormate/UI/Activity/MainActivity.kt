@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             when(menuItem.itemId){
                 R.id.page_home -> { showFa() }
                 R.id.page_board -> { showFb() }
-                //R.id.page_my -> { showFc() }
+                R.id.page_my -> { showFc() }
                 else -> throw IllegalArgumentException("유효하지 않습니다.")
             }
 
@@ -51,19 +51,19 @@ class MainActivity : AppCompatActivity() {
     private fun showFb() {
         fragmentManager.beginTransaction().hide(fa).commit()
         fragmentManager.beginTransaction().show(fb).commit()
-       // fragmentManager.beginTransaction().hide(fc).commit()
+        fragmentManager.beginTransaction().hide(fc).commit()
     }
 
     private fun showFa() {
         fragmentManager.beginTransaction().show(fa).commit()
         fragmentManager.beginTransaction().hide(fb).commit()
-        //fragmentManager.beginTransaction().hide(fc).commit()
+        fragmentManager.beginTransaction().hide(fc).commit()
     }
 
     private fun addFragment() {
         fragmentManager.beginTransaction().add(R.id.main_frame, fa).commit()
         fragmentManager.beginTransaction().add(R.id.main_frame, fb).commit()
-       // fragmentManager.beginTransaction().add(R.id.main_frame, fc).commit()
+        fragmentManager.beginTransaction().add(R.id.main_frame, fc).commit()
     }
 
 

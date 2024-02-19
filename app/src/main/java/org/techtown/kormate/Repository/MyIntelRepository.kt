@@ -1,49 +1,60 @@
 package org.techtown.kormate.Repository
 
 import android.app.Application
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.techtown.kormate.Constant.FirebasePathConstant
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Model.UserKakaoIntel
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class MyIntelRepository(application: Application) {
 
-    private lateinit var userIntel : UserIntel
-    private var userIntelUploadSuccess = false
+    private val myIntelRef = FirebaseDatabase.getInstance()
+        .reference.child(FirebasePathConstant.USER_INTEL_PATH)
+        .child(UserKakaoIntel.userId)
 
-    fun repoGetUserIntel() = userIntel
 
-    fun repoGetUserIntelUploadSuccess() = userIntelUploadSuccess
+    fun repoFetchUserIntel() : LiveData<UserIntel> {
 
-    fun repoFetchUserIntel(){
+        val userIntelMutableLiveData = MutableLiveData<UserIntel>()
 
-        val reference = FirebaseDatabase.getInstance()
-            .reference.child(FirebasePathConstant.USER_INTEL_PATH)
-            .child(UserKakaoIntel.userId)
+        myIntelRef.addValueEventListener(object : ValueEventListener {
 
-        reference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                userIntel = dataSnapshot.getValue(UserIntel::class.java)!!
+                val userIntel = dataSnapshot.getValue(UserIntel::class.java)!!
+                userIntelMutableLiveData.value = userIntel
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
 
         })
 
+        return userIntelMutableLiveData
+
     }
 
-    fun repoUploadUserIntel(userIntel: UserIntel){
+    suspend fun repoUploadUserIntel(userIntel: UserIntel) = withContext(Dispatchers.IO){
 
-        userIntelUploadSuccess = false
+        suspendCoroutine { continuation ->
 
-        FirebaseDatabase.getInstance()
-            .reference.child(FirebasePathConstant.USER_INTEL_PATH)
-            .child(UserKakaoIntel.userId).setValue(userIntel).addOnSuccessListener {
-                userIntelUploadSuccess = true
-            }
+            myIntelRef.setValue(userIntel)
+                .addOnCompleteListener {task ->
+                    if(task.isSuccessful)
+                        continuation.resume(true)
+                    else
+                        continuation.resume(false)
+                }
+
+        }
+
 
     }
 
