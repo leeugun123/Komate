@@ -4,12 +4,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.database.FirebaseDatabase
 import org.techtown.kormate.Constant.FirebasePathConstant
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Model.UserKakaoIntel.userId
 import org.techtown.kormate.R
 import org.techtown.kormate.UI.Activity.MainActivity
+import org.techtown.kormate.UI.ViewModel.MyIntelViewModel
 import org.techtown.kormate.databinding.ActivityGenderBinding
 
 
@@ -17,6 +19,7 @@ import org.techtown.kormate.databinding.ActivityGenderBinding
 class GenderActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityGenderBinding.inflate(layoutInflater)}
+    private val myIntelViewModel by lazy { ViewModelProvider(this)[MyIntelViewModel::class.java]}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +45,11 @@ class GenderActivity : AppCompatActivity() {
 
         }
 
+        myIntelViewModel.postLiveData.observe(this){
+            Toast.makeText(this, INPUT_INFO_COMPLETE_GUIDE, Toast.LENGTH_SHORT).show()
+        }
+
+
     }
 
     private fun syncCheckButton(gender : String) {
@@ -50,10 +58,7 @@ class GenderActivity : AppCompatActivity() {
     }
 
     private fun uploadUserInfo() {
-        FirebaseDatabase.getInstance().
-        reference.child(FirebasePathConstant.USER_INTEL_PATH)
-            .child(userId).setValue(UserIntel)
-            .addOnSuccessListener { Toast.makeText(this, INPUT_INFO_COMPLETE_GUIDE, Toast.LENGTH_SHORT).show() }
+        myIntelViewModel.uploadUserIntel(UserIntel)
     }
 
     private fun moveMainActivity() {
