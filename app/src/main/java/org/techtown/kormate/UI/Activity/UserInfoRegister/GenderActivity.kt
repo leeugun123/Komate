@@ -5,10 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.database.FirebaseDatabase
-import org.techtown.kormate.Constant.FirebasePathConstant
 import org.techtown.kormate.Model.UserIntel
-import org.techtown.kormate.Model.UserKakaoIntel.userId
 import org.techtown.kormate.R
 import org.techtown.kormate.UI.Activity.MainActivity
 import org.techtown.kormate.UI.ViewModel.MyIntelViewModel
@@ -45,7 +42,7 @@ class GenderActivity : AppCompatActivity() {
 
         }
 
-        myIntelViewModel.postLiveData.observe(this){
+        myIntelViewModel.postSuccessLiveData.observe(this){
             Toast.makeText(this, INPUT_INFO_COMPLETE_GUIDE, Toast.LENGTH_SHORT).show()
         }
 

@@ -32,7 +32,7 @@ class MyIntelReviseActivity : AppCompatActivity() {
             reviseUploadUserIntel()
         }
 
-        myIntelViewModel.postLiveData.observe(this){ success ->
+        myIntelViewModel.postSuccessLiveData.observe(this){ success ->
 
             if(success)
                 reviseCompleteMessage()
