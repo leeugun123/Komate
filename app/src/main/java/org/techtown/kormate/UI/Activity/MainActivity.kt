@@ -25,20 +25,25 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         addFragment()
-        
-        binding.bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+        initNavigationBar()
 
-            when(menuItem.itemId){
-                R.id.page_home -> { showFa() }
-                R.id.page_board -> { showFb() }
-                R.id.page_my -> { showFc() }
-                else -> throw IllegalArgumentException("유효하지 않습니다.")
+    }
+
+    private fun initNavigationBar() {
+
+        binding.bottomNavigationView.run {
+
+            setOnItemSelectedListener {item ->
+                when(item.itemId){
+                    R.id.page_home -> { showFa() }
+                    R.id.page_board -> { showFb() }
+                    R.id.page_my -> { showFc() }
+                    else -> throw IllegalArgumentException("유효하지 않습니다.")
+                }
+                true
             }
-
-            true
-
+            selectedItemId = R.id.page_home
         }
-
 
     }
 
