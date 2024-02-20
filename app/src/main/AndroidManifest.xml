@@ -34,10 +34,12 @@
 
         <activity
             android:name=".UI.Activity.UserInfoRegister.GenderActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
             android:name=".UI.Activity.UserInfoRegister.SelfIntroActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
@@ -46,27 +48,33 @@
 
         <activity
             android:name=".UI.Activity.UserInfoRegister.NationActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
             android:name=".UI.Activity.MyIntelReviseActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
             android:name=".UI.Activity.ImageDetailActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
             android:name=".UI.Activity.BoardEditActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
             android:name=".UI.Activity.BoardActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".UI.Activity.BoardPostActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
@@ -89,10 +97,12 @@
 
         <activity
             android:name=".UI.Activity.LoginActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
             android:name=".UI.Activity.SplashActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -103,6 +113,7 @@
 
         <activity
             android:name=".UI.Activity.MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
 
     </application>
