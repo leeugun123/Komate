@@ -16,6 +16,9 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        var keyHash = Utility.getKeyHash(this)
+        Log.e("GlobalApplication", "$keyHash")
+
         Handler().postDelayed({
             moveToLoginActivity()
         }, SPLASH_DURATION)

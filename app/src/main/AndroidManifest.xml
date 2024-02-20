@@ -30,7 +30,8 @@
         android:roundIcon="@mipmap/app_logo_final_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kormate"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        tools:ignore="MissingClass">
 
         <activity
             android:name=".UI.Activity.UserInfoRegister.GenderActivity"
@@ -86,10 +87,6 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:host="oauth"
-                    android:scheme="kakao${KAKAO_API_KEY}" />
-
             </intent-filter>
 
         </activity>

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -27,11 +28,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-
-        addFragment()
+        fragmentInit()
         initNavigationBar()
 
+    }
+
+    private fun fragmentInit() {
+        setContentView(binding.root)
+        addFragment()
     }
 
     private fun initNavigationBar() {
@@ -42,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.page_home -> { showFa() }
                 R.id.page_board -> { showFb() }
                 R.id.page_my -> { showFc() }
-                else -> throw IllegalArgumentException("유효하지 않습니다.")
+                else -> throw IllegalArgumentException(NO_INVALID)
             }
             true
         }
@@ -86,17 +90,16 @@ class MainActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             doubleBackToExitPressedOnce = false
-        }, BACK_PRESS_WAIT_TIME)  // 2초간 뒤로가기 버튼을 두 번 눌러야 종료되도록 설정
+        }, BACK_PRESS_WAIT_TIME)
 
     }
 
     companion object{
+
         private const val BACK_PRESS_EXIT_GUIDE = "한번 더 누르면 앱이 종료됩니다."
-        private const val BACK_PRESS_WAIT_TIME : Long = 2000
+        private const val NO_INVALID = "유효하지 않습니다."
+        private const val BACK_PRESS_WAIT_TIME : Long = 2000 //2초
+
     }
-
-
-
-
 
 }

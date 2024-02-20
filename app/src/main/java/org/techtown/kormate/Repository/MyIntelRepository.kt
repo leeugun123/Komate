@@ -7,7 +7,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import org.techtown.kormate.Constant.FirebasePathConstant
 import org.techtown.kormate.Constant.FirebasePathConstant.USER_INTEL_PATH
@@ -20,13 +23,23 @@ import kotlin.coroutines.suspendCoroutine
 class MyIntelRepository(application: Application) {
 
     private val myIntelRef = FirebaseDatabase.getInstance()
-        .reference.child(USER_INTEL_PATH)
-        .child(userId)
+        .reference.child(USER_INTEL_PATH).child(userId)
+
+    private val userIntelMutableLiveData = MutableLiveData<UserIntel>()
 
 
     fun repoFetchUserIntel() : LiveData<UserIntel> {
 
-        val userIntelMutableLiveData = MutableLiveData<UserIntel>()
+        CoroutineScope(Dispatchers.IO).launch{
+            if(checkDataExistence())
+                getUserId()
+        }
+
+        return userIntelMutableLiveData
+
+    }
+
+    private fun getUserId() {
 
         myIntelRef.addValueEventListener(object : ValueEventListener {
 
@@ -36,10 +49,7 @@ class MyIntelRepository(application: Application) {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
-
         })
-
-        return userIntelMutableLiveData
 
     }
 
@@ -58,6 +68,14 @@ class MyIntelRepository(application: Application) {
         }
 
     }
+
+    suspend fun checkDataExistence() =
+        try {
+            FirebaseDatabase.getInstance().
+            reference.child(USER_INTEL_PATH)
+                .child(userId).get().await().exists()
+        }
+        catch (e: Exception) { false }
 
 
 

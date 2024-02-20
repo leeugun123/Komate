@@ -22,74 +22,102 @@ import org.techtown.kormate.Model.UserKakaoIntel.userNickName
 import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
 import org.techtown.kormate.UI.Activity.UserInfoRegister.NationActivity
 import org.techtown.kormate.UI.ViewModel.KakaoViewModel
+import org.techtown.kormate.UI.ViewModel.MyIntelViewModel
 import org.techtown.kormate.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
     private val kakaoViewModel by lazy { ViewModelProvider(this)[KakaoViewModel::class.java] }
+    private val myIntelViewModel by lazy {ViewModelProvider(this)[MyIntelViewModel::class.java]}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        //kakaoLoginProcess()
-        /*
-        val callback : (OAuthToken?, Throwable?) -> Unit = { token, error ->
-
-            Log.e("TAG","에러 출력  : " + error!!.message.toString())
+        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
 
             if (error != null) {
-                lifecycleScope.launch(Dispatchers.Main) { handleKakaoLoginError(error) }
+                Toast.makeText(this, "카카오 로그인 실패", Toast.LENGTH_SHORT).show()
+            }
+            else if (tokenInfo != null) {
+                kakaoLoginSuccess()
+            }
+
+        }
+
+        val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+            if (error != null) {
+                when {
+                    error.toString() == AuthErrorCause.AccessDenied.toString() -> {
+                        Toast.makeText(this, "접근이 거부 됨(동의 취소)", Toast.LENGTH_SHORT).show()
+                    }
+                    error.toString() == AuthErrorCause.InvalidClient.toString() -> {
+                        Toast.makeText(this, "유효하지 않은 앱", Toast.LENGTH_SHORT).show()
+                    }
+                    error.toString() == AuthErrorCause.InvalidGrant.toString() -> {
+                        Toast.makeText(this, "인증 수단이 유효하지 않아 인증할 수 없는 상태", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    error.toString() == AuthErrorCause.InvalidRequest.toString() -> {
+                        Toast.makeText(this, "요청 파라미터 오류", Toast.LENGTH_SHORT).show()
+                    }
+                    error.toString() == AuthErrorCause.InvalidScope.toString() -> {
+                        Toast.makeText(this, "유효하지 않은 scope ID", Toast.LENGTH_SHORT).show()
+                    }
+                    error.toString() == AuthErrorCause.Misconfigured.toString() -> {
+                        Toast.makeText(this, "설정이 올바르지 않음(android key hash)", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    error.toString() == AuthErrorCause.ServerError.toString() -> {
+                        Toast.makeText(this, "서버 내부 에러", Toast.LENGTH_SHORT).show()
+                    }
+                    error.toString() == AuthErrorCause.Unauthorized.toString() -> {
+                        Toast.makeText(this, "앱이 요청 권한이 없음", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> { // Unknown
+                        Toast.makeText(this, "기타 에러", Toast.LENGTH_SHORT).show()
+                    }
+
+
+                }
             } else if (token != null) {
                 kakaoLoginSuccess()
             }
+
+
         }
-*/
+
+
         binding.kakaoLogin.setOnClickListener {
 
-            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+            if(UserApiClient.instance.isKakaoTalkLoginAvailable(this)){
+                UserApiClient.instance.loginWithKakaoTalk(this,callback = callback)
+            }
+            else{
+                UserApiClient.instance.loginWithKakaoAccount(this,callback = callback)
+            }
+
+            kakaoLoginSuccess()
+
+        }
+
+
+    }
+
+    private fun kakaoLoginSuccess(){
+
+        bindingKakaoInfo()
+        Toast.makeText(this, KAKAO_ACCESS_SUCCESS, Toast.LENGTH_SHORT).show()
+        myIntelViewModel.checkDataExist()
+
+        myIntelViewModel.dataExistLiveData.observe(this){exist ->
+            startActivity(decideIntent(exist))
             finish()
-
-        /*
-            lifecycleScope.launch(Dispatchers.IO) {
-                if (UserApiClient.instance.isKakaoTalkLoginAvailable(this@LoginActivity)) {
-                    UserApiClient.instance.loginWithKakaoTalk(this@LoginActivity, callback = callback)
-                } else {
-                    UserApiClient.instance.loginWithKakaoAccount(this@LoginActivity, callback = callback)
-                }
-            }
-        */
-
-
-        }
-
-
-    }
-
-    private fun handleKakaoLoginError(error: Throwable): () -> Unit = {
-
-        when {
-
-            error.toString() == AuthErrorCause.AccessDenied.toString() -> {
-                Toast.makeText(this@LoginActivity, ACCESS_DENIED, Toast.LENGTH_SHORT).show()
-            }
-            error.toString() == AuthErrorCause.InvalidClient.toString() -> {
-                Toast.makeText(this@LoginActivity, INVALID_ERROR, Toast.LENGTH_SHORT).show()
-            }
-            else -> {
-                Toast.makeText(this@LoginActivity, OTHER_ERROR , Toast.LENGTH_SHORT).show()
-            }
         }
 
     }
 
-    private fun kakaoLoginProcess() {
-
-       bindingKakaoInfo()
-        decideLogin()
-
-    }
 
     private fun bindingKakaoInfo() {
 
@@ -105,49 +133,14 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private fun decideLogin(){
-
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            if (error != null) {
-                Log.e("TAG" , "에러 " + error.toString())
-                Toast.makeText(this, KAKAO_ACCESS_DENIED, Toast.LENGTH_SHORT).show()
-            } else if (tokenInfo != null) {
-                kakaoLoginSuccess()
-            }
-        }
-
-    }
 
 
-    private fun kakaoLoginSuccess(){
-        Toast.makeText(this, KAKAO_ACCESS_SUCCESS, Toast.LENGTH_SHORT).show()
 
-        lifecycleScope.launch(Dispatchers.Main) {
-            moveNextActivity()
-        }
-    }
-
-    private suspend fun moveNextActivity() {
-        startActivity(decideActivity())
-        finish()
-    }
-
-    private suspend fun decideActivity() = if(checkId(userId)){
+    private fun decideIntent(exist : Boolean) = if(exist){
         Intent(this@LoginActivity, MainActivity::class.java)
     } else
         Intent(this@LoginActivity, NationActivity::class.java)
 
-    private suspend fun checkId(userId: String) = checkDataExistence(userId)
-
-    private suspend fun checkDataExistence(userId: String) = withContext(Dispatchers.IO) {
-
-        return@withContext try {
-            FirebaseDatabase.getInstance().
-            reference.child(USER_INTEL_PATH)
-                .child(userId).get().await().exists()
-        } catch (e: Exception) { false }
-
-    }
 
     companion object{
         private const val KAKAO_ACCESS_DENIED = "카카오 로그인 실패"
