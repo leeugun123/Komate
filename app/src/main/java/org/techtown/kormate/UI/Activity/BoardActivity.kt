@@ -164,7 +164,7 @@ class BoardActivity : AppCompatActivity() {
     private fun showDeleteAlertDialog() {
 
         val builder = AlertDialog.Builder(this)
-        builder.setTitle(REMOVE_POST_COMPLETE)
+        builder.setTitle(REMOVE_POST_ASKING)
 
         builder.setPositiveButton("예") { _, _ ->
             removeBoard()
@@ -361,7 +361,8 @@ class BoardActivity : AppCompatActivity() {
 
     companion object{
         private const val NO_POST_TRY_AGAIN = "글이 없습니다. 다시 작성해주세요."
-        private const val REMOVE_POST_COMPLETE = "게시물이 삭제 되었습니다."
+        private const val REMOVE_POST_ASKING = "게시물을 삭제하시겠습니까?"
+        private const val REMOVE_POST_COMPLETE = "게시물이 삭제되었습니다."
         private const val POST_COMMENT_COMPLETE = "댓글이 등록 되었습니다."
         private const val CANCEL = "취소"
         private const val CHECK = "확인"

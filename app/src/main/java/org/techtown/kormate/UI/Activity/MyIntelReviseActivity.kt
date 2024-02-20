@@ -23,7 +23,6 @@ class MyIntelReviseActivity : AppCompatActivity() {
 
         uiSync()
 
-
         binding.backBtn.setOnClickListener {
             finish()
         }
