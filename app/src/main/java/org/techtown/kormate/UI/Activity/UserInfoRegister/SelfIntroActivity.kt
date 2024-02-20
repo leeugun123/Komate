@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Model.UserKakaoIntel.userNickName
 import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
 import org.techtown.kormate.R
@@ -67,10 +69,16 @@ class SelfIntroActivity : AppCompatActivity() {
 
     private fun checkSelfEditText() {
 
-        if(binding.selfEdittext.text.toString().isNotEmpty())
+        if(binding.selfEdittext.text.toString().isNotEmpty()){
+            selfIntroBinding()
             moveToGenderActivity()
+        }
         else
             Toast.makeText(this, SELF_INTRO_GUIDE, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun selfIntroBinding() {
+        UserIntel.selfIntro = binding.selfEdittext.text.toString()
     }
 
     private fun moveToGenderActivity() {
