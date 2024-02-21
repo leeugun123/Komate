@@ -95,16 +95,25 @@ class BoardEditActivity : AppCompatActivity() {
 
             }
 
-            receiveIntent.img.forEach {imageUrl ->
+            Log.e("TAG",receiveIntent.img.size.toString() + "사진 개수")
 
-                if (!imageUrl.startsWith("https"))
-                    uploadImage(imageUrl.toUri())
-                else {
-                    imageFileNames.add(imageUrl)
-                    checkUploadCompletion(imageFileNames.size, receiveIntent.img.size, post, imageFileNames, progressBar)
+            if(receiveIntent.img.size == 0){
+                upload(post, imageFileNames)
+            }else{
+                receiveIntent.img.forEach {imageUrl ->
+
+                    if (!imageUrl.startsWith("https"))
+                        uploadImage(imageUrl.toUri())
+                    else {
+                        imageFileNames.add(imageUrl)
+                        checkUploadCompletion(imageFileNames.size, receiveIntent.img.size, post, imageFileNames, progressBar)
+                    }
+
                 }
 
             }
+
+
 
         }
 
@@ -119,8 +128,6 @@ class BoardEditActivity : AppCompatActivity() {
 
 
     }
-
-
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
@@ -200,7 +207,7 @@ class BoardEditActivity : AppCompatActivity() {
     private fun restoreComment(){
 
         BoardActivity.commentList.forEach { comment ->
-            commentViewModel.uploadComment(comment,BoardData.boardPostId)
+            commentViewModel.uploadComment(comment , BoardData.boardPostId)
         }
 
     }

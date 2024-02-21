@@ -44,7 +44,6 @@ class BoardActivity : AppCompatActivity() {
     private val commentRecyclerView by lazy { binding.commentRecyclerView }
 
     private val binding by lazy { ActivityBoardBinding.inflate(layoutInflater) }
-
     private val receiveData by lazy { intent.getParcelableExtra<BoardDetail>(POST_PATH_INTENT)!! }
 
 
