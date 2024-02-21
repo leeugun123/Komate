@@ -130,9 +130,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun bindingKakaoInfo() {
 
-        lifecycleScope.launch(Dispatchers.Main){
-            kakaoViewModel.loadUserData()
-        }
+
+        kakaoViewModel.loadUserData()
+
 
         kakaoViewModel.userKakaoIntel.observe(this){
             userNickName = it.userNickName
