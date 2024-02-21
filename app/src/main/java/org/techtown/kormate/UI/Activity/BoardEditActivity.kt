@@ -42,13 +42,13 @@ class BoardEditActivity : AppCompatActivity() {
     private val boardViewModel by lazy { ViewModelProvider(this)[BoardViewModel::class.java] }
     private val commentViewModel by lazy {ViewModelProvider(this)[CommentViewModel::class.java]}
     private lateinit var receiveIntent : BoardDetail
+    private lateinit var goalImg : MutableList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         syncTitleUi()
         getIntentHandling()
-
 
         binding.backBtn.setOnClickListener { finish() }
 
@@ -61,7 +61,7 @@ class BoardEditActivity : AppCompatActivity() {
 
             val post = binding.post.text.toString()
 
-            if (post.isEmpty() && receiveIntent.img.isEmpty()) {
+            if (post.isEmpty() && goalImg.isEmpty()) {
                 showToast(NO_CONTENT_INPUT_CONTENT_MESSAGE)
                 return@setOnClickListener
             }
@@ -85,7 +85,7 @@ class BoardEditActivity : AppCompatActivity() {
                         imageRef.downloadUrl
                             .addOnSuccessListener { uri ->
                                 imageFileNames.add(uri.toString())
-                                checkUploadCompletion(imageFileNames.size, receiveIntent.img.size, post, imageFileNames, progressBar)
+                                checkUploadCompletion(imageFileNames.size, goalImg.size, post, imageFileNames, progressBar)
                             }
                     }
                     .addOnFailureListener { e ->
@@ -95,18 +95,17 @@ class BoardEditActivity : AppCompatActivity() {
 
             }
 
-            Log.e("TAG",receiveIntent.img.size.toString() + "사진 개수")
 
-            if(receiveIntent.img.size == 0){
-                upload(post, imageFileNames)
+            if(goalImg.size == 0){
+                upload(post, imageFileNames) //글만 있는 경우
             }else{
-                receiveIntent.img.forEach {imageUrl ->
+                goalImg.forEach {imageUrl ->
 
                     if (!imageUrl.startsWith("https"))
-                        uploadImage(imageUrl.toUri())
+                        uploadImage(imageUrl.toUri()) //upload 되지 않는 사진인 경우 파이어베이스를 거침
                     else {
                         imageFileNames.add(imageUrl)
-                        checkUploadCompletion(imageFileNames.size, receiveIntent.img.size, post, imageFileNames, progressBar)
+                        checkUploadCompletion(imageFileNames.size, goalImg.size, post, imageFileNames, progressBar)
                     }
 
                 }
@@ -163,10 +162,14 @@ class BoardEditActivity : AppCompatActivity() {
     private fun getCurrentTimestamp() = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
 
     private fun checkUploadCompletion(currentSize: Int, totalSize: Int, post: String, imageFileNames: MutableList<String>, progressBar: ProgressDialog) {
+
+        Log.e("TAG", "$currentSize   $totalSize")
+
         if (currentSize == totalSize) {
             upload(post, imageFileNames)
             progressBar.dismiss()
         }
+
     }
 
     private fun getIntentHandling() {
@@ -189,6 +192,7 @@ class BoardEditActivity : AppCompatActivity() {
 
     private fun receiveIntentInit() {
         receiveIntent = intent.getParcelableExtra(POST_PATH_INTENT)!!
+        goalImg = receiveIntent.img
     }
 
     private fun syncTitleUi() {
@@ -254,7 +258,7 @@ class BoardEditActivity : AppCompatActivity() {
 
         if (requestCode == REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
             addUriImg(data)
-            handleSelectedImages(receiveIntent.img, binding)
+            handleSelectedImages(goalImg, binding)
         }
 
     }
@@ -264,13 +268,13 @@ class BoardEditActivity : AppCompatActivity() {
         data?.clipData?.let { clipData ->
             for (i in 0 until clipData.itemCount) {
 
-                if (receiveIntent.img.size == 3) {
+                if (goalImg.size == 3) {
                     Toast.makeText(this, MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE, Toast.LENGTH_SHORT).show()
                     break
                 }
 
                 val getUri = clipData.getItemAt(i).uri.toString()
-                receiveIntent.img.add(getUri)
+                goalImg.add(getUri)
 
             }
         }
