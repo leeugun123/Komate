@@ -13,9 +13,9 @@ import org.techtown.kormate.Repository.KakaoRepository
 
 class KakaoViewModel(application: Application) : AndroidViewModel(application) {
 
-    private var _userKakaoIntel = MutableLiveData<UserKakaoIntel>()
-    val userKakaoIntel : LiveData<UserKakaoIntel>
-        get() = _userKakaoIntel
+    private var _KakaoIntelDownloadSuccess = MutableLiveData<Boolean>()
+    val KakaoIntelDownloadSuccess : LiveData<Boolean>
+        get() = _KakaoIntelDownloadSuccess
 
     private var kakaoRepository : KakaoRepository
 
@@ -30,7 +30,7 @@ class KakaoViewModel(application: Application) : AndroidViewModel(application) {
             val responseData = kakaoRepository.repoLoadUserData()
 
             withContext(Dispatchers.Main){
-                _userKakaoIntel.value = responseData
+                _KakaoIntelDownloadSuccess.value = responseData
             }
 
         }

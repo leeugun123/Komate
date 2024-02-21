@@ -3,20 +3,11 @@ package org.techtown.kormate.UI.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import com.google.firebase.database.FirebaseDatabase
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.user.UserApiClient
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
-import org.techtown.kormate.Constant.FirebasePathConstant.USER_INTEL_PATH
-import org.techtown.kormate.Model.UserKakaoIntel
 import org.techtown.kormate.Model.UserKakaoIntel.userId
 import org.techtown.kormate.Model.UserKakaoIntel.userNickName
 import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
@@ -130,19 +121,17 @@ class LoginActivity : AppCompatActivity() {
 
     private fun bindingKakaoInfo() {
 
-
         kakaoViewModel.loadUserData()
 
-
-        kakaoViewModel.userKakaoIntel.observe(this){
-            userNickName = it.userNickName
-            userProfileImg = it.userProfileImg
-            userId = it.userId
+        kakaoViewModel.KakaoIntelDownloadSuccess.observe(this){success ->
+            if(success)
+                Toast.makeText(this,"카카오 데이터 바인딩 성공",Toast.LENGTH_SHORT).show()
+            else
+                Toast.makeText(this,"카카오 데이터 바인딩 실패",Toast.LENGTH_SHORT).show()
         }
 
+
     }
-
-
 
 
     private fun decideIntent(exist : Boolean) = if(exist){
