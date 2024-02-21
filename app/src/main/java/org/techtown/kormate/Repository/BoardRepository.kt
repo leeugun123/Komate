@@ -4,6 +4,7 @@ import android.app.Application
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import org.techtown.kormate.Constant.FirebasePathConstant
 import org.techtown.kormate.Constant.FirebasePathConstant.POSTS_PATH
@@ -17,57 +18,29 @@ class BoardRepository(application: Application) {
     private val ref = Firebase.database.reference
     private val postRef = ref.child(POSTS_PATH)
 
-    suspend fun repoUploadPost(boardDetail: BoardDetail) = withContext(Dispatchers.IO) {
+    suspend fun repoUploadPost(boardDetail: BoardDetail) : Boolean {
 
-        suspendCoroutine { continuation ->
-
-            postRef.child(boardDetail.postId)
-                .setValue(boardDetail)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful)
-                        continuation.resume(true)
-                    else
-                        continuation.resume(false)
-                }
-
-        }
+        val job = postRef.child(boardDetail.postId).setValue(boardDetail)
+        job.await()
+        return job.isSuccessful
 
     }
 
-    suspend fun repoRemovePost(postId: String) = withContext(Dispatchers.IO) {
+    suspend fun repoRemovePost(postId: String) : Boolean {
 
-        suspendCoroutine { continuation ->
-
-            postRef.child(postId)
-                .removeValue()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful)
-                        continuation.resume(true)
-                    else
-                        continuation.resume(false)
-                }
-
-        }
+        val job = postRef.child(postId).removeValue()
+        job.await()
+        return job.isSuccessful
 
     }
 
-    suspend fun repoBoardReport(reportContent : Report) = withContext(Dispatchers.IO) {
+    suspend fun repoBoardReport(reportContent : Report) : Boolean {
 
-        suspendCoroutine { continuation ->
+        val reportUid = ref.push().key.toString()
+        val job =  ref.child(FirebasePathConstant.POST_REPORT_PATH).child(reportUid).setValue(reportContent)
+        job.await()
 
-            val reportUid = ref.push().key.toString()
-
-            ref.child(FirebasePathConstant.POST_REPORT_PATH)
-                .child(reportUid)
-                .setValue(reportContent)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful)
-                        continuation.resume(true)
-                    else
-                        continuation.resume(false)
-                }
-
-        }
+        return job.isSuccessful
 
     }
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.Report
 import org.techtown.kormate.Repository.BoardRepository
@@ -36,23 +37,42 @@ class BoardViewModel(application: Application) : AndroidViewModel(application) {
 
     fun uploadPost(boardDetail : BoardDetail) {
 
-        viewModelScope.launch (Dispatchers.Main){
-            _boardPostSuccess.value = boardRepository.repoUploadPost(boardDetail)
+        viewModelScope.launch (Dispatchers.IO){
+
+            val responseData = boardRepository.repoUploadPost(boardDetail)
+
+            withContext(Dispatchers.Main){
+                _boardPostSuccess.value = responseData
+            }
+
         }
 
     }
 
     fun removePost(postId : String){
 
-        viewModelScope.launch (Dispatchers.Main){
-            _boardRemoveSuccess.value = boardRepository.repoRemovePost(postId)
+        viewModelScope.launch (Dispatchers.IO){
+
+            val responseData = boardRepository.repoRemovePost(postId)
+
+            withContext(Dispatchers.Main){
+                _boardRemoveSuccess.value = responseData
+            }
+
         }
+
     }
 
     fun reportPost(report : Report){
 
-        viewModelScope.launch (Dispatchers.Main){
-            _boardReportSuccess.value = boardRepository.repoBoardReport(report)
+        viewModelScope.launch (Dispatchers.IO){
+
+            val responseData = boardRepository.repoBoardReport(report)
+
+            withContext(Dispatchers.Main){
+                _boardReportSuccess.value = responseData
+            }
+
         }
 
     }
