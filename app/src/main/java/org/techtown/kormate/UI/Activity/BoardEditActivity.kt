@@ -8,6 +8,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +30,7 @@ import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.Comment
 import org.techtown.kormate.UI.ViewModel.BoardViewModel
 import org.techtown.kormate.UI.ViewModel.CommentViewModel
+import org.techtown.kormate.Util.BoardData
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,11 +39,9 @@ import java.util.*
 class BoardEditActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityBoardPostBinding.inflate(layoutInflater) }
-    private val commentViewModel by lazy { ViewModelProvider(this)[CommentViewModel::class.java] }
     private val boardViewModel by lazy { ViewModelProvider(this)[BoardViewModel::class.java] }
+    private val commentViewModel by lazy {ViewModelProvider(this)[CommentViewModel::class.java]}
     private val postsRef by lazy { Firebase.database.reference.child(POSTS_PATH)}
-
-    private lateinit var commentList : MutableList<Comment>
     private lateinit var receiveIntent : BoardDetail
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,10 +50,6 @@ class BoardEditActivity : AppCompatActivity() {
         syncTitleUi()
         getIntentHandling()
 
-
-        commentViewModel.commentList.observe(this) { commentList ->
-            this.commentList = commentList as MutableList<Comment>
-        }//이전 댓글들 전부 불러와 동기화
 
         binding.backBtn.setOnClickListener { finish() }
 
@@ -205,11 +201,8 @@ class BoardEditActivity : AppCompatActivity() {
 
     private fun restoreComment(){
 
-        commentList.forEach { comment ->
-            postsRef.child(receiveIntent.postId)
-                .child(COMMENT_PATH)
-                .child(comment.id)
-                .setValue(comment)
+        BoardActivity.commentList.forEach { comment ->
+            commentViewModel.uploadComment(comment,BoardData.boardPostId)
         }
 
     }

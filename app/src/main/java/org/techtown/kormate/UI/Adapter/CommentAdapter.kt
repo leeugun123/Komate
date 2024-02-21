@@ -60,15 +60,12 @@ class CommentAdapter(private val comments: List<Comment>, private var userId : S
                             val databaseReference = FirebaseDatabase.getInstance().reference.child("posts")
                                 .child(postId).child("comments")
 
-                            databaseReference.child(comment.id.toString()).removeValue()
+                            databaseReference.child(comment.id).removeValue()
 
                             Toast.makeText(binding.root.context, " 댓글이 삭제되었습니다", Toast.LENGTH_SHORT).show()
 
                         }
-                        builder.setNegativeButton("아니오") { dialog, which ->
-
-
-                        }
+                        builder.setNegativeButton("아니오") { dialog, which -> }
 
                         builder.create().show()
 

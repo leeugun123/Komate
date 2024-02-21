@@ -49,8 +49,6 @@ class BoardActivity : AppCompatActivity() {
     private val postId by lazy { tempData.postId }
     private val userId by lazy { tempData.userId }
 
-    private var commentSize = 0
-    private var commentList = listOf<Comment>()
     private val REQUEST_CODE_EDIT_ACTIVITY = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -262,7 +260,6 @@ class BoardActivity : AppCompatActivity() {
     }
 
     private fun commentAdapterSync(list : List<Comment>) {
-        Log.e("TAG", list.size.toString() + "사이즈")
         commentList = list
         commentSize = commentList.size
         commentRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -367,6 +364,9 @@ class BoardActivity : AppCompatActivity() {
         private const val CANCEL = "취소"
         private const val CHECK = "확인"
         private const val REPORT_POST = "게시물이 신고 되었습니다."
+
+        var commentSize = 0
+        var commentList = listOf<Comment>()
     }
 
 
