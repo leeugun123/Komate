@@ -6,6 +6,7 @@
     android:layout_marginLeft="5dp"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:background="@color/white"
     >
 
     <ImageView
@@ -57,6 +58,7 @@
                 android:layout_height="25dp"
                 android:src="@drawable/ic_baseline_clear_24"
                 android:layout_gravity="right"
+                android:background="@color/white"
                 />
 
 
