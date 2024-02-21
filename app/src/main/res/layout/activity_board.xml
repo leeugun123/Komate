@@ -191,7 +191,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
                     android:hint="댓글 작성하기..."
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="10dp"
                     android:textColorHint="#2196F3"
                     android:background="@drawable/edittext_border"
                     />
