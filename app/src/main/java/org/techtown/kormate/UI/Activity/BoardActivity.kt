@@ -263,7 +263,7 @@ class BoardActivity : AppCompatActivity() {
         commentList = list
         commentSize = commentList.size
         commentRecyclerView.layoutManager = LinearLayoutManager(this)
-        commentRecyclerView.adapter = CommentAdapter(commentList, userId.toString(), postId)
+        commentRecyclerView.adapter = CommentAdapter(commentList, userId.toString(), postId , commentViewModel)
         commentRecyclerView.scrollToPosition(commentList.size - 1)
     }
 

@@ -6,4 +6,5 @@ object FirebasePathConstant {
     const val POST_REPORT_PATH = "postReports"
     const val POSTS_PATH = "posts"
     const val COMMENT_PATH = "comments"
+    const val COMMENT_REPORT_PATH = "commentsReports"
 }

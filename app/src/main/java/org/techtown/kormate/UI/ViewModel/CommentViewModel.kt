@@ -1,7 +1,6 @@
 package org.techtown.kormate.UI.ViewModel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,17 +9,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.techtown.kormate.Model.Comment
+import org.techtown.kormate.Model.Report
 import org.techtown.kormate.Repository.CommentRepository
-import org.techtown.kormate.UI.Activity.BoardActivity
 
 class CommentViewModel(application: Application) : AndroidViewModel(application) {
 
-   var commentList : LiveData<List<Comment>>
+    var commentList : LiveData<List<Comment>>
 
     private val _postCommentSuccess = MutableLiveData<Boolean>()
 
     val postCommentSuccess : LiveData<Boolean>
         get() = _postCommentSuccess
+
+    private val _reportCommentSuccess = MutableLiveData<Boolean>()
+
+    val reportCommentSuccess : LiveData<Boolean>
+        get() = _reportCommentSuccess
+
 
     private var commentRepository : CommentRepository
 
@@ -33,13 +38,28 @@ class CommentViewModel(application: Application) : AndroidViewModel(application)
 
         viewModelScope.launch (Dispatchers.IO){
 
-            val responseData = commentRepository.repoUploadComment(comment,postId)
+            val responseData = commentRepository.uploadComment(comment,postId)
 
             withContext(Dispatchers.Main){
                 _postCommentSuccess.value = responseData
             }
 
         }
+
+    }
+
+    fun reportComment(commentReport : Report){
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val responseData = commentRepository.reportComment(commentReport)
+
+            withContext(Dispatchers.Main){
+                _reportCommentSuccess.value = responseData
+            }
+
+        }
+
 
     }
 

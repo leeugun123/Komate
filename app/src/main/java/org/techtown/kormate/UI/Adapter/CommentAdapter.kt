@@ -85,6 +85,7 @@ class CommentAdapter(
             val checkedReasons = booleanArrayOf(false, false, false, false, false)
 
             val builder = AlertDialog.Builder(binding.root.context)
+
             builder.setTitle("신고 사유를 선택하세요")
             builder.setMultiChoiceItems(reasons, checkedReasons) { _, which, isChecked ->
                 checkedReasons[which] = isChecked
@@ -112,14 +113,11 @@ class CommentAdapter(
                 }
             }
 
-            // 선택한 신고 사유들에 대한 처리 진행
-            Firebase.database.reference.child("commentsReports")
-                .child(Firebase.database.reference.push().key.toString())
-                .setValue(Report(userId, selectedReasons, comment.userId.toString(), comment.id))
-
-            Toast.makeText(binding.root.context, "신고가 접수 되었습니다.", Toast.LENGTH_SHORT).show()
+            val report = Report(userId, selectedReasons, comment.userId.toString(), comment.id)
+            commentViewModel.reportComment(report)
 
         }
+
 
     }
 

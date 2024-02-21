@@ -41,7 +41,6 @@ class BoardEditActivity : AppCompatActivity() {
     private val binding by lazy { ActivityBoardPostBinding.inflate(layoutInflater) }
     private val boardViewModel by lazy { ViewModelProvider(this)[BoardViewModel::class.java] }
     private val commentViewModel by lazy {ViewModelProvider(this)[CommentViewModel::class.java]}
-    private val postsRef by lazy { Firebase.database.reference.child(POSTS_PATH)}
     private lateinit var receiveIntent : BoardDetail
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +72,6 @@ class BoardEditActivity : AppCompatActivity() {
             }
 
             val progressBar = createProgressBar()
-
             val storageRef = FirebaseStorage.getInstance().reference
             val imageFileNames = mutableListOf<String>()
 
@@ -195,7 +193,7 @@ class BoardEditActivity : AppCompatActivity() {
 
         setResult(Activity.RESULT_OK,  Intent())
         finish()
-        Toast.makeText(this, REVISE_POST_COMPLETE_MESSAGE, Toast.LENGTH_SHORT).show()
+        showToast(REVISE_POST_COMPLETE_MESSAGE)
 
     }
 
