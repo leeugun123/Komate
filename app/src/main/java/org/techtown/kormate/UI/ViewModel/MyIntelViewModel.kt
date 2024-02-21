@@ -34,8 +34,14 @@ class MyIntelViewModel(application: Application) : AndroidViewModel(application)
 
     fun uploadUserIntel(userIntel: UserIntel){
 
-        viewModelScope.launch (Dispatchers.Main){
-            _postSuccessLiveData.value = myIntelRepository.repoUploadUserIntel(userIntel)
+        viewModelScope.launch (Dispatchers.IO){
+
+            val responseData = myIntelRepository.repoUploadUserIntel(userIntel)
+
+            withContext(Dispatchers.Main){
+                _postSuccessLiveData.value = responseData
+            }
+
         }
 
     }

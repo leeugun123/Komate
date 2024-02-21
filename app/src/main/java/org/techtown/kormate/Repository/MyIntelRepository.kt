@@ -53,27 +53,19 @@ class MyIntelRepository(application: Application) {
 
     }
 
-    suspend fun repoUploadUserIntel(userIntel: UserIntel) = withContext(Dispatchers.IO){
+    suspend fun repoUploadUserIntel(userIntel: UserIntel) : Boolean {
 
-        suspendCoroutine { continuation ->
-
-            myIntelRef.setValue(userIntel)
-                .addOnCompleteListener {task ->
-                    if(task.isSuccessful)
-                        continuation.resume(true)
-                    else
-                        continuation.resume(false)
-                }
-
-        }
+        val job = myIntelRef.setValue(userIntel)
+        job.await()
+        return job.isSuccessful
 
     }
 
+
+
     suspend fun checkDataExistence() =
         try {
-            FirebaseDatabase.getInstance().
-            reference.child(USER_INTEL_PATH)
-                .child(userId).get().await().exists()
+            myIntelRef.get().await().exists()
         }
         catch (e: Exception) { false }
 
