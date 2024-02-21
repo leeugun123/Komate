@@ -29,6 +29,7 @@ import org.techtown.kormate.Util.CurrentDateTime
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.Comment
 import org.techtown.kormate.Model.Report
+import org.techtown.kormate.Model.UserKakaoIntel
 import org.techtown.kormate.UI.ViewModel.CommentViewModel
 import org.techtown.kormate.R
 import org.techtown.kormate.UI.ViewModel.BoardViewModel
@@ -44,10 +45,8 @@ class BoardActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityBoardBinding.inflate(layoutInflater) }
 
-    private val receiveData by lazy { intent.getParcelableExtra<BoardDetail>(POST_PATH_INTENT) }
-    private val tempData by lazy { receiveData!!}
-    private val postId by lazy { tempData.postId }
-    private val userId by lazy { tempData.userId }
+    private val receiveData by lazy { intent.getParcelableExtra<BoardDetail>(POST_PATH_INTENT)!! }
+
 
     private val REQUEST_CODE_EDIT_ACTIVITY = 2
 
@@ -98,7 +97,7 @@ class BoardActivity : AppCompatActivity() {
     }
 
     private fun boardPostIdSync() {
-        BoardData.boardPostId = postId
+        BoardData.boardPostId = receiveData.postId
     }
 
     private fun handleComment() {
@@ -147,7 +146,7 @@ class BoardActivity : AppCompatActivity() {
     }
 
     private fun selectPopupMenu(popupMenu: PopupMenu) {
-        if(userId != tempData.userId)
+        if(UserKakaoIntel.userId != receiveData.userId.toString())
             popupMenu.menuInflater.inflate(R.menu.post_report,popupMenu.menu)
         else
             popupMenu.menuInflater.inflate(R.menu.post_menu, popupMenu.menu)
@@ -176,7 +175,7 @@ class BoardActivity : AppCompatActivity() {
     private fun removeBoard() {
 
         lifecycleScope.launch(Dispatchers.Main){
-            boardViewModel.removePost(postId)
+            boardViewModel.removePost(receiveData.postId)
         }
     }
 
@@ -187,10 +186,10 @@ class BoardActivity : AppCompatActivity() {
 
     private fun uploadComment() {
 
-        val uploadComment = Comment("", tempData.userId,tempData.userName , tempData.userImg
+        val uploadComment = Comment("", UserKakaoIntel.userId.toLong() ,UserKakaoIntel.userNickName , UserKakaoIntel.userProfileImg
             ,binding.reply.text.toString() , CurrentDateTime.getCommentTime())
 
-        commentViewModel.uploadComment(uploadComment , postId)
+        commentViewModel.uploadComment(uploadComment , receiveData.postId)
 
     }
 
@@ -236,7 +235,7 @@ class BoardActivity : AppCompatActivity() {
 
     private fun userReport(selectedReasons : MutableList<String>) {
 
-        val reportContent = Report(userId.toString() , selectedReasons , tempData.userId.toString() , tempData.postId)
+        val reportContent = Report(UserKakaoIntel.userId , selectedReasons , receiveData.userId.toString() , receiveData.postId)
         boardViewModel.reportPost(reportContent)
     }
 
@@ -254,7 +253,7 @@ class BoardActivity : AppCompatActivity() {
 
     private fun commentProfileImgBinding() {
         Glide.with(this)
-            .load(tempData.userImg)
+            .load(UserKakaoIntel.userProfileImg)
             .circleCrop()
             .into(binding.replyImg)
     }
@@ -263,18 +262,18 @@ class BoardActivity : AppCompatActivity() {
         commentList = list
         commentSize = commentList.size
         commentRecyclerView.layoutManager = LinearLayoutManager(this)
-        commentRecyclerView.adapter = CommentAdapter(commentList, userId.toString(), postId , commentViewModel)
+        commentRecyclerView.adapter = CommentAdapter(commentList, UserKakaoIntel.userId , receiveData.postId , commentViewModel)
         commentRecyclerView.scrollToPosition(commentList.size - 1)
     }
 
     private fun postUiSync() {
-        binding.postText.text = tempData.post
+        binding.postText.text = receiveData.post
         imgUiSync()
     }
 
     private fun imgUiSync() {
 
-        if(tempData.img.size == 0)
+        if(receiveData.img.size == 0)
             removeImgView()
         else{
             imgDataSync()
@@ -287,10 +286,10 @@ class BoardActivity : AppCompatActivity() {
 
         val imageViewList = listOf(binding.uploadImageView1, binding.uploadImageView2, binding.uploadImageView3)
 
-        for (i in tempData.img.indices) {
+        for (i in receiveData.img.indices) {
 
             Glide.with(this)
-                .load(tempData.img[i])
+                .load(receiveData.img[i])
                 .override(1100,1000)
                 .into(imageViewList[i])
 
@@ -298,7 +297,7 @@ class BoardActivity : AppCompatActivity() {
 
         }//사용 하는 imageView 보여 주기
 
-        for (i in tempData.img.size until imageViewList.size) {
+        for (i in receiveData.img.size until imageViewList.size) {
             imageViewList[i].visibility = View.GONE
         }//사용 하지 않는 imageView 제거
     }
@@ -306,15 +305,15 @@ class BoardActivity : AppCompatActivity() {
     private fun clickImageView() {
 
         binding.uploadImageView1.setOnClickListener {
-            tossIntent(tempData.img.size,1, tempData.img[0])
+            tossIntent(receiveData.img.size,1, receiveData.img[0])
         }
 
         binding.uploadImageView2.setOnClickListener {
-            tossIntent(tempData.img.size,2, tempData.img[1])
+            tossIntent(receiveData.img.size,2, receiveData.img[1])
         }
 
         binding.uploadImageView3.setOnClickListener {
-            tossIntent(tempData.img.size,3, tempData.img[2])
+            tossIntent(receiveData.img.size,3, receiveData.img[2])
         }
 
     }//액티비티로
@@ -339,12 +338,12 @@ class BoardActivity : AppCompatActivity() {
     private fun userInfoUiSync() {
 
         Glide.with(this)
-            .load(tempData.userImg)
+            .load(receiveData.userImg)
             .circleCrop()
             .into(binding.userImg)
 
-        binding.userName.text = tempData.userName
-        binding.dateTime.text = tempData.dateTime
+        binding.userName.text = receiveData.userName
+        binding.dateTime.text = receiveData.dateTime
 
     }
 
