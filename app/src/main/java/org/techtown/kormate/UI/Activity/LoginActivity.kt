@@ -124,10 +124,8 @@ class LoginActivity : AppCompatActivity() {
         kakaoViewModel.loadUserData()
 
         kakaoViewModel.KakaoIntelDownloadSuccess.observe(this){success ->
-            if(success)
-                Toast.makeText(this,"카카오 데이터 바인딩 성공",Toast.LENGTH_SHORT).show()
-            else
-                Toast.makeText(this,"카카오 데이터 바인딩 실패",Toast.LENGTH_SHORT).show()
+            if(!success)
+                Toast.makeText(this,KAKAO_DATA_BINDING_FAILED,Toast.LENGTH_SHORT).show()
         }
 
 
@@ -152,6 +150,7 @@ class LoginActivity : AppCompatActivity() {
         private const val SETTING_NOT_RIGHT = "설정이 올바르지 않음(android key hash)"
         private const val SERVER_INTERNAL_ERROR = "서버 내부 에러"
         private const val NOT_HAVE_REQUEST_PERMISSION = "앱이 요청 권한이 없음"
+        private const val KAKAO_DATA_BINDING_FAILED = "카카오 데이터 바인딩 실패"
     }
 
 }
