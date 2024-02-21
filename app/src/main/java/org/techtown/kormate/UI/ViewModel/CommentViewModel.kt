@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.techtown.kormate.Model.Comment
 import org.techtown.kormate.Repository.CommentRepository
 import org.techtown.kormate.UI.Activity.BoardActivity
@@ -30,9 +31,16 @@ class CommentViewModel(application: Application) : AndroidViewModel(application)
 
     fun uploadComment(comment : Comment , postId : String){
 
-        viewModelScope.launch (Dispatchers.Main){
-            _postCommentSuccess.value = commentRepository.repoUploadComment(comment,postId)
+        viewModelScope.launch (Dispatchers.IO){
+
+            val responseData = commentRepository.repoUploadComment(comment,postId)
+
+            withContext(Dispatchers.Main){
+                _postCommentSuccess.value = responseData
+            }
+
         }
+
     }
 
 

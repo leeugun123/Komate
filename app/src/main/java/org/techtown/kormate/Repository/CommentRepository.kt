@@ -10,6 +10,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import org.techtown.kormate.Constant.FirebasePathConstant
 import org.techtown.kormate.Model.BoardDetail
@@ -53,25 +54,16 @@ class CommentRepository(application: Application) {
     }
 
 
-
-
-    suspend fun repoUploadComment(comment : Comment , postId : String) = withContext(Dispatchers.IO) {
+    suspend fun repoUploadComment(comment : Comment , postId : String) : Boolean {
 
         val commentRef = ref.child(postId).child(FirebasePathConstant.COMMENT_PATH)
         val commentId = commentRef.push().key.toString()
         comment.id = commentId
 
-        suspendCoroutine { continuation ->
+        val job = commentRef.child(commentId).setValue(comment)
+        job.await()
 
-            commentRef.child(commentId)
-                    .setValue(comment)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful)
-                            continuation.resume(true)
-                        else
-                            continuation.resume(false)
-                    }
-        }
+        return job.isSuccessful
 
 
     }
