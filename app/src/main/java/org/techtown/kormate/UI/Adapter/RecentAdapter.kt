@@ -42,13 +42,15 @@ class RecentAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Ad
             .into(holder.binding.userImg)
 
         holder.itemView.setOnClickListener {
-
-            val intent = Intent(holder.itemView.context, BoardActivity::class.java)
-            intent.putExtra(POST_PATH_INTENT ,list)
-            holder.itemView.context.startActivity(intent)
-
+            moveToBoardActivity(holder , list)
         }
 
+    }
+
+    private fun moveToBoardActivity(holder : ViewHolder, list : BoardDetail) {
+        val intent = Intent(holder.itemView.context, BoardActivity::class.java)
+        intent.putExtra(POST_PATH_INTENT ,list)
+        holder.itemView.context.startActivity(intent)
     }
 
 

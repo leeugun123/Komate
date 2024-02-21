@@ -34,25 +34,32 @@ class PreviewAdapter(private val boardList : List<BoardDetail>) : RecyclerView.A
 
             binding.dateTime.text = boardDetail.dateTime
 
-            val concatPost = if(boardDetail.post.length > 105){
-                boardDetail.post.substring(0,110)+"..."
+            val concatPost = if(boardDetail.post.length > PREVIEW_TEXT_CUT_MAX_SIZE){
+                boardDetail.post.substring(PREVIEW_TEXT_CUT_START, PREVIEW_TEXT_CUT_END) + "..."
             } else
                 boardDetail.post
 
             binding.post.text = concatPost
 
             binding.root.setOnClickListener {
-
-                val intent = Intent(itemView.context, BoardActivity::class.java)
-                intent.putExtra("postIntel",boardDetail)
-                itemView.context.startActivity(intent)
-
+                moveToBoardActivity(boardDetail)
             }
 
         }
 
+        private fun moveToBoardActivity(boardDetail: BoardDetail) {
+            val intent = Intent(itemView.context, BoardActivity::class.java)
+            intent.putExtra("postIntel",boardDetail)
+            itemView.context.startActivity(intent)
+        }
 
 
+    }
+
+    companion object{
+        private const val PREVIEW_TEXT_CUT_START = 0
+        private const val PREVIEW_TEXT_CUT_END = 110
+        private const val PREVIEW_TEXT_CUT_MAX_SIZE = 105
     }
 
 
