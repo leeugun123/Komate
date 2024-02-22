@@ -3,6 +3,7 @@ package org.techtown.kormate.UI.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import org.techtown.kormate.Model.UserIntel
@@ -14,7 +15,7 @@ import org.techtown.kormate.databinding.ActivityReviseBinding
 class MyIntelReviseActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityReviseBinding.inflate(layoutInflater) }
-    private val myIntelViewModel by lazy { ViewModelProvider(this)[MyIntelViewModel::class.java] }
+    private val myIntelViewModel : MyIntelViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 

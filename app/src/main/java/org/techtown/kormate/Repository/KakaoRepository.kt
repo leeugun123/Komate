@@ -11,7 +11,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class KakaoRepository(application : Application) {
+class KakaoRepository() {
 
     suspend fun repoLoadUserData(): Boolean {
 

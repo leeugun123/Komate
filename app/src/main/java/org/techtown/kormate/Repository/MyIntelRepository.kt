@@ -20,7 +20,7 @@ import org.techtown.kormate.Model.UserKakaoIntel.userId
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class MyIntelRepository(application: Application) {
+class MyIntelRepository() {
 
     private val myIntelRef = FirebaseDatabase.getInstance()
         .reference.child(USER_INTEL_PATH).child(userId)

@@ -14,7 +14,7 @@ import org.techtown.kormate.Model.Comment
 import org.techtown.kormate.Model.Report
 import org.techtown.kormate.Util.BoardData
 
-class CommentRepository(application: Application) {
+class CommentRepository() {
 
 
     private val ref = Firebase.database

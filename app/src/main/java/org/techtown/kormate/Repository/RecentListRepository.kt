@@ -13,7 +13,7 @@ import org.techtown.kormate.Constant.FirebasePathConstant
 import org.techtown.kormate.Model.BoardDetail
 
 
-class RecentListRepository(application: Application) {
+class RecentListRepository() {
 
     private val postRef = Firebase.database.reference.
     child(FirebasePathConstant.POSTS_PATH)

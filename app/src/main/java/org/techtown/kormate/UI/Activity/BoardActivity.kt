@@ -46,7 +46,6 @@ class BoardActivity : AppCompatActivity() {
     private val binding by lazy { ActivityBoardBinding.inflate(layoutInflater) }
     private val receiveData by lazy { intent.getParcelableExtra<BoardDetail>(POST_PATH_INTENT)!! }
 
-
     private val REQUEST_CODE_EDIT_ACTIVITY = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {

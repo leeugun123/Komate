@@ -1,9 +1,8 @@
 package org.techtown.kormate.UI.ViewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -12,7 +11,7 @@ import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.Report
 import org.techtown.kormate.Repository.BoardRepository
 
-class BoardViewModel(application: Application) : AndroidViewModel(application) {
+class BoardViewModel() : ViewModel() {
 
     private val _boardPostSuccess = MutableLiveData<Boolean>()
 
@@ -28,21 +27,16 @@ class BoardViewModel(application: Application) : AndroidViewModel(application) {
     val boardReportSuccess: LiveData<Boolean>
         get() = _boardReportSuccess
 
-
-    private var boardRepository : BoardRepository
-
-    init {
-        boardRepository = BoardRepository(application)
-    }
+    private val boardRepository = BoardRepository()
 
     fun uploadPost(boardDetail : BoardDetail) {
 
         viewModelScope.launch (Dispatchers.IO){
 
-            val responseData = boardRepository.repoUploadPost(boardDetail)
+            val responseUploadPostSuccess = boardRepository.repoUploadPost(boardDetail)
 
             withContext(Dispatchers.Main){
-                _boardPostSuccess.value = responseData
+                _boardPostSuccess.value = responseUploadPostSuccess
             }
 
         }
@@ -53,10 +47,10 @@ class BoardViewModel(application: Application) : AndroidViewModel(application) {
 
         viewModelScope.launch (Dispatchers.IO){
 
-            val responseData = boardRepository.repoRemovePost(postId)
+            val responseRemoveSuccess = boardRepository.repoRemovePost(postId)
 
             withContext(Dispatchers.Main){
-                _boardRemoveSuccess.value = responseData
+                _boardRemoveSuccess.value = responseRemoveSuccess
             }
 
         }
@@ -67,10 +61,10 @@ class BoardViewModel(application: Application) : AndroidViewModel(application) {
 
         viewModelScope.launch (Dispatchers.IO){
 
-            val responseData = boardRepository.repoBoardReport(report)
+            val responseBoardReportSuccess = boardRepository.repoBoardReport(report)
 
             withContext(Dispatchers.Main){
-                _boardReportSuccess.value = responseData
+                _boardReportSuccess.value = responseBoardReportSuccess
             }
 
         }

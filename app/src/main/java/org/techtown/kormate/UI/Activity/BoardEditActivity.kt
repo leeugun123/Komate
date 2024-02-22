@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -39,8 +40,10 @@ import java.util.*
 class BoardEditActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityBoardPostBinding.inflate(layoutInflater) }
-    private val boardViewModel by lazy { ViewModelProvider(this)[BoardViewModel::class.java] }
-    private val commentViewModel by lazy {ViewModelProvider(this)[CommentViewModel::class.java]}
+
+    private val boardViewModel : BoardViewModel by viewModels()
+    private val commentViewModel : CommentViewModel by viewModels()
+
     private lateinit var receiveIntent : BoardDetail
     private lateinit var goalImg : MutableList<String>
 

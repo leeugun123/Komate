@@ -1,9 +1,8 @@
 package org.techtown.kormate.UI.ViewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -11,7 +10,7 @@ import kotlinx.coroutines.withContext
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Repository.MyIntelRepository
 
-class MyIntelViewModel(application: Application) : AndroidViewModel(application){
+class MyIntelViewModel() : ViewModel(){
 
     val userIntel : LiveData<UserIntel>
 
@@ -25,10 +24,9 @@ class MyIntelViewModel(application: Application) : AndroidViewModel(application)
     val dataExistLiveData : LiveData<Boolean>
         get() = _dataExistLiveData
 
-    private var myIntelRepository : MyIntelRepository
+    private val myIntelRepository = MyIntelRepository()
 
     init {
-        myIntelRepository = MyIntelRepository(application)
         userIntel = myIntelRepository.repoFetchUserIntel()
     }
 
@@ -36,10 +34,10 @@ class MyIntelViewModel(application: Application) : AndroidViewModel(application)
 
         viewModelScope.launch (Dispatchers.IO){
 
-            val responseData = myIntelRepository.repoUploadUserIntel(userIntel)
+            val responseUploadUserIntelSuccess = myIntelRepository.repoUploadUserIntel(userIntel)
 
             withContext(Dispatchers.Main){
-                _postSuccessLiveData.value = responseData
+                _postSuccessLiveData.value = responseUploadUserIntelSuccess
             }
 
         }
@@ -50,10 +48,10 @@ class MyIntelViewModel(application: Application) : AndroidViewModel(application)
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            val responseData = myIntelRepository.checkDataExistence()
+            val responseDataExistSuccess = myIntelRepository.checkDataExistence()
 
             withContext(Dispatchers.Main){
-                _dataExistLiveData.value = responseData
+                _dataExistLiveData.value = responseDataExistSuccess
             }
 
         }

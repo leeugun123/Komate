@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
 import android.widget.Toast.makeText
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
@@ -41,7 +42,7 @@ import java.util.*
 class BoardPostActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityBoardPostBinding.inflate(layoutInflater) }
-    private val boardViewModel by lazy { ViewModelProvider(this)[BoardViewModel::class.java] }
+    private val boardViewModel : BoardViewModel by viewModels()
     private val postsRef by lazy { Firebase.database.reference.child("posts") }
     private val postId by lazy { postsRef.push().key }
 

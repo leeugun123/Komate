@@ -13,7 +13,7 @@ import org.techtown.kormate.Model.Report
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class BoardRepository(application: Application) {
+class BoardRepository() {
 
     private val ref = Firebase.database.reference
     private val postRef = ref.child(POSTS_PATH)

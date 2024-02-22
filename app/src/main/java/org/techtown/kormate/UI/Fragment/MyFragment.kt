@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.kakao.sdk.user.UserApiClient
@@ -25,7 +26,7 @@ import org.techtown.kormate.databinding.FragmentMyBinding
 class MyFragment : Fragment() {
 
     private lateinit var binding : FragmentMyBinding
-    private val myIntelViewModel by lazy { ViewModelProvider(requireActivity())[MyIntelViewModel::class.java] }
+    private val myIntelViewModel : MyIntelViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

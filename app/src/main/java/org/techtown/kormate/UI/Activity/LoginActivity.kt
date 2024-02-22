@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
@@ -19,8 +20,8 @@ import org.techtown.kormate.databinding.ActivityLoginBinding
 class LoginActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
-    private val kakaoViewModel by lazy { ViewModelProvider(this)[KakaoViewModel::class.java] }
-    private val myIntelViewModel by lazy {ViewModelProvider(this)[MyIntelViewModel::class.java]}
+    private val kakaoViewModel : KakaoViewModel by viewModels()
+    private val myIntelViewModel : MyIntelViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
