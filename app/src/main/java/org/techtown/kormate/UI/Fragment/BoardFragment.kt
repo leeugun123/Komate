@@ -40,7 +40,7 @@ class BoardFragment : Fragment() {
 
     private fun recentListObserve() {
 
-        recentListViewModel.getRecentData().observe(viewLifecycleOwner) { recentList ->
+        recentListViewModel.recentList.observe(viewLifecycleOwner) { recentList ->
             binding.boardRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             binding.boardRecyclerview.adapter = PreviewAdapter(recentList)
 

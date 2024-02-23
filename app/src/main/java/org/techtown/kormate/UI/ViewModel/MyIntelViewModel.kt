@@ -12,7 +12,6 @@ import org.techtown.kormate.Repository.MyIntelRepository
 
 class MyIntelViewModel() : ViewModel(){
 
-    val userIntel : LiveData<UserIntel>
 
     private val _postSuccessLiveData = MutableLiveData<Boolean>()
 
@@ -25,10 +24,8 @@ class MyIntelViewModel() : ViewModel(){
         get() = _dataExistLiveData
 
     private val myIntelRepository = MyIntelRepository()
+    val userIntel = myIntelRepository.repoFetchUserIntel()
 
-    init {
-        userIntel = myIntelRepository.repoFetchUserIntel()
-    }
 
     fun uploadUserIntel(userIntel: UserIntel){
 

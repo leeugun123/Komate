@@ -14,19 +14,13 @@ import org.techtown.kormate.Repository.CommentRepository
 
 class CommentViewModel() : ViewModel() {
 
-    var commentList : LiveData<List<Comment>>
-
     private val _postCommentSuccess = MutableLiveData<Boolean>()
 
     val postCommentSuccess : LiveData<Boolean>
         get() = _postCommentSuccess
 
-
     private val commentRepository = CommentRepository()
-
-    init {
-        commentList = commentRepository.loadComments()
-    }
+    val commentList = commentRepository.loadComments()
 
     fun uploadComment(comment : Comment , postId : String){
 

@@ -55,7 +55,7 @@ class HomeFragment : Fragment() {
 
     private fun recentLimitListObserve() {
 
-        recentListViewModel.getRecentLimitData().observe(viewLifecycleOwner) { recentLimitList ->
+        recentListViewModel.recentLimitList.observe(viewLifecycleOwner) { recentLimitList ->
             binding.recentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             binding.recentRecyclerview.adapter = RecentAdapter(recentLimitList)
         }
