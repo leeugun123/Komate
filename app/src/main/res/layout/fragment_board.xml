@@ -112,12 +112,20 @@
     </LinearLayout>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/boardRecyclerview"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_marginTop="20dp"
-        />
+        android:layout_height="500dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/boardRecyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_marginTop="20dp"
+            />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     <Button
         android:id="@+id/movePost"

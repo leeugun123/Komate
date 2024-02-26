@@ -14,16 +14,12 @@ import android.widget.Toast.makeText
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.techtown.kormate.Constant.BoardPostConstant.MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
@@ -43,6 +39,7 @@ class BoardPostActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityBoardPostBinding.inflate(layoutInflater) }
     private val boardViewModel : BoardViewModel by viewModels()
+
     private val postsRef by lazy { Firebase.database.reference.child("posts") }
     private val postId by lazy { postsRef.push().key }
 
@@ -126,6 +123,8 @@ class BoardPostActivity : AppCompatActivity() {
 
     }
 
+
+
     private fun showToast(message: String) {
         makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -139,6 +138,7 @@ class BoardPostActivity : AppCompatActivity() {
         boardViewModel.boardPostSuccess.observe(this) { success ->
             if (success)
                 postComplete()
+
         }
 
     }
@@ -146,11 +146,9 @@ class BoardPostActivity : AppCompatActivity() {
     private fun uploadPost(post : String ,picUri : MutableList<String> , progressDialog : ProgressDialog) {
 
         val uploadBoardDetail = BoardDetail(postId.toString(), userId.toLong(), userNickName, userProfileImg
-            , post, picUri, CurrentDateTime.getPostTime() )
+            , post, picUri, CurrentDateTime.getPostTime())
 
-        lifecycleScope.launch(Dispatchers.Main){
-            boardViewModel.uploadPost(uploadBoardDetail)
-        }
+        boardViewModel.uploadPost(uploadBoardDetail)
 
         progressDialog.dismiss()
     }

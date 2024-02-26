@@ -13,6 +13,12 @@ import org.techtown.kormate.Repository.BoardRepository
 
 class BoardViewModel() : ViewModel() {
 
+
+    private val _boardDetailList = MutableLiveData<List<BoardDetail>>()
+
+    val boardDetailList : LiveData<List<BoardDetail>>
+        get() = _boardDetailList
+
     private val _boardPostSuccess = MutableLiveData<Boolean>()
 
     val boardPostSuccess: LiveData<Boolean>
@@ -28,6 +34,20 @@ class BoardViewModel() : ViewModel() {
         get() = _boardReportSuccess
 
     private val boardRepository = BoardRepository()
+
+
+    fun getBoardDetailList(){
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val responseBoardDetailList = boardRepository.getRecentBoardDetail()
+
+            withContext(Dispatchers.Main){
+                _boardDetailList.value = responseBoardDetailList
+            }
+        }
+    }
+
 
     fun uploadPost(boardDetail : BoardDetail) {
 

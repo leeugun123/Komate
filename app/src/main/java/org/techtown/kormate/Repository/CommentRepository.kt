@@ -10,17 +10,17 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 import org.techtown.kormate.Constant.FirebasePathConstant
+import org.techtown.kormate.Constant.FirebasePathConstant.COMMENT_REPORT_PATH
 import org.techtown.kormate.Model.Comment
 import org.techtown.kormate.Model.Report
 import org.techtown.kormate.Util.BoardData
 
 class CommentRepository() {
 
-
     private val ref = Firebase.database
         .reference.child(FirebasePathConstant.POSTS_PATH)
 
-    private val commentReportRef = Firebase.database.reference.child("commentsReports")
+    private val commentReportRef = Firebase.database.reference.child(COMMENT_REPORT_PATH)
 
 
     fun loadComments() : LiveData<List<Comment>> {

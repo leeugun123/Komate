@@ -2,24 +2,22 @@ package org.techtown.kormate.UI.Fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.techtown.kormate.UI.Adapter.PreviewAdapter
 import org.techtown.kormate.UI.Activity.BoardPostActivity
-import org.techtown.kormate.UI.ViewModel.RecentListViewModel
+import org.techtown.kormate.UI.ViewModel.BoardViewModel
 import org.techtown.kormate.databinding.FragmentBoardBinding
 
 
 class BoardFragment : Fragment() {
 
     private lateinit var binding : FragmentBoardBinding
-    private val recentListViewModel : RecentListViewModel by viewModels()
+    private val boardViewModel : BoardViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState)
     }
@@ -35,15 +33,34 @@ class BoardFragment : Fragment() {
             startActivity(Intent(activity, BoardPostActivity::class.java))
         }
 
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            getBoardDetailList()
+        }
+
+        dataUiBindingInit()
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getBoardDetailList()
+    }
+
+    private fun dataUiBindingInit() {
+        getBoardDetailList()
         recentListObserve()
+    }
+
+    private fun getBoardDetailList() {
+        boardViewModel.getBoardDetailList()
     }
 
     private fun recentListObserve() {
 
-        recentListViewModel.recentList.observe(viewLifecycleOwner) { recentList ->
+        boardViewModel.boardDetailList.observe(viewLifecycleOwner) { recentList ->
             binding.boardRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             binding.boardRecyclerview.adapter = PreviewAdapter(recentList)
-
+            binding.swipeRefreshLayout.isRefreshing = false
         }
 
     }

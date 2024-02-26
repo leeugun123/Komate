@@ -18,6 +18,25 @@ class BoardRepository() {
     private val ref = Firebase.database.reference
     private val postRef = ref.child(POSTS_PATH)
 
+    suspend fun getRecentBoardDetail(): List<BoardDetail> {
+
+        val recentLimitList = mutableListOf<BoardDetail>()
+
+        val dataSnapshot = postRef.get().await()
+
+        if(dataSnapshot.exists()){
+
+            dataSnapshot.children.reversed().forEach{
+                recentLimitList.add(it.getValue(BoardDetail::class.java)!!)
+            }
+
+        }
+
+
+        return recentLimitList
+
+    }
+
     suspend fun repoUploadPost(boardDetail: BoardDetail) : Boolean {
 
         val job = postRef.child(boardDetail.postId).setValue(boardDetail)

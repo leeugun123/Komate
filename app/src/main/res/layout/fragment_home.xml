@@ -139,11 +139,21 @@
         android:alpha="0.3"
         />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recentRecyclerview"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="wrap_content"
+        android:id="@+id/swipeRefreshLayout">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recentRecyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 
 
 
