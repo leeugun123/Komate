@@ -64,15 +64,8 @@ class BoardEditActivity : AppCompatActivity() {
 
             val post = binding.post.text.toString()
 
-            if (post.isEmpty() && goalImg.isEmpty()) {
-                showToast(NO_CONTENT_INPUT_CONTENT_MESSAGE)
+            if(checkPostEmpty(post))
                 return@setOnClickListener
-            }
-
-            if (post.isEmpty()) {
-                showToast(NO_CONTEXT_MESSAGE)
-                return@setOnClickListener
-            }
 
             val progressBar = createProgressBar()
             val storageRef = FirebaseStorage.getInstance().reference
@@ -100,9 +93,11 @@ class BoardEditActivity : AppCompatActivity() {
 
 
             if(goalImg.size == 0){
-                upload(post, imageFileNames) //글만 있는 경우
-            }else{
-                goalImg.forEach {imageUrl ->
+                postUpload(post, imageFileNames)
+            }//글만 있는 경우
+            else{
+
+                goalImg.forEach { imageUrl ->
 
                     if (!imageUrl.startsWith("https"))
                         uploadImage(imageUrl.toUri()) //upload 되지 않는 사진인 경우 파이어베이스를 거침
@@ -114,8 +109,6 @@ class BoardEditActivity : AppCompatActivity() {
                 }
 
             }
-
-
 
         }
 
@@ -131,16 +124,29 @@ class BoardEditActivity : AppCompatActivity() {
 
     }
 
+    private fun checkPostEmpty(post : String) : Boolean {
+
+        return if (post.isEmpty() && goalImg.isEmpty()) {
+            showToast(NO_CONTENT_INPUT_CONTENT_MESSAGE)
+            true
+        } else if (post.isEmpty()) {
+            showToast(NO_CONTEXT_MESSAGE)
+            true
+        } else
+            false
+
+    }
+
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun createProgressBar(): ProgressDialog {
-        val progressBar = ProgressDialog(this)
-        progressBar.setMessage(REVISE_DOING_MESSAGE)
-        progressBar.setCancelable(false)
-        progressBar.show()
-        return progressBar
+        return ProgressDialog(this).apply {
+            this.setMessage(REVISE_DOING_MESSAGE)
+            this.setCancelable(false)
+            this.show()
+        }
     }
 
     private fun moveToGallery() {
@@ -158,6 +164,7 @@ class BoardEditActivity : AppCompatActivity() {
             REQUEST_CODE_PICK_IMAGES
         )
 
+
     }
 
 
@@ -166,10 +173,8 @@ class BoardEditActivity : AppCompatActivity() {
 
     private fun checkUploadCompletion(currentSize: Int, totalSize: Int, post: String, imageFileNames: MutableList<String>, progressBar: ProgressDialog) {
 
-        Log.e("TAG", "$currentSize   $totalSize")
-
         if (currentSize == totalSize) {
-            upload(post, imageFileNames)
+            postUpload(post, imageFileNames)
             progressBar.dismiss()
         }
 
@@ -219,7 +224,7 @@ class BoardEditActivity : AppCompatActivity() {
 
     }
 
-    private fun upload(post : String, imageFileNames : MutableList<String>){
+    private fun postUpload(post : String, imageFileNames : MutableList<String>){
 
         receiveIntent.let {
 

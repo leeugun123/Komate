@@ -31,7 +31,7 @@ class BoardViewModel() : ViewModel() {
 
     fun uploadPost(boardDetail : BoardDetail) {
 
-        viewModelScope.launch (Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO){
 
             val responseUploadPostSuccess = boardRepository.repoUploadPost(boardDetail)
 
@@ -52,6 +52,7 @@ class BoardViewModel() : ViewModel() {
             withContext(Dispatchers.Main){
                 _boardRemoveSuccess.value = responseRemoveSuccess
             }
+
 
         }
 
