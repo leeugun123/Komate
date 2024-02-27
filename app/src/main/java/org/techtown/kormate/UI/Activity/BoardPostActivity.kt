@@ -3,6 +3,7 @@ package org.techtown.kormate.UI.Activity
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Build
@@ -24,6 +25,7 @@ import org.techtown.kormate.Constant.BoardPostConstant.MAXIMUM_PIC_THREE_POSSIBL
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
 import org.techtown.kormate.Constant.CarmeraPermissionConstant.REQUEST_CODE_PICK_IMAGES
+import org.techtown.kormate.Constant.FirebasePathConstant.POSTS_PATH
 import org.techtown.kormate.Util.CurrentDateTime
 import org.techtown.kormate.UI.Adapter.GalleryAdapter
 import org.techtown.kormate.Model.BoardDetail
@@ -40,7 +42,7 @@ class BoardPostActivity : AppCompatActivity() {
     private val binding by lazy { ActivityBoardPostBinding.inflate(layoutInflater) }
     private val boardViewModel : BoardViewModel by viewModels()
 
-    private val postsRef by lazy { Firebase.database.reference.child("posts") }
+    private val postsRef by lazy { Firebase.database.reference.child(POSTS_PATH) }
     private val postId by lazy { postsRef.push().key }
 
     private var imageUris = mutableListOf<String>()
@@ -143,21 +145,21 @@ class BoardPostActivity : AppCompatActivity() {
 
     }
 
-    private fun uploadPost(post : String ,picUri : MutableList<String> , progressDialog : ProgressDialog) {
+    private fun uploadPost(post : String ,picUri : MutableList<String> , dialog : Dialog) {
 
         val uploadBoardDetail = BoardDetail(postId.toString(), userId.toLong(), userNickName, userProfileImg
             , post, picUri, CurrentDateTime.getPostTime())
 
         boardViewModel.uploadPost(uploadBoardDetail)
 
-        progressDialog.dismiss()
+        dialog.dismiss()
     }
 
-    private fun createProgressBar(): ProgressDialog {
+    private fun createProgressBar() : Dialog {
 
-        val progressBar = ProgressDialog(this)
+        val progressBar = Dialog(this)
         progressBar.let {
-            it.setMessage(UPLOAD_DOING_MESSAGE)
+            it.setTitle(UPLOAD_DOING_MESSAGE)
             it.setCancelable(false)
             it.show()
         }
@@ -182,7 +184,7 @@ class BoardPostActivity : AppCompatActivity() {
                 override fun onPermissionDenied(deniedPermissions: List<String>) {}
 
             })
-            .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
+            .setDeniedMessage(PERMISSION_ALLOW_MESSAGE)
             .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.READ_CALENDAR )
             .check()
@@ -242,6 +244,7 @@ class BoardPostActivity : AppCompatActivity() {
     companion object{
         private const val POST_UPLOAD_COMPLETE_MESSAGE = "게시글이 등록 되었습니다."
         private const val UPLOAD_DOING_MESSAGE = "업로드 중"
+        private const val PERMISSION_ALLOW_MESSAGE = "권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]"
 
     }
 

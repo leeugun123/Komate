@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -38,8 +39,8 @@ import org.techtown.kormate.databinding.ActivityBoardBinding
 
 class BoardActivity : AppCompatActivity() {
 
-    private val commentViewModel by lazy { ViewModelProvider(this)[CommentViewModel::class.java] }
-    private val boardViewModel by lazy { ViewModelProvider(this)[BoardViewModel::class.java]}
+    private val commentViewModel : CommentViewModel by viewModels()
+    private val boardViewModel : BoardViewModel by viewModels()
 
     private val commentRecyclerView by lazy { binding.commentRecyclerView }
 
