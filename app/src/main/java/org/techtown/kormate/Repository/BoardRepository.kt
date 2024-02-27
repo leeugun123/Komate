@@ -77,12 +77,6 @@ class BoardRepository() {
 
     }
 
-    companion object{
-        private const val PAGE_LOAD_LIMIT = 4
-    }
-
-
-
 
 
 }
