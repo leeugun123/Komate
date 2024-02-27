@@ -1,6 +1,11 @@
 package org.techtown.kormate.Repository
 
 import android.app.Application
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
@@ -18,24 +23,32 @@ class BoardRepository() {
     private val ref = Firebase.database.reference
     private val postRef = ref.child(POSTS_PATH)
 
-    suspend fun getRecentBoardDetail(): List<BoardDetail> {
+    fun getRecentBoardDetail(): MutableLiveData<List<BoardDetail>> {
 
-        val recentLimitList = mutableListOf<BoardDetail>()
+        val recentLimitListMutableLiveData = MutableLiveData<List<BoardDetail>>()
 
-        val dataSnapshot = postRef.get().await()
+        postRef.limitToLast(PAGE_LOAD_LIMIT).addValueEventListener(object : ValueEventListener {
 
-        if(dataSnapshot.exists()){
+            override fun onDataChange(snapshot: DataSnapshot) {
 
-            dataSnapshot.children.reversed().forEach{
-                recentLimitList.add(it.getValue(BoardDetail::class.java)!!)
+                val recentLimitList = mutableListOf<BoardDetail>()
+
+                snapshot.children.reversed().forEach {
+                    val boardPost = it.getValue(BoardDetail::class.java)
+                    recentLimitList.add(boardPost!!)
+                }
+
+                recentLimitListMutableLiveData.value = recentLimitList
             }
 
-        }
+            override fun onCancelled(error: DatabaseError) {}
 
+        })
 
-        return recentLimitList
+        return recentLimitListMutableLiveData
 
     }
+
 
     suspend fun repoUploadPost(boardDetail: BoardDetail) : Boolean {
 
@@ -61,6 +74,10 @@ class BoardRepository() {
 
         return job.isSuccessful
 
+    }
+
+    companion object{
+        private const val PAGE_LOAD_LIMIT = 4
     }
 
 

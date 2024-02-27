@@ -33,19 +33,10 @@ class HomeFragment : Fragment() {
         uiBinding()
         dataUiBinding()
 
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            getBoardLimitDetailList()
-        }
-
     }
 
-    override fun onStart() {
-        super.onStart()
-        getBoardLimitDetailList()
-    }
 
     private fun dataUiBinding() {
-        getBoardLimitDetailList()
         recentLimitListObserve()
     }
 
@@ -73,7 +64,6 @@ class HomeFragment : Fragment() {
         boardViewModel.boardDetailList.observe(viewLifecycleOwner) { recentLimitList ->
             binding.recentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             binding.recentRecyclerview.adapter = RecentAdapter(limitListSize(recentLimitList))
-            binding.swipeRefreshLayout.isRefreshing = false
         }
 
     }
@@ -86,10 +76,6 @@ class HomeFragment : Fragment() {
             list
         }
 
-    }
-
-    private fun getBoardLimitDetailList(){
-        boardViewModel.getBoardDetailList()
     }
 
     companion object{

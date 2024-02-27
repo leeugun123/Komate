@@ -33,34 +33,22 @@ class BoardFragment : Fragment() {
             startActivity(Intent(activity, BoardPostActivity::class.java))
         }
 
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            getBoardDetailList()
-        }
 
         dataUiBindingInit()
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        getBoardDetailList()
-    }
 
     private fun dataUiBindingInit() {
-        getBoardDetailList()
         recentListObserve()
     }
 
-    private fun getBoardDetailList() {
-        boardViewModel.getBoardDetailList()
-    }
 
     private fun recentListObserve() {
 
         boardViewModel.boardDetailList.observe(viewLifecycleOwner) { recentList ->
             binding.boardRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             binding.boardRecyclerview.adapter = PreviewAdapter(recentList)
-            binding.swipeRefreshLayout.isRefreshing = false
         }
 
     }
