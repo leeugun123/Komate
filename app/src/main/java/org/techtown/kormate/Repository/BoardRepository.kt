@@ -27,7 +27,7 @@ class BoardRepository() {
 
         val recentLimitListMutableLiveData = MutableLiveData<List<BoardDetail>>()
 
-        postRef.limitToLast(PAGE_LOAD_LIMIT).addValueEventListener(object : ValueEventListener {
+        postRef.addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
 
