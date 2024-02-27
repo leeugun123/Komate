@@ -5,13 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.user.UserApiClient
-import org.techtown.kormate.Model.UserKakaoIntel.userId
-import org.techtown.kormate.Model.UserKakaoIntel.userNickName
-import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
 import org.techtown.kormate.UI.Activity.UserInfoRegister.NationActivity
 import org.techtown.kormate.UI.ViewModel.KakaoViewModel
 import org.techtown.kormate.UI.ViewModel.MyIntelViewModel
@@ -56,29 +52,31 @@ class LoginActivity : AppCompatActivity() {
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
 
             if (error != null) {
-                when {
-                    error.toString() == AuthErrorCause.AccessDenied.toString() -> {
+
+                when (error.toString()) {
+
+                    AuthErrorCause.AccessDenied.toString() -> {
                         errorMessageToast(ACCESS_DENIED)
                     }
-                    error.toString() == AuthErrorCause.InvalidClient.toString() -> {
+                    AuthErrorCause.InvalidClient.toString() -> {
                         errorMessageToast(INVALID_ERROR)
                     }
-                    error.toString() == AuthErrorCause.InvalidGrant.toString() -> {
+                    AuthErrorCause.InvalidGrant.toString() -> {
                         errorMessageToast(CAN_NOT_AUTHENTICATION)
                     }
-                    error.toString() == AuthErrorCause.InvalidRequest.toString() -> {
+                    AuthErrorCause.InvalidRequest.toString() -> {
                         errorMessageToast(REQUEST_PARAMETER_ERROR)
                     }
-                    error.toString() == AuthErrorCause.InvalidScope.toString() -> {
+                    AuthErrorCause.InvalidScope.toString() -> {
                         errorMessageToast(INVALID_SCOPE_ID)
                     }
-                    error.toString() == AuthErrorCause.Misconfigured.toString() -> {
+                    AuthErrorCause.Misconfigured.toString() -> {
                         errorMessageToast(SETTING_NOT_RIGHT)
                     }
-                    error.toString() == AuthErrorCause.ServerError.toString() -> {
+                    AuthErrorCause.ServerError.toString() -> {
                         errorMessageToast(SERVER_INTERNAL_ERROR)
                     }
-                    error.toString() == AuthErrorCause.Unauthorized.toString() -> {
+                    AuthErrorCause.Unauthorized.toString() -> {
                         errorMessageToast(NOT_HAVE_REQUEST_PERMISSION)
                     }
                     else -> { // Unknown
@@ -122,14 +120,20 @@ class LoginActivity : AppCompatActivity() {
 
     private fun bindingKakaoInfo() {
 
-        kakaoViewModel.loadUserData()
+        loadKakaoIntel()
+        kakaoViewModelObserve()
 
-        kakaoViewModel.KakaoIntelDownloadSuccess.observe(this){success ->
+    }
+
+    private fun kakaoViewModelObserve() {
+        kakaoViewModel.kakaoIntelDownloadSuccess.observe(this){ success ->
             if(!success)
                 Toast.makeText(this,KAKAO_DATA_BINDING_FAILED,Toast.LENGTH_SHORT).show()
         }
+    }
 
-
+    private fun loadKakaoIntel() {
+        kakaoViewModel.loadUserData()
     }
 
 

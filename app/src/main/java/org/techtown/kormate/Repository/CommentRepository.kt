@@ -21,11 +21,11 @@ class CommentRepository() {
         .reference.child(FirebasePathConstant.POSTS_PATH)
 
     private val commentReportRef = Firebase.database.reference.child(COMMENT_REPORT_PATH)
+    private val commentListMutableLiveData = MutableLiveData<List<Comment>>()
 
 
     fun loadComments() : LiveData<List<Comment>> {
 
-        val commentListMutableLiveData = MutableLiveData<List<Comment>>()
         val commentsRef = ref.child(BoardData.boardPostId).child(FirebasePathConstant.COMMENT_PATH)
 
         commentsRef.addValueEventListener(object : ValueEventListener {

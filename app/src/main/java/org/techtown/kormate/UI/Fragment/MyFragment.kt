@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.graphics.scaleMatrix
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -19,6 +20,7 @@ import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Model.UserKakaoIntel
 import org.techtown.kormate.UI.Activity.LoginActivity
 import org.techtown.kormate.UI.Activity.MyIntelReviseActivity
+import org.techtown.kormate.UI.ViewModel.KakaoViewModel
 import org.techtown.kormate.UI.ViewModel.MyIntelViewModel
 import org.techtown.kormate.databinding.FragmentMyBinding
 
@@ -27,6 +29,7 @@ class MyFragment : Fragment() {
 
     private lateinit var binding : FragmentMyBinding
     private val myIntelViewModel : MyIntelViewModel by viewModels()
+    private val kakaoViewModel : KakaoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,12 +43,16 @@ class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.logoutButton.setOnClickListener {
-            showAlertDialog()
-        }
+        binding.apply {
 
-        binding.reviseButt.setOnClickListener {
-            startActivity(Intent(requireContext(), MyIntelReviseActivity::class.java))
+            logoutButton.setOnClickListener {
+                showAlertDialog()
+            }
+
+            reviseButt.setOnClickListener {
+                startActivity(Intent(requireContext(), MyIntelReviseActivity::class.java))
+            }
+
         }
 
         kakaoIntelBinding()
@@ -74,11 +81,11 @@ class MyFragment : Fragment() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(LOGOUT_ASK_MESSAGE)
 
-        builder.setPositiveButton("예") { dialog, _ ->
+        builder.setPositiveButton(YES_MESSAGE) { dialog, _ ->
             checkKakaoLogOut(dialog)
         }
 
-        builder.setNegativeButton("아니오") { dialog, _ ->
+        builder.setNegativeButton(NO_MESSAGE) { dialog, _ ->
             dialog.dismiss()
         }
 
@@ -88,13 +95,28 @@ class MyFragment : Fragment() {
 
     private fun checkKakaoLogOut(dialog : DialogInterface) {
 
-        UserApiClient.instance.logout { error ->
-            if (error != null)
-                Toast.makeText(requireContext(), LOGOUT_FAIL_MESSAGE, Toast.LENGTH_SHORT).show()
-            else
+        kakaoLogoutRequest()
+        kakaoLogOutSuccessObserve(dialog)
+    }
+
+    private fun kakaoLogoutRequest() {
+        kakaoViewModel.kakaoLogout()
+    }
+
+    private fun kakaoLogOutSuccessObserve(dialog : DialogInterface) {
+
+        kakaoViewModel.kakaoLogOutSuccess.observe(viewLifecycleOwner){success ->
+
+            if(success)
                 moveToLoginActivity(dialog)
+            else
+                showToastMessage(LOGOUT_FAIL_MESSAGE)
         }
 
+    }
+
+    private fun showToastMessage(message : String){
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun moveToLoginActivity(dialog: DialogInterface) {
@@ -158,6 +180,8 @@ class MyFragment : Fragment() {
         private const val LOGOUT_ASK_MESSAGE = "로그 아웃 하시겠습니까?"
         private const val LOGOUT_SUCCESS_MESSAGE = "로그아웃 되었습니다."
         private const val LOGOUT_FAIL_MESSAGE = "로그아웃 실패"
+        private const val YES_MESSAGE = "예"
+        private const val NO_MESSAGE = "아니요"
     }
 
 }

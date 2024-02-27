@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -45,66 +44,67 @@ class BoardPostActivity : AppCompatActivity() {
     private val postsRef by lazy { Firebase.database.reference.child(POSTS_PATH) }
     private val postId by lazy { postsRef.push().key }
 
-    private var imageUris = mutableListOf<String>()
+    private var goalImg = mutableListOf<String>()
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.backBtn.setOnClickListener {
-            finish()
-        }
+        binding.apply {
 
-        binding.getImgButton.setOnClickListener {
-            requestCameraPermission { moveToGallery() }
-        }
-
-        binding.updateButton.setOnClickListener {
-
-            val post = binding.post.text.toString()
-
-            if (post.isEmpty() && imageUris.isEmpty()) {
-                showToast(NO_CONTENT_INPUT_CONTENT_MESSAGE)
-                return@setOnClickListener
+            backBtn.setOnClickListener {
+                finish()
             }
 
-            if (post.isEmpty()) {
-                showToast(NO_CONTEXT_MESSAGE)
-                return@setOnClickListener
+            getImgButton.setOnClickListener {
+                requestCameraPermission { moveToGallery() }
             }
 
-            val progressBar = createProgressBar()
-            val storageRef = FirebaseStorage.getInstance().reference
-            val imageFileNames = mutableListOf<String>()
-
-            // Upload images if there are any
-            for (imageUri in imageUris) {
-                val imageFileName = "IMG_${getCurrentTimestamp()}_${UUID.randomUUID()}"
-                val imageRef = storageRef.child("images/$imageFileName")
-
-                imageRef.putFile(imageUri.toUri())
-                    .addOnSuccessListener { _ ->
-                        imageRef.downloadUrl
-                            .addOnSuccessListener { uri ->
-                                imageFileNames.add(uri.toString())
-                                if (imageFileNames.size == imageUris.size)
-                                    uploadPost(post, imageFileNames, progressBar)
-                            }
-                    }
-                    .addOnFailureListener { e ->
-                        showToast(e.message.toString())
-                        progressBar.dismiss()
-                    }
+            updateButton.setOnClickListener {
+                imageAndTextProcessing()
             }
-
-            // If there are no images, upload only the post
-            if (imageUris.isEmpty())
-                uploadPost(post, mutableListOf(), progressBar)
 
         }
 
-        checkUploadPost()
+        boardPostSuccessObserve()
+
+    }
+
+    private fun imageAndTextProcessing() {
+
+        val post = binding.post.text.toString()
+
+        if(checkPostEmpty(post))
+            return
+
+        val progressBar = createProgressBar()
+        val storageRef = FirebaseStorage.getInstance().reference
+        val imageFileNames = mutableListOf<String>()
+
+        goalImg.forEach{ imageUri ->
+
+            val imageFileName = "IMG_${getCurrentTimestamp()}_${UUID.randomUUID()}"
+            val imageRef = storageRef.child("images/$imageFileName")
+
+            imageRef.putFile(imageUri.toUri())
+                .addOnSuccessListener { _ ->
+                    imageRef.downloadUrl
+                        .addOnSuccessListener { uri ->
+                            imageFileNames.add(uri.toString())
+                            if (imageFileNames.size == goalImg.size)
+                                uploadPost(post, imageFileNames, progressBar)
+                        }
+                }
+                .addOnFailureListener { e ->
+                    showToastMessage(e.message.toString())
+                    progressBar.dismiss()
+                }
+
+        }
+
+        if (goalImg.isEmpty())
+            uploadPost(post, mutableListOf(), progressBar)
 
     }
 
@@ -126,16 +126,23 @@ class BoardPostActivity : AppCompatActivity() {
     }
 
 
-
-    private fun showToast(message: String) {
-        makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-
     private fun getCurrentTimestamp() = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
 
 
-    private fun checkUploadPost() {
+    private fun checkPostEmpty(post : String) : Boolean {
+
+        return if (post.isEmpty() && goalImg.isEmpty()) {
+            showToastMessage(NO_CONTENT_INPUT_CONTENT_MESSAGE)
+            true
+        } else if (post.isEmpty()) {
+            showToastMessage(NO_CONTEXT_MESSAGE)
+            true
+        } else
+            false
+
+    }
+
+    private fun boardPostSuccessObserve() {
 
         boardViewModel.boardPostSuccess.observe(this) { success ->
             if (success)
@@ -158,6 +165,7 @@ class BoardPostActivity : AppCompatActivity() {
     private fun createProgressBar() : Dialog {
 
         val progressBar = Dialog(this)
+
         progressBar.let {
             it.setTitle(UPLOAD_DOING_MESSAGE)
             it.setCancelable(false)
@@ -169,10 +177,12 @@ class BoardPostActivity : AppCompatActivity() {
 
     private fun postComplete(){
         finish()
-        makeText(this, POST_UPLOAD_COMPLETE_MESSAGE, Toast.LENGTH_SHORT).show()
+        showToastMessage(POST_UPLOAD_COMPLETE_MESSAGE)
     }
 
-    // ...
+    private fun showToastMessage(message : String){
+        makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 
     private fun requestCameraPermission(logic : () -> Unit){
 
@@ -196,7 +206,7 @@ class BoardPostActivity : AppCompatActivity() {
 
         if (requestCode == REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
             addUriImg(data)
-            handleSelectedImages(imageUris, binding)
+            handleSelectedImages(goalImg, binding)
         }
 
     }
@@ -207,13 +217,13 @@ class BoardPostActivity : AppCompatActivity() {
 
             for (i in 0 until clipData.itemCount) {
 
-                if (imageUris.size == 3) {
+                if (goalImg.size == 3) {
                     makeText(this, MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE, Toast.LENGTH_SHORT).show()
                     break
                 } //사진 개수 제한
 
                 val getUri = clipData.getItemAt(i).uri
-                imageUris.add(getUri.toString())
+                goalImg.add(getUri.toString())
 
             }
 
@@ -231,7 +241,7 @@ class BoardPostActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun uploadImgButtonTextSync() {
-        binding.getImgButton.text = "사진 올리기(" + imageUris.size.toString() + "/3)"
+        binding.getImgButton.text = "사진 올리기(" + goalImg.size.toString() + "/3)"
     }
 
     private fun connectGalleryAdapter(imageUris: MutableList<String>, acBinding: ActivityBoardPostBinding ) {

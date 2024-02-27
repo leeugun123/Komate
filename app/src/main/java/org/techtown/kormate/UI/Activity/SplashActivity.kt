@@ -15,11 +15,13 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        splashLoading()
+    }
 
+    private fun splashLoading() {
         Handler().postDelayed({
             moveToLoginActivity()
         }, SPLASH_DURATION)
-
     }
 
     private fun moveToLoginActivity() {

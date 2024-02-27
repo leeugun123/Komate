@@ -62,55 +62,65 @@ class BoardEditActivity : AppCompatActivity() {
 
         binding.updateButton.setOnClickListener {
 
-            val post = binding.post.text.toString()
+            imageAndTextProcessing()
 
-            if(checkPostEmpty(post))
-                return@setOnClickListener
+        }
 
-            val progressBar = createProgressBar()
-            val storageRef = FirebaseStorage.getInstance().reference
-            val imageFileNames = mutableListOf<String>()
-
-            fun uploadImage(uri : Uri) {
-
-                val imageFileName = "IMG_${getCurrentTimestamp()}_${UUID.randomUUID()}"
-                val imageRef = storageRef.child("images/$imageFileName")
-
-                imageRef.putFile(uri)
-                    .addOnSuccessListener { _ ->
-                        imageRef.downloadUrl
-                            .addOnSuccessListener { uri ->
-                                imageFileNames.add(uri.toString())
-                                checkUploadCompletion(imageFileNames.size, goalImg.size, post, imageFileNames, progressBar)
-                            }
-                    }
-                    .addOnFailureListener { e ->
-                        showToast(e.message.toString())
-                        progressBar.dismiss()
-                    }
-
-            }
+        boardPostSuccessObserve()
 
 
-            if(goalImg.size == 0){
-                postUpload(post, imageFileNames)
-            }//글만 있는 경우
-            else{
+    }
 
-                goalImg.forEach { imageUrl ->
+    private fun imageAndTextProcessing() {
+        val post = binding.post.text.toString()
 
-                    if (!imageUrl.startsWith("https"))
-                        uploadImage(imageUrl.toUri()) //upload 되지 않는 사진인 경우 파이어베이스를 거침
-                    else {
-                        imageFileNames.add(imageUrl)
-                        checkUploadCompletion(imageFileNames.size, goalImg.size, post, imageFileNames, progressBar)
-                    }
+        if(checkPostEmpty(post))
+            return
 
+        val progressBar = createProgressBar()
+        val storageRef = FirebaseStorage.getInstance().reference
+        val imageFileNames = mutableListOf<String>()
+
+        fun uploadImage(uri : Uri) {
+
+            val imageFileName = "IMG_${getCurrentTimestamp()}_${UUID.randomUUID()}"
+            val imageRef = storageRef.child("images/$imageFileName")
+
+            imageRef.putFile(uri)
+                .addOnSuccessListener { _ ->
+                    imageRef.downloadUrl
+                        .addOnSuccessListener { uri ->
+                            imageFileNames.add(uri.toString())
+                            checkUploadCompletion(imageFileNames.size, goalImg.size, post, imageFileNames, progressBar)
+                        }
+                }
+                .addOnFailureListener { e ->
+                    showToast(e.message.toString())
+                    progressBar.dismiss()
+                }
+
+        }
+
+        if(goalImg.size == 0){
+            postUpload(post, imageFileNames)
+        }//글만 있는 경우
+        else{
+
+            goalImg.forEach { imageUrl ->
+
+                if (!imageUrl.startsWith("https"))
+                    uploadImage(imageUrl.toUri()) //upload 되지 않는 사진인 경우 파이어베이스를 거침
+                else {
+                    imageFileNames.add(imageUrl)
+                    checkUploadCompletion(imageFileNames.size, goalImg.size, post, imageFileNames, progressBar)
                 }
 
             }
 
         }
+    }
+
+    private fun boardPostSuccessObserve() {
 
         boardViewModel.boardPostSuccess.observe(this) { success ->
 
@@ -120,8 +130,6 @@ class BoardEditActivity : AppCompatActivity() {
             }
 
         }
-
-
     }
 
     private fun checkPostEmpty(post : String) : Boolean {

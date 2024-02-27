@@ -24,22 +24,30 @@ class MyIntelReviseActivity : AppCompatActivity() {
 
         uiSync()
 
-        binding.backBtn.setOnClickListener {
-            finish()
+        binding.apply {
+
+            backBtn.setOnClickListener {
+                finish()
+            }
+
+            reviseButton.setOnClickListener {
+                reviseUserIntelBinding()
+                reviseUploadUserIntel()
+            }
+
         }
 
-        binding.reviseButton.setOnClickListener {
-            reviseUserIntelBinding()
-            reviseUploadUserIntel()
-        }
+        postSuccessLiveDataObserve()
+
+
+    }
+
+    private fun postSuccessLiveDataObserve() {
 
         myIntelViewModel.postSuccessLiveData.observe(this){ success ->
-
             if(success)
                 reviseCompleteMessage()
-
         }
-
 
     }
 

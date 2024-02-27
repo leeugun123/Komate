@@ -56,44 +56,84 @@ class BoardActivity : AppCompatActivity() {
         boardUiSync()
         boardPostIdSync()
 
+        binding.apply {
 
-        binding.backBtn.setOnClickListener { finish() }
+            backBtn.setOnClickListener { finish() }
 
-        binding.commentPost.setOnClickListener {
+            commentPost.setOnClickListener {
 
-            if(binding.reply.text.isNotEmpty())
-                handleComment()
-            else
-                Toast.makeText(this@BoardActivity, NO_POST_TRY_AGAIN, Toast.LENGTH_SHORT).show()
+                if(binding.reply.text.isNotEmpty())
+                    handleComment()
+                else
+                    Toast.makeText(this@BoardActivity, NO_POST_TRY_AGAIN, Toast.LENGTH_SHORT).show()
+
+            }
+
+            edit.setOnClickListener { showPopUpMenu(it) }
+
         }
 
+        viewModelObserve()
 
-        binding.edit.setOnClickListener {
-            showPopUpMenu(it)
+
+    }
+
+    private fun viewModelObserve() {
+        boardViewModelObserve()
+        commentViewModelObserve()
+    }
+
+    private fun commentViewModelObserve() {
+        commentListObserve()
+        postCommentSuccessObserve()
+    }
+
+    private fun boardViewModelObserve() {
+        boardRemoveSuccessObserve()
+        boardReportSuccessObserve()
+    }
+
+    private fun postCommentSuccessObserve() {
+        commentViewModel.postCommentSuccess.observe(this){
+            if(it)
+                showToastMessage(POST_COMMENT_COMPLETE)
         }
+    }
+
+
+    private fun commentListObserve() {
+        commentViewModel.commentList.observe(this) {commentList ->
+            commentAdapterSync(commentList)
+        }
+    }
+
+
+    private fun boardReportSuccessObserve() {
+
+        boardViewModel.boardReportSuccess.observe(this){
+            if(it)
+                showToastMessage(REPORT_POST)
+        }
+
+    }
+
+    private fun boardRemoveSuccessObserve() {
 
         boardViewModel.boardRemoveSuccess.observe(this){
             if(it){
-                Toast.makeText(context, REMOVE_POST_COMPLETE, Toast.LENGTH_SHORT).show()
+                showToastMessage(REMOVE_POST_COMPLETE)
                 finish()
             }
         }
 
-        boardViewModel.boardReportSuccess.observe(this){
-            if(it)
-                Toast.makeText(context, REPORT_POST, Toast.LENGTH_SHORT).show()
-        }
-
-        commentViewModel.commentList.observe(this) {commentList ->
-            commentAdapterSync(commentList)
-        }
-
-        commentViewModel.postCommentSuccess.observe(this){
-            if(it)
-                Toast.makeText(this@BoardActivity, POST_COMMENT_COMPLETE, Toast.LENGTH_SHORT).show()
-        }
-
     }
+
+    private fun showToastMessage(message : String){
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+
+
 
     private fun boardPostIdSync() {
         BoardData.boardPostId = receiveData.postId

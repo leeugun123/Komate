@@ -1,39 +1,52 @@
 package org.techtown.kormate.Repository
 
-import android.app.Application
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.User
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.techtown.kormate.Model.UserKakaoIntel
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
+import org.techtown.kormate.UI.Fragment.MyFragment
 
 class KakaoRepository() {
 
     suspend fun repoLoadUserData(): Boolean {
 
-        val deferred = CompletableDeferred<Boolean>()
+        val loadDeferred = CompletableDeferred<Boolean>()
 
         UserApiClient.instance.me { user, error ->
 
             if (error != null) {
                 errorMasterAccountHandle()
-                deferred.complete(false)
+                loadDeferred.complete(false)
             } else {
                 user?.let {
                     repoUserKakaoBinding(it)
-                    deferred.complete(true)
+                    loadDeferred.complete(true)
                 }
             }
 
         }
 
-        return deferred.await()
+        return loadDeferred.await()
 
     }
+
+    suspend fun repoKakaoLogout() : Boolean {
+
+        val logOutDeferred = CompletableDeferred<Boolean>()
+
+        UserApiClient.instance.logout { error ->
+
+            if (error != null)
+                logOutDeferred.complete(false)
+            else
+                logOutDeferred.complete(true)
+
+        }
+
+        return logOutDeferred.await()
+
+    }
+
 
     private fun repoUserKakaoBinding(user : User) {
         UserKakaoIntel.userNickName = user.kakaoAccount?.profile?.nickname.toString()
