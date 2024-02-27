@@ -22,10 +22,9 @@ class BoardRepository() {
 
     private val ref = Firebase.database.reference
     private val postRef = ref.child(POSTS_PATH)
+    private val recentLimitListMutableLiveData = MutableLiveData<List<BoardDetail>>()
 
-    fun getRecentBoardDetail(): MutableLiveData<List<BoardDetail>> {
-
-        val recentLimitListMutableLiveData = MutableLiveData<List<BoardDetail>>()
+    fun getRecentBoardDetail(): LiveData<List<BoardDetail>> {
 
         postRef.addValueEventListener(object : ValueEventListener {
 
@@ -39,11 +38,13 @@ class BoardRepository() {
                 }
 
                 recentLimitListMutableLiveData.value = recentLimitList
+
             }
 
             override fun onCancelled(error: DatabaseError) {}
 
         })
+
 
         return recentLimitListMutableLiveData
 
