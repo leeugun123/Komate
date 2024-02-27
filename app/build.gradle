@@ -102,5 +102,8 @@ dependencies {
 
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01'
 
+    //파이어베이스 코루틴 비동기 처리
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.2'
+
 
 }
