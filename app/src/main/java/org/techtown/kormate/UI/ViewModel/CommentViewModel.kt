@@ -19,8 +19,28 @@ class CommentViewModel() : ViewModel() {
     val postCommentSuccess : LiveData<Boolean>
         get() = _postCommentSuccess
 
+    private val _commentList = MutableLiveData<List<Comment>>()
+
+    val commentList : LiveData<List<Comment>>
+        get() = _commentList
+
     private val commentRepository = CommentRepository()
-    val commentList = commentRepository.loadComments()
+
+
+    fun getComment(){
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val responseCommentListData = commentRepository.loadComments()
+
+            withContext(Dispatchers.Main){
+                _commentList.value = responseCommentListData
+            }
+
+        }
+
+    }
+
 
     fun uploadComment(comment : Comment , postId : String){
 
@@ -41,7 +61,6 @@ class CommentViewModel() : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             commentRepository.reportComment(commentReport)
         }
-
 
     }
 

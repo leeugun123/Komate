@@ -57,20 +57,31 @@ class CommentAdapter(
         }
 
         private fun setDeleteButton(comment: Comment) {
+
             binding.Button.setOnClickListener {
+
                 val builder = AlertDialog.Builder(binding.root.context)
+
                 builder.setTitle("댓글을 삭제하시겠습니까?")
                 builder.setPositiveButton("예") { dialog, _ ->
+
                     val databaseReference =
                         FirebaseDatabase.getInstance().reference.child("posts")
                             .child(postId).child("comments")
                     databaseReference.child(comment.id).removeValue()
                     Toast.makeText(binding.root.context, " 댓글이 삭제되었습니다", Toast.LENGTH_SHORT)
                         .show()
+
+                    commentViewModel.getComment()
+
                 }
+
                 builder.setNegativeButton("아니오") { dialog, _ -> }
                 builder.create().show()
+
+
             }
+
         }
 
         private fun setReportButton(comment: Comment) {

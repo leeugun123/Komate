@@ -77,6 +77,11 @@ class BoardActivity : AppCompatActivity() {
             }
 
             edit.setOnClickListener { showPopUpMenu(it) }
+
+            swipeFreshLayout.setOnRefreshListener {
+                getCommentList()
+            }
+
         }
 
 
@@ -98,9 +103,13 @@ class BoardActivity : AppCompatActivity() {
     }
 
     private fun postCommentSuccessObserve() {
-        commentViewModel.postCommentSuccess.observe(this){
-            if(it)
+        commentViewModel.postCommentSuccess.observe(this){ success ->
+            if(success){
+                getCommentList()
                 showToastMessage(POST_COMMENT_COMPLETE)
+            }
+            else
+                showToastMessage(COMMENT_UPLOAD_FAIL)
         }
     }
 
@@ -108,7 +117,12 @@ class BoardActivity : AppCompatActivity() {
     private fun commentListObserve() {
         commentViewModel.commentList.observe(this) {commentList ->
             commentAdapterSync(commentList)
+            swipeFreshCancel()
         }
+    }
+
+    private fun swipeFreshCancel() {
+        binding.swipeFreshLayout.isRefreshing = false
     }
 
 
@@ -203,28 +217,26 @@ class BoardActivity : AppCompatActivity() {
 
     private fun showDeleteAlertDialog() {
 
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(REMOVE_POST_ASKING)
+        AlertDialog.Builder(this)
+            .setTitle(REMOVE_POST_ASKING)
+            .setPositiveButton(YES) { _, _ -> removeBoard() }
+            .setNegativeButton(NO) { _, _ -> }
+            .create()
+            .show()
 
-        builder.setPositiveButton("예") { _, _ ->
-            removeBoard()
-        }
-
-        builder.setNegativeButton("아니오") { _, _ -> }
-
-        builder.create().show()
     }
 
     private fun removeBoard() {
-
-        lifecycleScope.launch(Dispatchers.Main){
-            boardViewModel.removePost(receiveData.postId)
-        }
+        boardViewModel.removePost(receiveData.postId)
     }
 
     private fun commentPositionSync() {
         commentSize += 1
         commentRecyclerView.scrollToPosition(commentSize-1)
+    }
+
+    private fun getCommentList(){
+        commentViewModel.getComment()
     }
 
     private fun uploadComment() {
@@ -287,6 +299,7 @@ class BoardActivity : AppCompatActivity() {
            userInfoUiSync()
            postUiSync()
            commentUiSync()
+           getCommentList()
     }
 
     private fun commentUiSync() {
@@ -347,19 +360,23 @@ class BoardActivity : AppCompatActivity() {
 
     private fun clickImageView() {
 
-        binding.uploadImageView1.setOnClickListener {
-            tossIntent(receiveData.img.size,1, receiveData.img[0])
+        binding.apply {
+
+            uploadImageView1.setOnClickListener {
+                tossIntent(receiveData.img.size,1, receiveData.img[0])
+            }
+
+            uploadImageView2.setOnClickListener {
+                tossIntent(receiveData.img.size,2, receiveData.img[1])
+            }
+
+            uploadImageView3.setOnClickListener {
+                tossIntent(receiveData.img.size,3, receiveData.img[2])
+            }
+
         }
 
-        binding.uploadImageView2.setOnClickListener {
-            tossIntent(receiveData.img.size,2, receiveData.img[1])
-        }
-
-        binding.uploadImageView3.setOnClickListener {
-            tossIntent(receiveData.img.size,3, receiveData.img[2])
-        }
-
-    }//액티비티로
+    }
 
     private fun removeImgView() {
 
@@ -393,10 +410,13 @@ class BoardActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?){
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_EDIT_ACTIVITY && resultCode == Activity.RESULT_OK)
+
+        if (requestCode == REQUEST_CODE_EDIT_ACTIVITY && resultCode == Activity.RESULT_OK){
             finish()
+        }
+
     }
-    //수정 후 액티비티 종료
+
 
     companion object{
         private const val NO_POST_TRY_AGAIN = "글이 없습니다. 다시 작성해주세요."
@@ -406,6 +426,10 @@ class BoardActivity : AppCompatActivity() {
         private const val CANCEL = "취소"
         private const val CHECK = "확인"
         private const val REPORT_POST = "게시물이 신고 되었습니다."
+        private const val COMMENT_UPLOAD_FAIL = "댓글 업로드 실패"
+
+        private const val YES = "예"
+        private const val NO = "아니오"
 
         var commentSize = 0
         var commentList = listOf<Comment>()
