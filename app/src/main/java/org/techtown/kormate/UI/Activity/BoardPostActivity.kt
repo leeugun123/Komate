@@ -31,6 +31,7 @@ import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.UserKakaoIntel.userId
 import org.techtown.kormate.Model.UserKakaoIntel.userNickName
 import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
+import org.techtown.kormate.UI.Fragment.BoardFragment
 import org.techtown.kormate.UI.ViewModel.BoardViewModel
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat
@@ -167,22 +168,17 @@ class BoardPostActivity : AppCompatActivity() {
         dialog.dismiss()
     }
 
-    private fun createProgressBar() : Dialog {
-
-        val progressBar = Dialog(this)
-
-        progressBar.let {
-            it.setTitle(UPLOAD_DOING_MESSAGE)
-            it.setCancelable(false)
-            it.show()
-        }
-        return progressBar
+    private fun createProgressBar() = Dialog(this).apply {
+        setTitle(UPLOAD_DOING_MESSAGE)
+        setCancelable(false)
+        show()
     }
 
 
     private fun postComplete(){
-        finish()
         showToastMessage(POST_UPLOAD_COMPLETE_MESSAGE)
+        setResult(BoardFragment.BOARD_RESPONSE_CODE)
+        finish()
     }
 
     private fun showToastMessage(message : String){

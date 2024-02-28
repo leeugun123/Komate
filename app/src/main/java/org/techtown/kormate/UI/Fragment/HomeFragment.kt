@@ -1,25 +1,29 @@
 package org.techtown.kormate.UI.Fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import org.techtown.kormate.Constant.FirebasePathConstant
+import org.techtown.kormate.FragmentCallback
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.UserKakaoIntel.userNickName
 import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
+import org.techtown.kormate.UI.Activity.BoardActivity
 import org.techtown.kormate.UI.Adapter.RecentAdapter
 import org.techtown.kormate.UI.ViewModel.BoardViewModel
 import org.techtown.kormate.databinding.FragmentHomeBinding
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment() ,FragmentCallback {
 
     private lateinit var binding : FragmentHomeBinding
-    private val boardViewModel : BoardViewModel by viewModels()
+    private val boardViewModel : BoardViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) }
 
@@ -61,9 +65,9 @@ class HomeFragment : Fragment() {
 
     private fun recentLimitListObserve() {
 
-        boardViewModel.boardDetailList.observe(viewLifecycleOwner) { recentLimitList ->
+        boardViewModel.boardDetailList.observe(requireActivity()) { recentLimitList ->
             binding.recentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-            binding.recentRecyclerview.adapter = RecentAdapter(limitListSize(recentLimitList))
+            binding.recentRecyclerview.adapter = RecentAdapter(limitListSize(recentLimitList) , this)
         }
 
     }
@@ -80,6 +84,25 @@ class HomeFragment : Fragment() {
 
     companion object{
         private const val PAGE_LOAD_LIMIT = 4
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == 1002 && resultCode == 1003){
+            getBoardList()
+        }
+
+    }
+
+    private fun getBoardList(){
+        boardViewModel.getBoardList()
+    }
+
+    override fun onNavigateToActivity(boardDetail : BoardDetail) {
+        val intent = Intent(requireActivity(), BoardActivity::class.java)
+        intent.putExtra(FirebasePathConstant.POST_PATH_INTENT,boardDetail)
+        startActivityForResult(intent,1002)
     }
 
 

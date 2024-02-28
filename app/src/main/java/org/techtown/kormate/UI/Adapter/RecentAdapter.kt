@@ -8,10 +8,12 @@ import com.bumptech.glide.Glide
 import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.UI.Activity.BoardActivity
 import org.techtown.kormate.Model.BoardDetail
+import org.techtown.kormate.UI.Fragment.BoardFragment
+import org.techtown.kormate.UI.Fragment.HomeFragment
 import org.techtown.kormate.databinding.RecentpreviewBinding
 
 
-class RecentAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Adapter<RecentAdapter.ViewHolder>() {
+class RecentAdapter(private val boardList : List<BoardDetail> , private val homeFragment: HomeFragment) : RecyclerView.Adapter<RecentAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding : RecentpreviewBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -45,14 +47,8 @@ class RecentAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Ad
             .circleCrop()
             .into(holder.binding.userImg)
 
-        holder.itemView.setOnClickListener { moveToBoardActivity(holder , list) }
+        holder.itemView.setOnClickListener { homeFragment.onNavigateToActivity(list) }
 
-    }
-
-    private fun moveToBoardActivity(holder : ViewHolder, list : BoardDetail) {
-        val intent = Intent(holder.itemView.context, BoardActivity::class.java)
-        intent.putExtra(POST_PATH_INTENT ,list)
-        holder.itemView.context.startActivity(intent)
     }
 
 

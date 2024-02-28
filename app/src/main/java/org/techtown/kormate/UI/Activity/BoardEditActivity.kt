@@ -219,7 +219,7 @@ class BoardEditActivity : AppCompatActivity() {
 
     private fun reviseComplete() {
 
-        setResult(Activity.RESULT_OK,  Intent())
+        setResult(1003,  Intent())
         finish()
         showToast(REVISE_POST_COMPLETE_MESSAGE)
 

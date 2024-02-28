@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.UI.Activity.BoardActivity
+import org.techtown.kormate.UI.Fragment.BoardFragment
+import org.techtown.kormate.UI.Fragment.HomeFragment
 import org.techtown.kormate.databinding.BoardpreviewBinding
 
-class PreviewAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Adapter<PreviewAdapter.ViewHolder>(){
+class PreviewAdapter(private val boardList : List<BoardDetail> , private val boardFragment : BoardFragment) : RecyclerView.Adapter<PreviewAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -42,16 +44,12 @@ class PreviewAdapter(private val boardList : List<BoardDetail>) : RecyclerView.A
             binding.post.text = concatPost
 
             binding.root.setOnClickListener {
-                moveToBoardActivity(boardDetail)
+                boardFragment.onNavigateToActivity(boardDetail)
             }
 
         }
 
-        private fun moveToBoardActivity(boardDetail: BoardDetail) {
-            val intent = Intent(itemView.context, BoardActivity::class.java)
-            intent.putExtra("postIntel",boardDetail)
-            itemView.context.startActivity(intent)
-        }
+
 
 
     }

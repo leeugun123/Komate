@@ -163,6 +163,7 @@ class BoardActivity : AppCompatActivity() {
         boardViewModel.boardRemoveSuccess.observe(this){
             if(it){
                 showToastMessage(REMOVE_POST_COMPLETE)
+                setResult(1003)
                 finish()
             }
         }
@@ -434,7 +435,8 @@ class BoardActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?){
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == REQUEST_CODE_EDIT_ACTIVITY && resultCode == Activity.RESULT_OK){
+        if (requestCode == REQUEST_CODE_EDIT_ACTIVITY && resultCode == 1003){
+            setResult(resultCode)
             finish()
         }
 

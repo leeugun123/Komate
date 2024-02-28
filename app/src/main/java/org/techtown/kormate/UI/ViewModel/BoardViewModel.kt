@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.DEBUG_PROPERTY_VALUE_OFF
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,9 +29,25 @@ class BoardViewModel() : ViewModel() {
     val boardReportSuccess: LiveData<Boolean>
         get() = _boardReportSuccess
 
+    private val _boardDetailList = MutableLiveData<List<BoardDetail>>()
+    val boardDetailList : LiveData<List<BoardDetail>>
+        get() = _boardDetailList
+
     private val boardRepository = BoardRepository()
 
-    val boardDetailList : LiveData<List<BoardDetail>> = boardRepository.getRecentBoardDetail()
+    fun getBoardList(){
+
+        viewModelScope.launch(Dispatchers.IO){
+
+            val responseBoardList = boardRepository.getRecentBoardDetail()
+
+            withContext(Dispatchers.Main){
+                _boardDetailList.value = responseBoardList
+            }
+
+        }
+
+    }
 
 
 
