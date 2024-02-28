@@ -95,6 +95,20 @@ class BoardActivity : AppCompatActivity() {
     private fun commentViewModelObserve() {
         commentListObserve()
         postCommentSuccessObserve()
+        deleteCommentSuccessObserve()
+    }
+
+    private fun deleteCommentSuccessObserve() {
+
+        commentViewModel.deleteCommentSuccess.observe(this){ success ->
+
+            if(success){
+                showToastMessage(DELETE_COMMENT_COMPLETE)
+                getCommentList()
+            }
+
+        }
+
     }
 
     private fun boardViewModelObserve() {
@@ -423,6 +437,7 @@ class BoardActivity : AppCompatActivity() {
         private const val REMOVE_POST_ASKING = "게시물을 삭제하시겠습니까?"
         private const val REMOVE_POST_COMPLETE = "게시물이 삭제되었습니다."
         private const val POST_COMMENT_COMPLETE = "댓글이 등록 되었습니다."
+        private const val DELETE_COMMENT_COMPLETE = "댓글이 삭제되었습니다."
         private const val CANCEL = "취소"
         private const val CHECK = "확인"
         private const val REPORT_POST = "게시물이 신고 되었습니다."

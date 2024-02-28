@@ -14,15 +14,22 @@ import org.techtown.kormate.Repository.CommentRepository
 
 class CommentViewModel() : ViewModel() {
 
+    private val _commentList = MutableLiveData<List<Comment>>()
+
+    val commentList : LiveData<List<Comment>>
+        get() = _commentList
+
     private val _postCommentSuccess = MutableLiveData<Boolean>()
 
     val postCommentSuccess : LiveData<Boolean>
         get() = _postCommentSuccess
 
-    private val _commentList = MutableLiveData<List<Comment>>()
 
-    val commentList : LiveData<List<Comment>>
-        get() = _commentList
+    private val _deleteCommentSuccess = MutableLiveData<Boolean>()
+
+    val deleteCommentSuccess : LiveData<Boolean>
+        get() = _deleteCommentSuccess
+
 
     private val commentRepository = CommentRepository()
 
@@ -61,6 +68,21 @@ class CommentViewModel() : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             commentRepository.reportComment(commentReport)
         }
+
+    }
+
+    fun deleteComment(commentId : String){
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val responseDeleteCommentSuccess = commentRepository.deleteComment(commentId)
+
+            withContext(Dispatchers.Main){
+                _deleteCommentSuccess.value = responseDeleteCommentSuccess
+            }
+
+        }
+
 
     }
 

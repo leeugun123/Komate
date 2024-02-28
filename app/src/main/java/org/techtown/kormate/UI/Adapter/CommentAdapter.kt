@@ -19,9 +19,9 @@ import org.techtown.kormate.databinding.CommentimgBinding
 
 
 class CommentAdapter(
-    private val comments: List<Comment>,
-    private val userId: String,
-    private val postId: String,
+    private val comments : List<Comment>,
+    private val userId : String,
+    private val postId : String,
     private val commentViewModel : CommentViewModel
 ) : RecyclerView.Adapter<CommentAdapter.ViewHolder>() {
 
@@ -34,7 +34,7 @@ class CommentAdapter(
         holder.bind(comments[position])
     }
 
-    override fun getItemCount(): Int = comments.size
+    override fun getItemCount() = comments.size
 
     inner class ViewHolder(private val binding: CommentimgBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -45,6 +45,8 @@ class CommentAdapter(
                 .load(comment.userImg)
                 .circleCrop()
                 .into(binding.commentUserImg)
+
+
             binding.commentUserName.text = comment.userName
             binding.commentTime.text = comment.createdTime
             binding.commentText.text= comment.text
@@ -64,23 +66,15 @@ class CommentAdapter(
 
                 builder.setTitle("댓글을 삭제하시겠습니까?")
                 builder.setPositiveButton("예") { dialog, _ ->
-
-                    val databaseReference =
-                        FirebaseDatabase.getInstance().reference.child("posts")
-                            .child(postId).child("comments")
-                    databaseReference.child(comment.id).removeValue()
-                    Toast.makeText(binding.root.context, " 댓글이 삭제되었습니다", Toast.LENGTH_SHORT)
-                        .show()
-
-                    commentViewModel.getComment()
-
+                    commentViewModel.deleteComment(comment.id)
                 }
 
                 builder.setNegativeButton("아니오") { dialog, _ -> }
                 builder.create().show()
 
-
             }
+
+
 
         }
 

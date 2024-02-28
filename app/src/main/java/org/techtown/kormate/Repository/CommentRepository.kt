@@ -27,6 +27,7 @@ class CommentRepository() {
     suspend fun loadComments() : List<Comment> {
 
         val commentsRef = postsPathRef.child(BoardData.boardPostId).child(FirebasePathConstant.COMMENT_PATH)
+
         val dataSnapshot = commentsRef.get().await()
 
         commentList.clear()
@@ -57,6 +58,17 @@ class CommentRepository() {
 
         val pushKey = commentReportRef.push().key.toString()
         val job = commentReportRef.child(pushKey).setValue(commentReport)
+        job.await()
+
+        return job.isSuccessful
+
+    }
+
+    suspend fun deleteComment(commentId : String) : Boolean {
+
+        val commentsRef = postsPathRef.child(BoardData.boardPostId).child(FirebasePathConstant.COMMENT_PATH)
+
+        val job = commentsRef.child(commentId).removeValue()
         job.await()
 
         return job.isSuccessful
