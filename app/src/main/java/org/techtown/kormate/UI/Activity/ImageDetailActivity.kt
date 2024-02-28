@@ -26,6 +26,12 @@ class ImageDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         uiSync()
+        bindingApply()
+
+
+    }
+
+    private fun bindingApply() {
 
         binding.apply {
 
@@ -36,9 +42,7 @@ class ImageDetailActivity : AppCompatActivity() {
             downButton.setOnClickListener {
                 imgDownload()
             }
-
         }
-
 
 
     }

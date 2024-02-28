@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.scaleMatrix
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -31,6 +32,7 @@ class MyFragment : Fragment() {
     private val myIntelViewModel : MyIntelViewModel by viewModels()
     private val kakaoViewModel : KakaoViewModel by viewModels()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -43,6 +45,14 @@ class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        bindingApply()
+        kakaoIntelBinding()
+        observeUserIntelViewModel()
+
+    }
+
+    private fun bindingApply() {
+
         binding.apply {
 
             logoutButton.setOnClickListener {
@@ -52,11 +62,8 @@ class MyFragment : Fragment() {
             reviseButt.setOnClickListener {
                 startActivity(Intent(requireContext(), MyIntelReviseActivity::class.java))
             }
-
         }
 
-        kakaoIntelBinding()
-        observeUserIntelViewModel()
 
     }
 

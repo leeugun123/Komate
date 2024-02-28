@@ -29,13 +29,22 @@ class BoardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.movePost.setOnClickListener {
-            startActivity(Intent(activity, BoardPostActivity::class.java))
-        }
+        bindingApply()
 
 
         dataUiBindingInit()
 
+    }
+
+    private fun bindingApply() {
+
+        binding.apply {
+
+            movePost.setOnClickListener {
+                startActivity(Intent(activity, BoardPostActivity::class.java))
+            }
+
+        }
     }
 
 

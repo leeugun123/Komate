@@ -24,9 +24,18 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         kakaoAutoLogin()
+        bindingApply()
 
-        binding.kakaoLogin.setOnClickListener {
-            checkUserApiClient()
+
+    }
+
+    private fun bindingApply() {
+
+        binding.apply {
+
+            kakaoLogin.setOnClickListener {
+                checkUserApiClient()
+            }
         }
 
     }

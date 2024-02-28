@@ -23,6 +23,15 @@ class MyIntelReviseActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         uiSync()
+        bindingApply()
+
+
+        postSuccessLiveDataObserve()
+
+
+    }
+
+    private fun bindingApply() {
 
         binding.apply {
 
@@ -34,11 +43,7 @@ class MyIntelReviseActivity : AppCompatActivity() {
                 reviseUserIntelBinding()
                 reviseUploadUserIntel()
             }
-
         }
-
-        postSuccessLiveDataObserve()
-
 
     }
 

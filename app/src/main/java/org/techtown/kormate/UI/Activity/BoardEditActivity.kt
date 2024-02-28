@@ -50,24 +50,25 @@ class BoardEditActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
         syncTitleUi()
         getIntentHandling()
-
-        binding.backBtn.setOnClickListener { finish() }
-
-        binding.getImgButton.setOnClickListener {
-            requestCameraPermission { moveToGallery() }
-        }
-
-
-        binding.updateButton.setOnClickListener {
-
-            imageAndTextProcessing()
-
-        }
-
+        bindingApply()
         boardPostSuccessObserve()
 
+
+    }
+
+    private fun bindingApply() {
+
+        binding.apply {
+
+            backBtn.setOnClickListener { finish() }
+
+            getImgButton.setOnClickListener { requestCameraPermission { moveToGallery() } }
+
+            updateButton.setOnClickListener { imageAndTextProcessing() }
+        }
 
     }
 

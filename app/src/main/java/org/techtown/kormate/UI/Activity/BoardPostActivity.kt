@@ -39,17 +39,24 @@ import java.util.*
 class BoardPostActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityBoardPostBinding.inflate(layoutInflater) }
-    private val boardViewModel : BoardViewModel by viewModels()
-
     private val postsRef by lazy { Firebase.database.reference.child(POSTS_PATH) }
     private val postId by lazy { postsRef.push().key }
 
+    private val boardViewModel : BoardViewModel by viewModels()
     private var goalImg = mutableListOf<String>()
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        bindingApply()
+        boardPostSuccessObserve()
+
+    }
+
+    private fun bindingApply() {
 
         binding.apply {
 
@@ -66,8 +73,6 @@ class BoardPostActivity : AppCompatActivity() {
             }
 
         }
-
-        boardPostSuccessObserve()
 
     }
 

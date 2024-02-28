@@ -55,6 +55,13 @@ class BoardActivity : AppCompatActivity() {
 
         boardUiSync()
         boardPostIdSync()
+        bindingApply()
+        viewModelObserve()
+
+
+    }
+
+    private fun bindingApply() {
 
         binding.apply {
 
@@ -65,15 +72,12 @@ class BoardActivity : AppCompatActivity() {
                 if(binding.reply.text.isNotEmpty())
                     handleComment()
                 else
-                    Toast.makeText(this@BoardActivity, NO_POST_TRY_AGAIN, Toast.LENGTH_SHORT).show()
+                    showToastMessage(NO_POST_TRY_AGAIN)
 
             }
 
             edit.setOnClickListener { showPopUpMenu(it) }
-
         }
-
-        viewModelObserve()
 
 
     }
