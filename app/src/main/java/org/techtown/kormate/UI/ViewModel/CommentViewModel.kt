@@ -24,6 +24,11 @@ class CommentViewModel() : ViewModel() {
     val postCommentSuccess : LiveData<Boolean>
         get() = _postCommentSuccess
 
+    private val _reportCommentSuccess = MutableLiveData<Boolean>()
+
+    val reportCommentSuccess : LiveData<Boolean>
+        get() = _reportCommentSuccess
+
 
     private val _deleteCommentSuccess = MutableLiveData<Boolean>()
 
@@ -66,7 +71,13 @@ class CommentViewModel() : ViewModel() {
     fun reportComment(commentReport : Report){
 
         viewModelScope.launch(Dispatchers.IO) {
-            commentRepository.reportComment(commentReport)
+
+            val responseReportSuccess = commentRepository.reportComment(commentReport)
+
+            withContext(Dispatchers.Main){
+                _reportCommentSuccess.value = responseReportSuccess
+            }
+
         }
 
     }

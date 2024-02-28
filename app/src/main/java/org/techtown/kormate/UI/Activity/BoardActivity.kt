@@ -96,6 +96,17 @@ class BoardActivity : AppCompatActivity() {
         commentListObserve()
         postCommentSuccessObserve()
         deleteCommentSuccessObserve()
+        reportCommentSuccessObserve()
+    }
+
+    private fun reportCommentSuccessObserve() {
+
+        commentViewModel.reportCommentSuccess.observe(this){success ->
+
+            if(success)
+                showToastMessage(REPORT_COMMENT_COMPLETE)
+        }
+
     }
 
     private fun deleteCommentSuccessObserve() {
@@ -332,7 +343,7 @@ class BoardActivity : AppCompatActivity() {
         commentList = list
         commentSize = commentList.size
         commentRecyclerView.layoutManager = LinearLayoutManager(this)
-        commentRecyclerView.adapter = CommentAdapter(commentList, UserKakaoIntel.userId , receiveData.postId , commentViewModel)
+        commentRecyclerView.adapter = CommentAdapter(commentList, UserKakaoIntel.userId , commentViewModel)
         commentRecyclerView.scrollToPosition(commentList.size - 1)
     }
 
@@ -370,6 +381,8 @@ class BoardActivity : AppCompatActivity() {
         for (i in receiveData.img.size until imageViewList.size) {
             imageViewList[i].visibility = View.GONE
         }//사용 하지 않는 imageView 제거
+
+
     }
 
     private fun clickImageView() {
@@ -434,10 +447,11 @@ class BoardActivity : AppCompatActivity() {
 
     companion object{
         private const val NO_POST_TRY_AGAIN = "글이 없습니다. 다시 작성해주세요."
-        private const val REMOVE_POST_ASKING = "게시물을 삭제하시겠습니까?"
-        private const val REMOVE_POST_COMPLETE = "게시물이 삭제되었습니다."
+        private const val REMOVE_POST_ASKING = "게시물을 삭제 하시겠습니까?"
+        private const val REMOVE_POST_COMPLETE = "게시물이 삭제 되었습니다."
         private const val POST_COMMENT_COMPLETE = "댓글이 등록 되었습니다."
-        private const val DELETE_COMMENT_COMPLETE = "댓글이 삭제되었습니다."
+        private const val DELETE_COMMENT_COMPLETE = "댓글이 삭제 되었습니다."
+        private const val REPORT_COMMENT_COMPLETE = "댓글이 신고 되었습니다."
         private const val CANCEL = "취소"
         private const val CHECK = "확인"
         private const val REPORT_POST = "게시물이 신고 되었습니다."

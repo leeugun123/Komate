@@ -21,7 +21,6 @@ import org.techtown.kormate.databinding.CommentimgBinding
 class CommentAdapter(
     private val comments : List<Comment>,
     private val userId : String,
-    private val postId : String,
     private val commentViewModel : CommentViewModel
 ) : RecyclerView.Adapter<CommentAdapter.ViewHolder>() {
 
@@ -41,16 +40,7 @@ class CommentAdapter(
 
         fun bind(comment: Comment) {
 
-            Glide.with(itemView)
-                .load(comment.userImg)
-                .circleCrop()
-                .into(binding.commentUserImg)
-
-
-            binding.commentUserName.text = comment.userName
-            binding.commentTime.text = comment.createdTime
-            binding.commentText.text= comment.text
-
+            commentTitleUiBinding(comment)
             if (userId == comment.userId.toString())
                 setDeleteButton(comment)
             else
@@ -58,54 +48,63 @@ class CommentAdapter(
 
         }
 
+        private fun commentTitleUiBinding(comment : Comment) {
+
+            Glide.with(itemView)
+                .load(comment.userImg)
+                .circleCrop()
+                .into(binding.commentUserImg)
+
+            binding.apply {
+                commentUserName.text = comment.userName
+                commentTime.text = comment.createdTime
+                commentText.text= comment.text
+            }
+
+        }
+
         private fun setDeleteButton(comment: Comment) {
 
             binding.Button.setOnClickListener {
 
-                val builder = AlertDialog.Builder(binding.root.context)
-
-                builder.setTitle("댓글을 삭제하시겠습니까?")
-                builder.setPositiveButton("예") { dialog, _ ->
-                    commentViewModel.deleteComment(comment.id)
-                }
-
-                builder.setNegativeButton("아니오") { dialog, _ -> }
-                builder.create().show()
+                AlertDialog.Builder(binding.root.context)
+                    .setTitle("댓글을 삭제하시겠습니까?")
+                    .setPositiveButton("예") { _, _ -> commentViewModel.deleteComment(comment.id) }
+                    .setNegativeButton("아니오") { dialog, _ -> }
+                    .create().show()
 
             }
-
-
 
         }
 
         private fun setReportButton(comment: Comment) {
-            binding.Button.setImageResource(ic_baseline_report_24)
-            binding.Button.setOnClickListener {
-                showReportDialog(comment)
+
+            binding.Button.apply {
+                setImageResource(ic_baseline_report_24)
+                setOnClickListener { showReportDialog(comment)}
             }
+
         }
 
         private fun showReportDialog(comment: Comment) {
+
             val reasons = arrayOf("욕설", "도배", "인종 혐오 표현", "성적인 만남 유도")
             val checkedReasons = booleanArrayOf(false, false, false, false, false)
 
-            val builder = AlertDialog.Builder(binding.root.context)
+            AlertDialog.Builder(binding.root.context)
+                .setTitle("신고 사유를 선택하세요")
+                .setMultiChoiceItems(reasons, checkedReasons) { _, which, isChecked ->
+                    checkedReasons[which] = isChecked
+                }
+                .setPositiveButton("확인") { _, _ ->
+                    handleReport(comment, reasons, checkedReasons)
+                }
+                .setNegativeButton("취소") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create().show()
 
-            builder.setTitle("신고 사유를 선택하세요")
-            builder.setMultiChoiceItems(reasons, checkedReasons) { _, which, isChecked ->
-                checkedReasons[which] = isChecked
-            }
 
-            builder.setPositiveButton("확인") { _, _ ->
-                handleReport(comment, reasons, checkedReasons)
-            }
-
-            builder.setNegativeButton("취소") { dialog, _ ->
-                dialog.dismiss()
-            }
-
-            val dialog = builder.create()
-            dialog.show()
         }
 
         private fun handleReport(comment: Comment, reasons: Array<String>, checkedReasons: BooleanArray) {
@@ -122,7 +121,6 @@ class CommentAdapter(
             commentViewModel.reportComment(report)
 
         }
-
 
     }
 
