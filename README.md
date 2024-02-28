@@ -1,3 +1,12 @@
+# 깐부
+
+
+<img width="400" height="350" alt="Screenshot 2024-02-22 at 3 12 43 PM" src="https://github.com/leeugun123/Komate/assets/50404123/c186a342-fef2-4a98-ae78-d1467601677b">
+<img width="400" height="350" alt="Screenshot 2024-02-22 at 3 13 03 PM" src="https://github.com/leeugun123/Komate/assets/50404123/a7130cfa-b0a1-4898-8f04-a4fb7875731e">
+
+
+
+
 ## 💡 주제
 
 - 서울과기대 캠퍼스 내 외국 유학생과 한국 학생들이 **정보를 서로 공유** 할 수 있는 게시판
