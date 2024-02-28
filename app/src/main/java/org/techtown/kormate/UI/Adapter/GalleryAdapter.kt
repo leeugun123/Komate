@@ -21,7 +21,7 @@ class GalleryAdapter(private val imageUris: MutableList<String>, private var acB
         holder.bind(imageUris[position])
     }
 
-    override fun getItemCount(): Int = imageUris.size
+    override fun getItemCount() = imageUris.size
 
     inner class ViewHolder(private val binding: GalaryimgBinding) :
 

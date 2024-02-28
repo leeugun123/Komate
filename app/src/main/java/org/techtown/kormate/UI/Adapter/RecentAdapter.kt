@@ -26,14 +26,18 @@ class RecentAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Ad
 
     private fun syncAdapterUi(list : BoardDetail , holder : ViewHolder) {
 
-        holder.binding.dateTime.text = list.dateTime
+        holder.binding.apply {
 
-        holder.binding.post.text = if(list.post.length > PREVIEW_POST_LIMIT - 1){
-            list.post.substring(PREVIEW_POST_START, PREVIEW_POST_LIMIT - 1)+"..."
-        } else
-            list.post
+            dateTime.text = list.dateTime
 
-        holder.binding.userName.text = list.userName
+            post.text = if(list.post.length > PREVIEW_POST_LIMIT - 1){
+                list.post.substring(PREVIEW_POST_START, PREVIEW_POST_LIMIT - 1)+"..."
+            } else
+                list.post
+
+            userName.text = list.userName
+
+        }
 
         Glide.with(holder.itemView.context)
             .load(list.userImg)
@@ -41,9 +45,7 @@ class RecentAdapter(private val boardList : List<BoardDetail>) : RecyclerView.Ad
             .circleCrop()
             .into(holder.binding.userImg)
 
-        holder.itemView.setOnClickListener {
-            moveToBoardActivity(holder , list)
-        }
+        holder.itemView.setOnClickListener { moveToBoardActivity(holder , list) }
 
     }
 
