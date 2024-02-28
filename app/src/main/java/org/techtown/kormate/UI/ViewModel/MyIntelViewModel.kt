@@ -23,8 +23,25 @@ class MyIntelViewModel() : ViewModel(){
     val dataExistLiveData : LiveData<Boolean>
         get() = _dataExistLiveData
 
+    private val _userIntelLiveData = MutableLiveData<UserIntel>()
+
+    val userIntelLiveData  : LiveData<UserIntel>
+        get() = _userIntelLiveData
+
     private val myIntelRepository = MyIntelRepository()
-    val userIntel = myIntelRepository.repoFetchUserIntel()
+
+    fun getUserIntel(){
+
+        viewModelScope.launch(Dispatchers.IO){
+
+            val userIntelResponse = myIntelRepository.repoFetchUserIntel()
+
+            withContext(Dispatchers.Main){
+                _userIntelLiveData.value = userIntelResponse
+            }
+
+        }
+    }
 
 
     fun uploadUserIntel(userIntel: UserIntel){

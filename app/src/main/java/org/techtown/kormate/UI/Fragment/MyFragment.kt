@@ -1,7 +1,6 @@
 package org.techtown.kormate.UI.Fragment
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -11,12 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.graphics.scaleMatrix
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Model.UserKakaoIntel
 import org.techtown.kormate.UI.Activity.LoginActivity
@@ -32,7 +27,6 @@ class MyFragment : Fragment() {
     private val myIntelViewModel : MyIntelViewModel by viewModels()
     private val kakaoViewModel : KakaoViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -47,7 +41,8 @@ class MyFragment : Fragment() {
 
         bindingApply()
         kakaoIntelBinding()
-        observeUserIntelViewModel()
+        getUserIntel()
+        observeViewModel()
 
     }
 
@@ -60,11 +55,15 @@ class MyFragment : Fragment() {
             }
 
             reviseButt.setOnClickListener {
-                startActivity(Intent(requireContext(), MyIntelReviseActivity::class.java))
+                startActivityForResult(Intent(requireContext(), MyIntelReviseActivity::class.java) , REQUEST_REVISE_CODE)
             }
+
         }
 
+    }
 
+    private fun observeViewModel(){
+        observeUserIntelViewModel()
     }
 
     private fun kakaoIntelBinding() {
@@ -77,7 +76,7 @@ class MyFragment : Fragment() {
     }
 
     private fun userImgProfileBinding() {
-        Glide.with(this)
+        Glide.with(requireContext())
             .load(UserKakaoIntel.userProfileImg)
             .circleCrop()
             .into(binding.userProfile)
@@ -85,23 +84,14 @@ class MyFragment : Fragment() {
 
     private fun showAlertDialog() {
 
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(LOGOUT_ASK_MESSAGE)
-
-        builder.setPositiveButton(YES_MESSAGE) { dialog, _ ->
-            checkKakaoLogOut(dialog)
-        }
-
-        builder.setNegativeButton(NO_MESSAGE) { dialog, _ ->
-            dialog.dismiss()
-        }
-
-        val dialog = builder.create()
-        dialog.show()
+        AlertDialog.Builder(requireContext())
+            .setTitle(LOGOUT_ASK_MESSAGE)
+            .setPositiveButton(YES_MESSAGE) { dialog, _ -> checkKakaoLogOut(dialog) }
+            .setNegativeButton(NO_MESSAGE) { dialog, _ -> dialog.dismiss() }
+            .create().show()
     }
 
     private fun checkKakaoLogOut(dialog : DialogInterface) {
-
         kakaoLogoutRequest()
         kakaoLogOutSuccessObserve(dialog)
     }
@@ -113,7 +103,6 @@ class MyFragment : Fragment() {
     private fun kakaoLogOutSuccessObserve(dialog : DialogInterface) {
 
         kakaoViewModel.kakaoLogOutSuccess.observe(viewLifecycleOwner){success ->
-
             if(success)
                 moveToLoginActivity(dialog)
             else
@@ -128,7 +117,7 @@ class MyFragment : Fragment() {
 
     private fun moveToLoginActivity(dialog: DialogInterface) {
         startActivity(Intent(requireContext(), LoginActivity::class.java))
-        Toast.makeText(requireContext(), LOGOUT_SUCCESS_MESSAGE, Toast.LENGTH_SHORT).show()
+        showToastMessage(LOGOUT_SUCCESS_MESSAGE)
         dialog.dismiss()
         requireActivity().finish()
     }
@@ -137,12 +126,13 @@ class MyFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun observeUserIntelViewModel(){
 
-        myIntelViewModel.userIntel.observe(viewLifecycleOwner){ userIntel ->
+        myIntelViewModel.userIntelLiveData.observe(viewLifecycleOwner){ userIntel ->
             syncUserIntel(userIntel)
             syncUserIntelUiBinding()
         }
 
     }
+
 
     private fun syncUserIntelUiBinding() {
 
@@ -153,6 +143,7 @@ class MyFragment : Fragment() {
         binding.genderText.text = UserIntel.gender
 
         nationTranslationBinding()
+
     }
 
     private fun nationTranslationBinding() {
@@ -169,26 +160,37 @@ class MyFragment : Fragment() {
     }
 
     private fun syncUserIntel(userIntel: UserIntel?) {
-        UserIntel.nation = userIntel?.nation.toString()
-        UserIntel.major = userIntel?.major.toString()
-        UserIntel.gender = userIntel?.gender.toString()
-        UserIntel.selfIntro = userIntel?.selfIntro.toString()
+        UserIntel.nation = userIntel?.nation.orEmpty()
+        UserIntel.major = userIntel?.major.orEmpty()
+        UserIntel.gender = userIntel?.gender.orEmpty()
+        UserIntel.selfIntro = userIntel?.selfIntro.orEmpty()
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_REVISE && resultCode == Activity.RESULT_OK)
-            observeUserIntelViewModel()
+
+        if (requestCode == REQUEST_REVISE_CODE && resultCode == RESPONSE_REVISE_CODE){
+            getUserIntel()
+        }
+
+    }
+
+    private fun getUserIntel(){
+        myIntelViewModel.getUserIntel()
     }
 
     companion object {
-        const val REQUEST_REVISE = 1
-        private const val LOGOUT_ASK_MESSAGE = "로그 아웃 하시겠습니까?"
+
+        private const val LOGOUT_ASK_MESSAGE = "로그아웃 하시겠습니까?"
         private const val LOGOUT_SUCCESS_MESSAGE = "로그아웃 되었습니다."
         private const val LOGOUT_FAIL_MESSAGE = "로그아웃 실패"
         private const val YES_MESSAGE = "예"
         private const val NO_MESSAGE = "아니요"
+
+        const val REQUEST_REVISE_CODE = 1000
+        const val RESPONSE_REVISE_CODE = 1001
+
     }
 
 }

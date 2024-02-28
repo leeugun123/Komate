@@ -25,33 +25,13 @@ class MyIntelRepository() {
     private val myIntelRef = FirebaseDatabase.getInstance()
         .reference.child(USER_INTEL_PATH).child(userId)
 
-    private val userIntelMutableLiveData = MutableLiveData<UserIntel>()
-
-
-    fun repoFetchUserIntel() : LiveData<UserIntel> {
-
-        CoroutineScope(Dispatchers.IO).launch{
-            if(checkDataExistence())
-                getUserId()
-        }
-
-        return userIntelMutableLiveData
-
+    suspend fun repoFetchUserIntel(): UserIntel {
+        return if (checkDataExistence()) {
+            getUserIntel() ?: UserIntel
+        } else { UserIntel }
     }
 
-    private fun getUserId() {
-
-        myIntelRef.addValueEventListener(object : ValueEventListener {
-
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val userIntel = dataSnapshot.getValue(UserIntel::class.java)!!
-                userIntelMutableLiveData.value = userIntel
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
-
-    }
+    private suspend fun getUserIntel() = myIntelRef.get().await().getValue(UserIntel::class.java)
 
     suspend fun repoUploadUserIntel(userIntel: UserIntel) : Boolean {
 
@@ -61,15 +41,9 @@ class MyIntelRepository() {
 
     }
 
-
-
     suspend fun checkDataExistence() =
-        try {
-            myIntelRef.get().await().exists()
-        }
+        try { myIntelRef.get().await().exists() }
         catch (e: Exception) { false }
-
-
 
 
 }

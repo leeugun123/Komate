@@ -78,9 +78,7 @@ class BoardActivity : AppCompatActivity() {
 
             edit.setOnClickListener { showPopUpMenu(it) }
 
-            swipeFreshLayout.setOnRefreshListener {
-                getCommentList()
-            }
+            swipeFreshLayout.setOnRefreshListener { getCommentList() }
 
         }
 
@@ -174,8 +172,6 @@ class BoardActivity : AppCompatActivity() {
     private fun showToastMessage(message : String){
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
-
-
 
 
     private fun boardPostIdSync() {

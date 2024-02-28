@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Model.UserKakaoIntel
+import org.techtown.kormate.UI.Fragment.MyFragment
 import org.techtown.kormate.UI.ViewModel.MyIntelViewModel
 import org.techtown.kormate.databinding.ActivityReviseBinding
 
@@ -18,17 +19,16 @@ class MyIntelReviseActivity : AppCompatActivity() {
     private val myIntelViewModel : MyIntelViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         uiSync()
         bindingApply()
+        viewModelObserve()
+    }
 
-
+    private fun viewModelObserve() {
         postSuccessLiveDataObserve()
-
-
     }
 
     private fun bindingApply() {
@@ -58,8 +58,12 @@ class MyIntelReviseActivity : AppCompatActivity() {
 
     private fun uiSync() {
         kakaoUserInfoSync()
-        binding.selfEdittext.setText(UserIntel.selfIntro)
-        binding.majorIntel.setText(UserIntel.major)
+
+        binding.apply {
+            selfEdittext.setText(UserIntel.selfIntro)
+            majorIntel.setText(UserIntel.major)
+        }
+
     }
 
     private fun kakaoUserInfoSync() {
@@ -81,8 +85,13 @@ class MyIntelReviseActivity : AppCompatActivity() {
     }
 
     private fun reviseCompleteMessage() {
-        Toast.makeText(this, REVISE_COMPLETE_MESSAGE ,Toast.LENGTH_SHORT).show()
+        showToastMessage(REVISE_COMPLETE_MESSAGE)
+        setResult(MyFragment.RESPONSE_REVISE_CODE)
         finish()
+    }
+
+    private fun showToastMessage(message : String){
+        Toast.makeText(this, message ,Toast.LENGTH_SHORT).show()
     }
 
     private fun reviseUserIntelBinding() {
