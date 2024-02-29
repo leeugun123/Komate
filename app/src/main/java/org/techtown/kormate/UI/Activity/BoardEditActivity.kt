@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,7 +20,6 @@ import com.gun0912.tedpermission.normal.TedPermission
 import org.techtown.kormate.Constant.BoardPostConstant.MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
-import org.techtown.kormate.Constant.CarmeraPermissionConstant.REQUEST_CODE_PICK_IMAGES
 import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
 import org.techtown.kormate.UI.Adapter.GalleryAdapter
@@ -41,6 +42,8 @@ class BoardEditActivity : AppCompatActivity() {
     private lateinit var receiveIntent : BoardDetail
     private lateinit var goalImg : MutableList<String>
 
+    private lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -50,6 +53,18 @@ class BoardEditActivity : AppCompatActivity() {
         bindingApply()
         boardPostSuccessObserve()
 
+        activityResultLauncherInit()
+    }
+
+    private fun activityResultLauncherInit() {
+
+        activityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == Activity.RESULT_OK){
+                    addUriImg(it.data)
+                    handleSelectedImages(goalImg, binding)
+                }
+            }
 
     }
 
@@ -162,11 +177,7 @@ class BoardEditActivity : AppCompatActivity() {
             it.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         }
 
-        startActivityForResult(
-            Intent.createChooser(galleryIntent, "Select images"),
-            REQUEST_CODE_PICK_IMAGES
-        )
-
+        activityResultLauncher.launch(Intent.createChooser(galleryIntent, "Select images"))
 
     }
 
@@ -261,16 +272,6 @@ class BoardEditActivity : AppCompatActivity() {
             .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.READ_CALENDAR )
             .check()
-
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
-            addUriImg(data)
-            handleSelectedImages(goalImg, binding)
-        }
 
     }
 

@@ -9,13 +9,14 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
-import org.techtown.kormate.Constant.IntentCode.REQUEST_CODE_BOARD_SYNC
 import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
 import org.techtown.kormate.UI.Adapter.CommentAdapter
 import org.techtown.kormate.Util.CurrentDateTime
@@ -33,6 +34,7 @@ class BoardActivity : AppCompatActivity() {
 
     private val commentViewModel : CommentViewModel by viewModels()
     private val boardViewModel : BoardViewModel by viewModels()
+    private lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
 
     private val commentRecyclerView by lazy { binding.commentRecyclerView }
 
@@ -48,7 +50,19 @@ class BoardActivity : AppCompatActivity() {
         bindingApply()
         viewModelObserve()
 
+        activityResultLauncherInit()
 
+    }
+
+    private fun activityResultLauncherInit() {
+        activityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == RESPONSE_CODE_BOARD_SYNC){
+                    setResult(it.resultCode)
+                    finish()
+                }
+
+            }
     }
 
     private fun bindingApply() {
@@ -224,7 +238,7 @@ class BoardActivity : AppCompatActivity() {
     private fun moveBoardEditActivity() {
         val intent = Intent(this, BoardEditActivity::class.java)
         intent.putExtra(POST_PATH_INTENT , receiveData)
-        startActivityForResult(intent,REQUEST_CODE_BOARD_SYNC)
+        activityResultLauncher.launch(intent)
     }
 
     private fun showDeleteAlertDialog() {
@@ -422,15 +436,6 @@ class BoardActivity : AppCompatActivity() {
     }
 
 
-    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?){
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == REQUEST_CODE_BOARD_SYNC && resultCode == RESPONSE_CODE_BOARD_SYNC){
-            setResult(resultCode)
-            finish()
-        }
-
-    }
 
 
     companion object{

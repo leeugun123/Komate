@@ -11,6 +11,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
 import android.widget.Toast.makeText
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
@@ -23,7 +25,6 @@ import com.gun0912.tedpermission.normal.TedPermission
 import org.techtown.kormate.Constant.BoardPostConstant.MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
-import org.techtown.kormate.Constant.CarmeraPermissionConstant.REQUEST_CODE_PICK_IMAGES
 import org.techtown.kormate.Constant.FirebasePathConstant.POSTS_PATH
 import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
 import org.techtown.kormate.Util.CurrentDateTime
@@ -32,7 +33,6 @@ import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.UserKakaoIntel.userId
 import org.techtown.kormate.Model.UserKakaoIntel.userNickName
 import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
-import org.techtown.kormate.UI.Fragment.BoardFragment
 import org.techtown.kormate.UI.ViewModel.BoardViewModel
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat
@@ -47,6 +47,7 @@ class BoardPostActivity : AppCompatActivity() {
     private val boardViewModel : BoardViewModel by viewModels()
     private var goalImg = mutableListOf<String>()
 
+    private lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +56,19 @@ class BoardPostActivity : AppCompatActivity() {
 
         bindingApply()
         boardPostSuccessObserve()
+        activityResultLauncherInit()
 
+    }
+
+    private fun activityResultLauncherInit() {
+        activityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == Activity.RESULT_OK){
+                    addUriImg(it.data)
+                    handleSelectedImages(goalImg, binding)
+                }
+
+            }
     }
 
     private fun bindingApply() {
@@ -113,22 +126,20 @@ class BoardPostActivity : AppCompatActivity() {
         if (goalImg.isEmpty())
             uploadPost(post, mutableListOf(), progressBar)
 
+
     }
 
     private fun moveToGallery() {
 
         val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
 
-        galleryIntent.let {
-            it.type = "image/*"
-            it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            it.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+        galleryIntent.apply {
+            type = "image/*"
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         }
 
-        startActivityForResult(
-            Intent.createChooser(galleryIntent, "Select images"),
-            REQUEST_CODE_PICK_IMAGES
-        )
+        activityResultLauncher.launch( Intent.createChooser(galleryIntent, "Select images"))
 
     }
 
@@ -200,16 +211,6 @@ class BoardPostActivity : AppCompatActivity() {
             .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.READ_CALENDAR )
             .check()
-
-    }
-
-    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?){
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
-            addUriImg(data)
-            handleSelectedImages(goalImg, binding)
-        }
 
     }
 

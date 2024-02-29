@@ -6,12 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.techtown.kormate.Constant.FirebasePathConstant
 import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
-import org.techtown.kormate.Constant.IntentCode
-import org.techtown.kormate.Constant.IntentCode.REQUEST_CODE_BOARD_SYNC
 import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
 import org.techtown.kormate.FragmentCallback
 import org.techtown.kormate.Model.BoardDetail
@@ -26,6 +25,7 @@ class BoardFragment : Fragment() , FragmentCallback{
 
     private lateinit var binding : FragmentBoardBinding
     private val boardViewModel : BoardViewModel by activityViewModels()
+    private lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) }
 
@@ -40,7 +40,16 @@ class BoardFragment : Fragment() , FragmentCallback{
 
         bindingApply()
         dataUiBindingInit()
+        activityResultLauncherInit()
 
+    }
+
+    private fun activityResultLauncherInit() {
+        activityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == RESPONSE_CODE_BOARD_SYNC)
+                    getBoardList()
+            }
     }
 
     private fun bindingApply() {
@@ -48,7 +57,7 @@ class BoardFragment : Fragment() , FragmentCallback{
         binding.apply {
 
             movePost.setOnClickListener {
-                startActivityForResult(Intent(activity, BoardPostActivity::class.java), REQUEST_CODE_BOARD_SYNC)
+                activityResultLauncher.launch(Intent(activity, BoardPostActivity::class.java))
             }
 
             boardSwipeRefresh.setOnRefreshListener {
@@ -81,18 +90,10 @@ class BoardFragment : Fragment() , FragmentCallback{
         boardViewModel.getBoardList()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if(requestCode == REQUEST_CODE_BOARD_SYNC && resultCode == RESPONSE_CODE_BOARD_SYNC)
-            getBoardList()
-
-    }
-
     override fun onNavigateToActivity(boardDetail: BoardDetail) {
         val intent = Intent(requireActivity(), BoardActivity::class.java)
         intent.putExtra(POST_PATH_INTENT , boardDetail)
-        startActivityForResult(intent, REQUEST_CODE_BOARD_SYNC)
+        activityResultLauncher.launch(intent)
     }
 
 
