@@ -27,6 +27,7 @@ import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
 import org.techtown.kormate.Constant.FirebasePathConstant.POSTS_PATH
 import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
+import org.techtown.kormate.CustomProgressDialog
 import org.techtown.kormate.Util.CurrentDateTime
 import org.techtown.kormate.UI.Adapter.GalleryAdapter
 import org.techtown.kormate.Model.BoardDetail
@@ -98,7 +99,10 @@ class BoardPostActivity : AppCompatActivity() {
         if(checkPostEmpty(post))
             return
 
-        val progressBar = createProgressBar()
+        val customProgressDialog = CustomProgressDialog(this)
+        customProgressDialog.show()
+
+
         val storageRef = FirebaseStorage.getInstance().reference
         val imageFileNames = mutableListOf<String>()
 
@@ -113,18 +117,18 @@ class BoardPostActivity : AppCompatActivity() {
                         .addOnSuccessListener { uri ->
                             imageFileNames.add(uri.toString())
                             if (imageFileNames.size == goalImg.size)
-                                uploadPost(post, imageFileNames, progressBar)
+                                uploadPost(post, imageFileNames, customProgressDialog)
                         }
                 }
                 .addOnFailureListener { e ->
                     showToastMessage(e.message.toString())
-                    progressBar.dismiss()
+                    customProgressDialog.dismiss()
                 }
 
         }
 
         if (goalImg.isEmpty())
-            uploadPost(post, mutableListOf(), progressBar)
+            uploadPost(post, mutableListOf(), customProgressDialog)
 
 
     }
@@ -180,11 +184,7 @@ class BoardPostActivity : AppCompatActivity() {
         dialog.dismiss()
     }
 
-    private fun createProgressBar() = Dialog(this).apply {
-        setTitle(UPLOAD_DOING_MESSAGE)
-        setCancelable(false)
-        show()
-    }
+
 
 
     private fun postComplete(){

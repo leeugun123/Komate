@@ -2,6 +2,7 @@ package org.techtown.kormate.UI.Activity
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
@@ -22,6 +23,7 @@ import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
 import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
+import org.techtown.kormate.CustomProgressDialog
 import org.techtown.kormate.UI.Adapter.GalleryAdapter
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.UI.ViewModel.BoardViewModel
@@ -87,7 +89,9 @@ class BoardEditActivity : AppCompatActivity() {
         if(checkPostEmpty(post))
             return
 
-        val progressBar = createProgressBar()
+        val customProgressDialog = CustomProgressDialog(this)
+        customProgressDialog.show()
+
         val storageRef = FirebaseStorage.getInstance().reference
         val imageFileNames = mutableListOf<String>()
 
@@ -101,12 +105,12 @@ class BoardEditActivity : AppCompatActivity() {
                     imageRef.downloadUrl
                         .addOnSuccessListener { uri ->
                             imageFileNames.add(uri.toString())
-                            checkUploadCompletion(imageFileNames.size, goalImg.size, post, imageFileNames, progressBar)
+                            checkUploadCompletion(imageFileNames.size, goalImg.size, post, imageFileNames, customProgressDialog)
                         }
                 }
                 .addOnFailureListener { e ->
                     showToast(e.message.toString())
-                    progressBar.dismiss()
+                    customProgressDialog.dismiss()
                 }
 
         }
@@ -122,7 +126,7 @@ class BoardEditActivity : AppCompatActivity() {
                     uploadImage(imageUrl.toUri()) //upload 되지 않는 사진인 경우 파이어베이스를 거침
                 else {
                     imageFileNames.add(imageUrl)
-                    checkUploadCompletion(imageFileNames.size, goalImg.size, post, imageFileNames, progressBar)
+                    checkUploadCompletion(imageFileNames.size, goalImg.size, post, imageFileNames, customProgressDialog)
                 }
 
             }
@@ -159,14 +163,6 @@ class BoardEditActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun createProgressBar(): ProgressDialog {
-        return ProgressDialog(this).apply {
-            setMessage(REVISE_DOING_MESSAGE)
-            setCancelable(false)
-            show()
-        }
-    }
-
     private fun moveToGallery() {
 
         val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -185,11 +181,11 @@ class BoardEditActivity : AppCompatActivity() {
 
     private fun getCurrentTimestamp() = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
 
-    private fun checkUploadCompletion(currentSize: Int, totalSize: Int, post: String, imageFileNames: MutableList<String>, progressBar: ProgressDialog) {
+    private fun checkUploadCompletion(currentSize: Int, totalSize: Int, post: String, imageFileNames: MutableList<String>, dialog : Dialog) {
 
         if (currentSize == totalSize) {
             postUpload(post, imageFileNames)
-            progressBar.dismiss()
+            dialog.dismiss()
         }
 
     }
