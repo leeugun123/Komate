@@ -111,11 +111,20 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/boardRecyclerview"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/board_swipe_refresh"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_marginTop="20dp" />
+        android:layout_height="450dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/boardRecyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 
 
     <Button

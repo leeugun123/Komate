@@ -51,6 +51,10 @@ class BoardFragment : Fragment() , FragmentCallback{
                 startActivityForResult(Intent(activity, BoardPostActivity::class.java), REQUEST_CODE_BOARD_SYNC)
             }
 
+            boardSwipeRefresh.setOnRefreshListener {
+                getBoardList()
+            }
+
         }
     }
 
@@ -64,8 +68,11 @@ class BoardFragment : Fragment() , FragmentCallback{
     private fun recentListObserve() {
 
         boardViewModel.boardDetailList.observe(requireActivity()) { recentList ->
+
             binding.boardRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             binding.boardRecyclerview.adapter = PreviewAdapter(recentList , this)
+            binding.boardSwipeRefresh.isRefreshing = false
+
         }
 
     }

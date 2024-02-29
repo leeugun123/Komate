@@ -39,6 +39,10 @@ class HomeFragment : Fragment() ,FragmentCallback {
         uiBinding()
         dataUiBinding()
 
+        binding.homeSwipeRefresh.setOnRefreshListener {
+            getBoardList()
+        }
+
     }
 
 
@@ -70,6 +74,7 @@ class HomeFragment : Fragment() ,FragmentCallback {
         boardViewModel.boardDetailList.observe(requireActivity()) { recentLimitList ->
             binding.recentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             binding.recentRecyclerview.adapter = RecentAdapter(limitListSize(recentLimitList) , this)
+            binding.homeSwipeRefresh.isRefreshing = false
         }
 
     }
