@@ -9,6 +9,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.techtown.kormate.Constant.FirebasePathConstant
+import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
+import org.techtown.kormate.Constant.IntentCode
+import org.techtown.kormate.Constant.IntentCode.REQUEST_CODE_BOARD_SYNC
+import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
 import org.techtown.kormate.FragmentCallback
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.UI.Activity.BoardActivity
@@ -44,7 +48,7 @@ class BoardFragment : Fragment() , FragmentCallback{
         binding.apply {
 
             movePost.setOnClickListener {
-                startActivityForResult(Intent(activity, BoardPostActivity::class.java), BOARD_REQUEST_CODE)
+                startActivityForResult(Intent(activity, BoardPostActivity::class.java), REQUEST_CODE_BOARD_SYNC)
             }
 
         }
@@ -73,21 +77,15 @@ class BoardFragment : Fragment() , FragmentCallback{
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == BOARD_REQUEST_CODE && resultCode == BOARD_RESPONSE_CODE){
+        if(requestCode == REQUEST_CODE_BOARD_SYNC && resultCode == RESPONSE_CODE_BOARD_SYNC)
             getBoardList()
-        }
 
-    }
-
-    companion object{
-        const val BOARD_REQUEST_CODE = 1002
-        const val BOARD_RESPONSE_CODE = 1003
     }
 
     override fun onNavigateToActivity(boardDetail: BoardDetail) {
         val intent = Intent(requireActivity(), BoardActivity::class.java)
-        intent.putExtra(FirebasePathConstant.POST_PATH_INTENT,boardDetail)
-        startActivityForResult(intent, BOARD_REQUEST_CODE)
+        intent.putExtra(POST_PATH_INTENT , boardDetail)
+        startActivityForResult(intent, REQUEST_CODE_BOARD_SYNC)
     }
 
 

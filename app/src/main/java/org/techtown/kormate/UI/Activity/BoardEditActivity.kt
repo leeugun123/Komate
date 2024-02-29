@@ -8,14 +8,10 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.net.toUri
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
@@ -23,12 +19,10 @@ import org.techtown.kormate.Constant.BoardPostConstant.MAXIMUM_PIC_THREE_POSSIBL
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_MESSAGE
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
 import org.techtown.kormate.Constant.CarmeraPermissionConstant.REQUEST_CODE_PICK_IMAGES
-import org.techtown.kormate.Constant.FirebasePathConstant.COMMENT_PATH
-import org.techtown.kormate.Constant.FirebasePathConstant.POSTS_PATH
 import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
+import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
 import org.techtown.kormate.UI.Adapter.GalleryAdapter
 import org.techtown.kormate.Model.BoardDetail
-import org.techtown.kormate.Model.Comment
 import org.techtown.kormate.UI.ViewModel.BoardViewModel
 import org.techtown.kormate.UI.ViewModel.CommentViewModel
 import org.techtown.kormate.Util.BoardData
@@ -152,9 +146,9 @@ class BoardEditActivity : AppCompatActivity() {
 
     private fun createProgressBar(): ProgressDialog {
         return ProgressDialog(this).apply {
-            this.setMessage(REVISE_DOING_MESSAGE)
-            this.setCancelable(false)
-            this.show()
+            setMessage(REVISE_DOING_MESSAGE)
+            setCancelable(false)
+            show()
         }
     }
 
@@ -213,13 +207,13 @@ class BoardEditActivity : AppCompatActivity() {
     }
 
     private fun syncTitleUi() {
-        binding.title.text = "게시물 수정"
-        binding.updateButton.text = "수정 하기"
+        binding.title.text = BOARD_REVISE_TEXT
+        binding.updateButton.text = REVISE_BUTTON_TEXT
     }
 
     private fun reviseComplete() {
 
-        setResult(1003,  Intent())
+        setResult(RESPONSE_CODE_BOARD_SYNC,  Intent())
         finish()
         showToast(REVISE_POST_COMPLETE_MESSAGE)
 
@@ -263,7 +257,7 @@ class BoardEditActivity : AppCompatActivity() {
                 override fun onPermissionDenied(deniedPermissions: List<String>) {}
 
             })
-            .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
+            .setDeniedMessage(PERMISSION_ALLOW_MESSAGE)
             .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.READ_CALENDAR )
             .check()
@@ -307,7 +301,7 @@ class BoardEditActivity : AppCompatActivity() {
 
     private fun connectGalleryAdapter(imageUris: MutableList<String>, acBinding: ActivityBoardPostBinding ) {
 
-        binding.ImgRecyclerView.layoutManager = GridLayoutManager(this,3)
+        binding.ImgRecyclerView.layoutManager = GridLayoutManager(this,IMAGE_LAYOUT_COUNT)
         binding.ImgRecyclerView.adapter = GalleryAdapter(imageUris , acBinding)
 
     }
@@ -320,6 +314,11 @@ class BoardEditActivity : AppCompatActivity() {
     companion object{
         private const val REVISE_POST_COMPLETE_MESSAGE = "게시글이 수정 되었습니다."
         private const val REVISE_DOING_MESSAGE = "업로드 중"
+        private const val PERMISSION_ALLOW_MESSAGE = "권한을 허용 해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]"
+        private const val BOARD_REVISE_TEXT = "게시물 수정"
+        private const val REVISE_BUTTON_TEXT = "수정 하기"
+
+        private const val IMAGE_LAYOUT_COUNT = 3
     }
 
 

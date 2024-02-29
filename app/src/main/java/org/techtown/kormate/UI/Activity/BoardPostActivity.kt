@@ -25,6 +25,7 @@ import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_
 import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
 import org.techtown.kormate.Constant.CarmeraPermissionConstant.REQUEST_CODE_PICK_IMAGES
 import org.techtown.kormate.Constant.FirebasePathConstant.POSTS_PATH
+import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
 import org.techtown.kormate.Util.CurrentDateTime
 import org.techtown.kormate.UI.Adapter.GalleryAdapter
 import org.techtown.kormate.Model.BoardDetail
@@ -177,7 +178,7 @@ class BoardPostActivity : AppCompatActivity() {
 
     private fun postComplete(){
         showToastMessage(POST_UPLOAD_COMPLETE_MESSAGE)
-        setResult(BoardFragment.BOARD_RESPONSE_CODE)
+        setResult(RESPONSE_CODE_BOARD_SYNC)
         finish()
     }
 

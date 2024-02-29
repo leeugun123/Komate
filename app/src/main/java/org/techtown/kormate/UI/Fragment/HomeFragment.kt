@@ -10,6 +10,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import org.techtown.kormate.Constant.FirebasePathConstant
+import org.techtown.kormate.Constant.IntentCode.REQUEST_CODE_BOARD_SYNC
+import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
 import org.techtown.kormate.FragmentCallback
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.UserKakaoIntel.userNickName
@@ -89,7 +91,7 @@ class HomeFragment : Fragment() ,FragmentCallback {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == 1002 && resultCode == 1003){
+        if(requestCode == REQUEST_CODE_BOARD_SYNC && resultCode == RESPONSE_CODE_BOARD_SYNC){
             getBoardList()
         }
 
@@ -102,7 +104,7 @@ class HomeFragment : Fragment() ,FragmentCallback {
     override fun onNavigateToActivity(boardDetail : BoardDetail) {
         val intent = Intent(requireActivity(), BoardActivity::class.java)
         intent.putExtra(FirebasePathConstant.POST_PATH_INTENT,boardDetail)
-        startActivityForResult(intent,1002)
+        startActivityForResult(intent,REQUEST_CODE_BOARD_SYNC)
     }
 
 

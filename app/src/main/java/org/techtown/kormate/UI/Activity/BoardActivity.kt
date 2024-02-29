@@ -1,11 +1,9 @@
 package org.techtown.kormate.UI.Activity
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -13,18 +11,12 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.gun0912.tedpermission.provider.TedPermissionProvider.context
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.techtown.kormate.Constant.FirebasePathConstant.COMMENT_PATH
-import org.techtown.kormate.Constant.FirebasePathConstant.POSTS_PATH
 import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
+import org.techtown.kormate.Constant.IntentCode.REQUEST_CODE_BOARD_SYNC
+import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
 import org.techtown.kormate.UI.Adapter.CommentAdapter
 import org.techtown.kormate.Util.CurrentDateTime
 import org.techtown.kormate.Model.BoardDetail
@@ -46,8 +38,6 @@ class BoardActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityBoardBinding.inflate(layoutInflater) }
     private val receiveData by lazy { intent.getParcelableExtra<BoardDetail>(POST_PATH_INTENT)!! }
-
-    private val REQUEST_CODE_EDIT_ACTIVITY = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -163,7 +153,7 @@ class BoardActivity : AppCompatActivity() {
         boardViewModel.boardRemoveSuccess.observe(this){
             if(it){
                 showToastMessage(REMOVE_POST_COMPLETE)
-                setResult(1003)
+                setResult(RESPONSE_CODE_BOARD_SYNC)
                 finish()
             }
         }
@@ -234,7 +224,7 @@ class BoardActivity : AppCompatActivity() {
     private fun moveBoardEditActivity() {
         val intent = Intent(this, BoardEditActivity::class.java)
         intent.putExtra(POST_PATH_INTENT , receiveData)
-        startActivityForResult(intent,REQUEST_CODE_EDIT_ACTIVITY)
+        startActivityForResult(intent,REQUEST_CODE_BOARD_SYNC)
     }
 
     private fun showDeleteAlertDialog() {
@@ -435,7 +425,7 @@ class BoardActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?){
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == REQUEST_CODE_EDIT_ACTIVITY && resultCode == 1003){
+        if (requestCode == REQUEST_CODE_BOARD_SYNC && resultCode == RESPONSE_CODE_BOARD_SYNC){
             setResult(resultCode)
             finish()
         }
