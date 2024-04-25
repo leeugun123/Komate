@@ -2,7 +2,6 @@ package org.techtown.kormate.UI.Activity
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -13,28 +12,29 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
-import org.techtown.kormate.UI.Adapter.CommentAdapter
-import org.techtown.kormate.Util.CurrentDateTime
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.Comment
 import org.techtown.kormate.Model.Report
 import org.techtown.kormate.Model.UserKakaoIntel
-import org.techtown.kormate.UI.ViewModel.CommentViewModel
 import org.techtown.kormate.R
+import org.techtown.kormate.UI.Adapter.CommentAdapter
 import org.techtown.kormate.UI.ViewModel.BoardViewModel
+import org.techtown.kormate.UI.ViewModel.CommentViewModel
 import org.techtown.kormate.Util.BoardData
+import org.techtown.kormate.Util.CurrentDateTime
 import org.techtown.kormate.databinding.ActivityBoardBinding
 
 class BoardActivity : AppCompatActivity() {
 
-    private val commentViewModel : CommentViewModel by viewModels()
-    private val boardViewModel : BoardViewModel by viewModels()
-    private lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
+    private val commentViewModel by viewModels<CommentViewModel>()
+    private val boardViewModel by viewModels<BoardViewModel>()
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
     private val commentRecyclerView by lazy { binding.commentRecyclerView }
 
@@ -57,7 +57,7 @@ class BoardActivity : AppCompatActivity() {
     private fun activityResultLauncherInit() {
         activityResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == RESPONSE_CODE_BOARD_SYNC){
+                if (it.resultCode == RESPONSE_CODE_BOARD_SYNC) {
                     setResult(it.resultCode)
                     finish()
                 }
@@ -73,7 +73,7 @@ class BoardActivity : AppCompatActivity() {
 
             commentPost.setOnClickListener {
 
-                if(binding.reply.text.isNotEmpty())
+                if (binding.reply.text.isNotEmpty())
                     handleComment()
                 else
                     showToastMessage(NO_POST_TRY_AGAIN)
@@ -103,9 +103,9 @@ class BoardActivity : AppCompatActivity() {
 
     private fun reportCommentSuccessObserve() {
 
-        commentViewModel.reportCommentSuccess.observe(this){success ->
+        commentViewModel.reportCommentSuccess.observe(this) { success ->
 
-            if(success)
+            if (success)
                 showToastMessage(REPORT_COMMENT_COMPLETE)
         }
 
@@ -113,9 +113,9 @@ class BoardActivity : AppCompatActivity() {
 
     private fun deleteCommentSuccessObserve() {
 
-        commentViewModel.deleteCommentSuccess.observe(this){ success ->
+        commentViewModel.deleteCommentSuccess.observe(this) { success ->
 
-            if(success){
+            if (success) {
                 showToastMessage(DELETE_COMMENT_COMPLETE)
                 getCommentList()
             }
@@ -130,19 +130,18 @@ class BoardActivity : AppCompatActivity() {
     }
 
     private fun postCommentSuccessObserve() {
-        commentViewModel.postCommentSuccess.observe(this){ success ->
-            if(success){
+        commentViewModel.postCommentSuccess.observe(this) { success ->
+            if (success) {
                 getCommentList()
                 showToastMessage(POST_COMMENT_COMPLETE)
-            }
-            else
+            } else
                 showToastMessage(COMMENT_UPLOAD_FAIL)
         }
     }
 
 
     private fun commentListObserve() {
-        commentViewModel.commentList.observe(this) {commentList ->
+        commentViewModel.commentList.observe(this) { commentList ->
             commentAdapterSync(commentList)
             swipeFreshCancel()
         }
@@ -155,8 +154,8 @@ class BoardActivity : AppCompatActivity() {
 
     private fun boardReportSuccessObserve() {
 
-        boardViewModel.boardReportSuccess.observe(this){
-            if(it)
+        boardViewModel.boardReportSuccess.observe(this) {
+            if (it)
                 showToastMessage(REPORT_POST)
         }
 
@@ -164,8 +163,8 @@ class BoardActivity : AppCompatActivity() {
 
     private fun boardRemoveSuccessObserve() {
 
-        boardViewModel.boardRemoveSuccess.observe(this){
-            if(it){
+        boardViewModel.boardRemoveSuccess.observe(this) {
+            if (it) {
                 showToastMessage(REMOVE_POST_COMPLETE)
                 setResult(RESPONSE_CODE_BOARD_SYNC)
                 finish()
@@ -174,7 +173,7 @@ class BoardActivity : AppCompatActivity() {
 
     }
 
-    private fun showToastMessage(message : String){
+    private fun showToastMessage(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
@@ -194,9 +193,9 @@ class BoardActivity : AppCompatActivity() {
         commentPositionSync()
     }
 
-    private fun showPopUpMenu(view : View) {
+    private fun showPopUpMenu(view: View) {
 
-        val popUpMenu = PopupMenu(this , view)
+        val popUpMenu = PopupMenu(this, view)
         selectPopupMenu(popUpMenu)
         popUpItemClick(popUpMenu)
         popUpMenu.show()
@@ -207,7 +206,7 @@ class BoardActivity : AppCompatActivity() {
 
         popupMenu.setOnMenuItemClickListener { menuItem ->
 
-            when(menuItem.itemId){
+            when (menuItem.itemId) {
                 R.id.action_report -> {
                     showReportDialog()
                     true
@@ -218,10 +217,11 @@ class BoardActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.action_edit ->{
+                R.id.action_edit -> {
                     moveBoardEditActivity()
                     true
                 }
+
                 else -> false
 
             }
@@ -229,15 +229,15 @@ class BoardActivity : AppCompatActivity() {
     }
 
     private fun selectPopupMenu(popupMenu: PopupMenu) {
-        if(UserKakaoIntel.userId != receiveData.userId.toString())
-            popupMenu.menuInflater.inflate(R.menu.post_report,popupMenu.menu)
+        if (UserKakaoIntel.userId != receiveData.userId.toString())
+            popupMenu.menuInflater.inflate(R.menu.post_report, popupMenu.menu)
         else
             popupMenu.menuInflater.inflate(R.menu.post_menu, popupMenu.menu)
     }
 
     private fun moveBoardEditActivity() {
         val intent = Intent(this, BoardEditActivity::class.java)
-        intent.putExtra(POST_PATH_INTENT , receiveData)
+        intent.putExtra(POST_PATH_INTENT, receiveData)
         activityResultLauncher.launch(intent)
     }
 
@@ -258,29 +258,35 @@ class BoardActivity : AppCompatActivity() {
 
     private fun commentPositionSync() {
         commentSize += 1
-        commentRecyclerView.scrollToPosition(commentSize-1)
+        commentRecyclerView.scrollToPosition(commentSize - 1)
     }
 
-    private fun getCommentList(){
+    private fun getCommentList() {
         commentViewModel.getComment()
     }
 
     private fun uploadComment() {
 
-        val uploadComment = Comment("", UserKakaoIntel.userId.toLong() ,UserKakaoIntel.userNickName , UserKakaoIntel.userProfileImg
-            ,binding.reply.text.toString() , CurrentDateTime.getCommentTime())
+        val uploadComment = Comment(
+            "",
+            UserKakaoIntel.userId.toLong(),
+            UserKakaoIntel.userNickName,
+            UserKakaoIntel.userProfileImg,
+            binding.reply.text.toString(),
+            CurrentDateTime.getCommentTime()
+        )
 
-        commentViewModel.uploadComment(uploadComment , receiveData.postId)
+        commentViewModel.uploadComment(uploadComment, receiveData.postId)
 
     }
 
-    private fun tossIntent(entirePage: Int, curPage: Int,imgUri : String) {
+    private fun tossIntent(entirePage: Int, curPage: Int, imgUri: String) {
 
         val intent = Intent(this, ImageDetailActivity::class.java)
 
-        intent.putExtra("entirePage",entirePage)
-        intent.putExtra("currentPage",curPage)
-        intent.putExtra("imgUrl",imgUri)
+        intent.putExtra("entirePage", entirePage)
+        intent.putExtra("currentPage", curPage)
+        intent.putExtra("imgUrl", imgUri)
 
         startActivity(intent)
     }
@@ -314,18 +320,23 @@ class BoardActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun userReport(selectedReasons : MutableList<String>) {
+    private fun userReport(selectedReasons: MutableList<String>) {
 
-        val reportContent = Report(UserKakaoIntel.userId , selectedReasons , receiveData.userId.toString() , receiveData.postId)
+        val reportContent = Report(
+            UserKakaoIntel.userId,
+            selectedReasons,
+            receiveData.userId.toString(),
+            receiveData.postId
+        )
         boardViewModel.reportPost(reportContent)
     }
 
 
-    private fun boardUiSync(){
-           userInfoUiSync()
-           postUiSync()
-           commentUiSync()
-           getCommentList()
+    private fun boardUiSync() {
+        userInfoUiSync()
+        postUiSync()
+        commentUiSync()
+        getCommentList()
     }
 
     private fun commentUiSync() {
@@ -340,11 +351,12 @@ class BoardActivity : AppCompatActivity() {
             .into(binding.replyImg)
     }
 
-    private fun commentAdapterSync(list : List<Comment>) {
+    private fun commentAdapterSync(list: List<Comment>) {
         commentList = list
         commentSize = commentList.size
         commentRecyclerView.layoutManager = LinearLayoutManager(this)
-        commentRecyclerView.adapter = CommentAdapter(commentList, UserKakaoIntel.userId , commentViewModel)
+        commentRecyclerView.adapter =
+            CommentAdapter(commentList, UserKakaoIntel.userId, commentViewModel)
         commentRecyclerView.scrollToPosition(commentList.size - 1)
     }
 
@@ -355,9 +367,9 @@ class BoardActivity : AppCompatActivity() {
 
     private fun imgUiSync() {
 
-        if(receiveData.img.size == 0)
+        if (receiveData.img.size == 0)
             removeImgView()
-        else{
+        else {
             imgDataSync()
             clickImageView()
         }
@@ -366,13 +378,14 @@ class BoardActivity : AppCompatActivity() {
 
     private fun imgDataSync() {
 
-        val imageViewList = listOf(binding.uploadImageView1, binding.uploadImageView2, binding.uploadImageView3)
+        val imageViewList =
+            listOf(binding.uploadImageView1, binding.uploadImageView2, binding.uploadImageView3)
 
         for (i in receiveData.img.indices) {
 
             Glide.with(this)
                 .load(receiveData.img[i])
-                .override(1100,1000)
+                .override(1100, 1000)
                 .into(imageViewList[i])
 
             imageViewList[i].visibility = View.VISIBLE
@@ -391,15 +404,15 @@ class BoardActivity : AppCompatActivity() {
         binding.apply {
 
             uploadImageView1.setOnClickListener {
-                tossIntent(receiveData.img.size,1, receiveData.img[0])
+                tossIntent(receiveData.img.size, 1, receiveData.img[0])
             }
 
             uploadImageView2.setOnClickListener {
-                tossIntent(receiveData.img.size,2, receiveData.img[1])
+                tossIntent(receiveData.img.size, 2, receiveData.img[1])
             }
 
             uploadImageView3.setOnClickListener {
-                tossIntent(receiveData.img.size,3, receiveData.img[2])
+                tossIntent(receiveData.img.size, 3, receiveData.img[2])
             }
 
         }
@@ -417,9 +430,11 @@ class BoardActivity : AppCompatActivity() {
         val parentView3 = binding.uploadImageView3.parent as ViewGroup
         parentView3.removeView(binding.uploadImageView3)
 
-        binding.commentLinear.setPadding(binding.commentLinear.paddingLeft,
-            900, binding.commentLinear.paddingRight ,
-            binding.commentLinear.paddingBottom)
+        binding.commentLinear.setPadding(
+            binding.commentLinear.paddingLeft,
+            900, binding.commentLinear.paddingRight,
+            binding.commentLinear.paddingBottom
+        )
 
     }
 
@@ -436,9 +451,7 @@ class BoardActivity : AppCompatActivity() {
     }
 
 
-
-
-    companion object{
+    companion object {
         private const val NO_POST_TRY_AGAIN = "글이 없습니다. 다시 작성해주세요."
         private const val REMOVE_POST_ASKING = "게시물을 삭제 하시겠습니까?"
         private const val REMOVE_POST_COMPLETE = "게시물이 삭제 되었습니다."
@@ -456,9 +469,6 @@ class BoardActivity : AppCompatActivity() {
         var commentSize = 0
         var commentList = listOf<Comment>()
     }
-
-
-
 
 
 }

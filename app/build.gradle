@@ -5,10 +5,7 @@ plugins {
     id 'org.jetbrains.kotlin.kapt'
     id 'kotlin-parcelize'
     id 'com.google.gms.google-services'
-
-
 }
-
 
 
 android {
@@ -27,13 +24,11 @@ android {
         Properties properties = new Properties()
         properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
-        buildConfigField ("String", "KAKAO_API_KEY", properties.getProperty("KAKAO_API_KEY"))
+        buildConfigField("String", "KAKAO_API_KEY", properties.getProperty("KAKAO_API_KEY"))
 
-        defaultConfig{
-            manifestPlaceholders = ["KAKAO_API_KEY" : "\"${properties.getProperty("KAKAO_API_KEY")}\""]
+        defaultConfig {
+            manifestPlaceholders = ["KAKAO_API_KEY": "\"${properties.getProperty("KAKAO_API_KEY")}\""]
         }
-
-
     }
 
     buildTypes {
@@ -50,11 +45,9 @@ android {
         freeCompilerArgs = ['-Xjvm-default=enable']
         jvmTarget = '1.8'
     }
-    buildFeatures{
-        viewBinding = true
+    buildFeatures {
+        dataBinding = true
     }
-
-
 }
 
 dependencies {
@@ -63,14 +56,13 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    
+
     //noinspection GradleDependency
     implementation 'com.google.firebase:firebase-database-ktx:20.0.2'
     //noinspection GradleDependency
     implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
     //noinspection GradleDependency
     implementation 'com.google.firebase:firebase-analytics:20.0.1'
-
 
 
     testImplementation 'junit:junit:4.13.2'
@@ -104,6 +96,4 @@ dependencies {
 
     //파이어베이스 코루틴 비동기 처리
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.2'
-
-
 }

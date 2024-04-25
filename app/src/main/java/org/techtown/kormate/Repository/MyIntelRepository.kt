@@ -25,6 +25,10 @@ class MyIntelRepository() {
     private val myIntelRef = FirebaseDatabase.getInstance()
         .reference.child(USER_INTEL_PATH).child(userId)
 
+
+    //const val USER_INTEL_PATH = "usersIntel"
+
+
     suspend fun repoFetchUserIntel(): UserIntel {
         return if (checkDataExistence()) {
             getUserIntel() ?: UserIntel

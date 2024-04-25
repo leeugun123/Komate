@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">깐부</string>
-    <string name="kkanbu">KKANBU</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="app_name">깐부</string>
+
+    <!-- 스플래시 화면-->
+    <string name="kkanbu_korean">깐 부</string>
+    <string name="kkanbu_english">KKANBU</string>
+    <string name="foreigner_essential_app">외국인 유학생 필수정보 앱</string>
 
 </resources>

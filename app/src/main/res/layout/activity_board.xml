@@ -1,240 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white"
-    tools:context=".UI.Activity.BoardActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
 
-    <ScrollView
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white"
+        tools:context=".UI.Activity.BoardActivity">
 
-        <LinearLayout
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:context=".UI.Activity.BoardActivity">
-
-
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:context=".UI.Activity.BoardActivity">
 
-
-                <ImageButton
-                    android:id="@+id/back_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/ic_baseline_arrow_back_ios_24"
-                    android:background="@android:color/transparent"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:textSize="20sp"
-                    android:textColor="#5C96EC"
-                    android:textStyle="bold"
-                    android:text="질문"
-
-                    />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-
-                <ImageButton
-                    android:id="@+id/edit"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="0dp"
-                    android:background="@android:color/transparent"
-                    android:layout_gravity="right"
-                    android:src="@drawable/ic_baseline_more_vert_24"
-                    />
-
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                >
-
-                <ImageView
-                    android:id="@+id/user_img"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="10dp"
-                    />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/user_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="이유건"
-                        android:layout_marginLeft="10dp"
-                        android:textSize="20sp"
-                        android:textAppearance="@style/nametext"
-                        android:textColor="@color/black"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/dateTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:textSize="17sp"
-                        android:text="2023-01-24"
-                        />
-
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/upload_imageView1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/seoultech_logo" />
 
-                    <ImageView
-                        android:id="@+id/upload_imageView2"
+                    <ImageButton
+                        android:id="@+id/back_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="20dp"
+                        android:src="@drawable/ic_baseline_arrow_back_ios_24"
+                        android:background="@android:color/transparent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="20sp"
+                        android:textColor="#5C96EC"
+                        android:textStyle="bold"
+                        android:text="질문"
+
                         />
 
-                    <ImageView
-                        android:id="@+id/upload_imageView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+
+                    <ImageButton
+                        android:id="@+id/edit"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="0dp"
+                        android:background="@android:color/transparent"
+                        android:layout_gravity="right"
+                        android:src="@drawable/ic_baseline_more_vert_24" />
+
 
                 </LinearLayout>
 
-            </HorizontalScrollView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/user_img"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/user_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="이유건"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="20sp"
+                            android:textAppearance="@style/nametext"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/dateTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="17sp"
+                            android:text="2023-01-24" />
 
 
+                    </LinearLayout>
 
 
+                </LinearLayout>
 
 
-            <TextView
-                android:id="@+id/post_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
 
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:lineSpacingExtra="4dp"
-                android:textAppearance="@style/nametext"
-                />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/commentLinear"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                >
+                        <ImageView
+                            android:id="@+id/upload_imageView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/seoultech_logo" />
 
-                <ImageView
-                    android:id="@+id/reply_img"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="5dp"
-                    android:src="@drawable/hi"
-                    />
+                        <ImageView
+                            android:id="@+id/upload_imageView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
 
-                <EditText
-                    android:id="@+id/reply"
-                    android:layout_width="300dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:hint="댓글 작성하기"
-                    android:paddingLeft="10dp"
-                    android:textColorHint="#2196F3"
-                    android:background="@drawable/edittext_border"
-                    />
+                        <ImageView
+                            android:id="@+id/upload_imageView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
 
-                <ImageButton
-                    android:id="@+id/commentPost"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_baseline_send_24"
-                    />
+                    </LinearLayout>
+
+                </HorizontalScrollView>
+
+
+                <TextView
+                    android:id="@+id/post_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:lineSpacingExtra="4dp"
+                    android:textAppearance="@style/nametext" />
+
+                <LinearLayout
+                    android:id="@+id/commentLinear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/reply_img"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="5dp"
+                        android:src="@drawable/hi" />
+
+                    <EditText
+                        android:id="@+id/reply"
+                        android:layout_width="300dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:hint="댓글 작성하기"
+                        android:paddingLeft="10dp"
+                        android:textColorHint="#2196F3"
+                        android:background="@drawable/edittext_border" />
+
+                    <ImageButton
+                        android:id="@+id/commentPost"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_baseline_send_24" />
+
+                </LinearLayout>
+
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/swipeFreshLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/commentRecyclerView"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
             </LinearLayout>
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipeFreshLayout"
-                android:layout_width="match_parent"
-                android:layout_height="400dp">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/commentRecyclerView"
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </ScrollView>
 
 
-
-
-
-
-
-
-        </LinearLayout>
-
-
-    </ScrollView>
-
-
-
-
-
-
-</RelativeLayout>
+    </RelativeLayout>
+</layout>

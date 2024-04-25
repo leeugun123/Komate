@@ -7,10 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import org.techtown.kormate.databinding.ActivityImageDetailBinding
 
@@ -19,32 +19,24 @@ class ImageDetailActivity : AppCompatActivity() {
     private val binding by lazy { ActivityImageDetailBinding.inflate(layoutInflater) }
     private val receiveUrl by lazy { intent.getStringExtra("imgUrl") }
     private val entirePage by lazy { intent.getIntExtra("entirePage", ENTIRE_PAGE_NUM) }
-    private val curPage by lazy { intent.getIntExtra("currentPage",CUR_PAGE_NUM) }
+    private val curPage by lazy { intent.getIntExtra("currentPage", CUR_PAGE_NUM) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
         uiSync()
         bindingApply()
-
-
     }
 
     private fun bindingApply() {
-
         binding.apply {
-
             finishButton.setOnClickListener {
                 finish()
             }
-
             downButton.setOnClickListener {
                 imgDownload()
             }
         }
-
-
     }
 
     private fun imgDownload() {
@@ -61,7 +53,8 @@ class ImageDetailActivity : AppCompatActivity() {
 
         // 이미지가 저장될 경로와 파일명을 지정합니다.
         val fileName = "${System.currentTimeMillis()}.jpg"
-        val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val directory =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val filePath = "${directory.absolutePath}/$fileName"
         request.setDestinationUri(Uri.parse("file://$filePath"))
 
@@ -89,19 +82,18 @@ class ImageDetailActivity : AppCompatActivity() {
     }
 
     private fun uiSync() {
-
         binding.cur.text = curPage.toString()
         binding.entire.text = entirePage.toString()
 
         Glide.with(this)
             .load(receiveUrl)
-            .override(IMG_WIDTH_SIZE , IMG_HEIGHT_SIZE)
+            .override(IMG_WIDTH_SIZE, IMG_HEIGHT_SIZE)
             .centerCrop()
             .into(binding.detailImg)
 
     }
 
-    companion object{
+    companion object {
         private const val IMG_WIDTH_SIZE = 1500
         private const val IMG_HEIGHT_SIZE = 1500
         private const val ENTIRE_PAGE_NUM = 3
@@ -109,5 +101,4 @@ class ImageDetailActivity : AppCompatActivity() {
 
         private const val IMAGE_DOWNLOAD_COMPLETE = "이미지 다운 완료"
     }
-
 }

@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.DEBUG_PROPERTY_VALUE_OFF
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -14,14 +13,13 @@ import org.techtown.kormate.Repository.BoardRepository
 
 class BoardViewModel() : ViewModel() {
 
-
     private val _boardPostSuccess = MutableLiveData<Boolean>()
 
     val boardPostSuccess: LiveData<Boolean>
         get() = _boardPostSuccess
 
     private val _boardRemoveSuccess = MutableLiveData<Boolean>()
-    val boardRemoveSuccess  : LiveData<Boolean>
+    val boardRemoveSuccess: LiveData<Boolean>
         get() = _boardRemoveSuccess
 
     private val _boardReportSuccess = MutableLiveData<Boolean>()
@@ -30,63 +28,55 @@ class BoardViewModel() : ViewModel() {
         get() = _boardReportSuccess
 
     private val _boardDetailList = MutableLiveData<List<BoardDetail>>()
-    val boardDetailList : LiveData<List<BoardDetail>>
+    val boardDetailList: LiveData<List<BoardDetail>>
         get() = _boardDetailList
 
     private val boardRepository = BoardRepository()
 
-    fun getBoardList(){
+    fun getBoardList() {
 
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
 
             val responseBoardList = boardRepository.getRecentBoardDetail()
 
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 _boardDetailList.value = responseBoardList
             }
 
         }
-
     }
 
+    fun uploadPost(boardDetail: BoardDetail) {
 
-
-    fun uploadPost(boardDetail : BoardDetail) {
-
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
 
             val responseUploadPostSuccess = boardRepository.repoUploadPost(boardDetail)
 
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 _boardPostSuccess.value = responseUploadPostSuccess
             }
-
         }
-
     }
 
-    fun removePost(postId : String){
+    fun removePost(postId: String) {
 
-        viewModelScope.launch (Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
 
             val responseRemoveSuccess = boardRepository.repoRemovePost(postId)
 
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 _boardRemoveSuccess.value = responseRemoveSuccess
             }
-
-
         }
-
     }
 
-    fun reportPost(report : Report){
+    fun reportPost(report: Report) {
 
-        viewModelScope.launch (Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
 
             val responseBoardReportSuccess = boardRepository.repoBoardReport(report)
 
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 _boardReportSuccess.value = responseBoardReportSuccess
             }
 
