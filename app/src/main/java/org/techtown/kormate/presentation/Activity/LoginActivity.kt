@@ -1,4 +1,4 @@
-package org.techtown.kormate.UI.Activity
+package org.techtown.kormate.presentation.Activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,9 +8,9 @@ import androidx.activity.viewModels
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.user.UserApiClient
-import org.techtown.kormate.UI.Activity.UserInfoRegister.NationActivity
-import org.techtown.kormate.UI.ViewModel.KakaoViewModel
-import org.techtown.kormate.UI.ViewModel.MyIntelViewModel
+import org.techtown.kormate.presentation.Activity.UserInfoRegister.NationActivity
+import org.techtown.kormate.presentation.ViewModel.KakaoViewModel
+import org.techtown.kormate.presentation.ViewModel.MyIntelViewModel
 import org.techtown.kormate.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {

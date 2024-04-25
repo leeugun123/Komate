@@ -1,4 +1,4 @@
-package org.techtown.kormate.UI.Fragment
+package org.techtown.kormate.presentation.Fragment
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
@@ -14,10 +14,10 @@ import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Model.UserKakaoIntel
-import org.techtown.kormate.UI.Activity.LoginActivity
-import org.techtown.kormate.UI.Activity.MyIntelReviseActivity
-import org.techtown.kormate.UI.ViewModel.KakaoViewModel
-import org.techtown.kormate.UI.ViewModel.MyIntelViewModel
+import org.techtown.kormate.presentation.Activity.LoginActivity
+import org.techtown.kormate.presentation.Activity.MyIntelReviseActivity
+import org.techtown.kormate.presentation.ViewModel.KakaoViewModel
+import org.techtown.kormate.presentation.ViewModel.MyIntelViewModel
 import org.techtown.kormate.databinding.FragmentMyBinding
 
 

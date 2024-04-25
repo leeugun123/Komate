@@ -1,15 +1,11 @@
-package org.techtown.kormate.UI.Adapter
+package org.techtown.kormate.presentation.Adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
-import org.techtown.kormate.UI.Activity.BoardActivity
 import org.techtown.kormate.Model.BoardDetail
-import org.techtown.kormate.UI.Fragment.BoardFragment
-import org.techtown.kormate.UI.Fragment.HomeFragment
+import org.techtown.kormate.presentation.Fragment.HomeFragment
 import org.techtown.kormate.databinding.RecentpreviewBinding
 
 

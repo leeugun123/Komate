@@ -1,9 +1,8 @@
-package org.techtown.kormate.UI.Activity
+package org.techtown.kormate.presentation.Activity
 
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
-import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -24,10 +23,10 @@ import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
 import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
 import org.techtown.kormate.CustomProgressDialog
-import org.techtown.kormate.UI.Adapter.GalleryAdapter
+import org.techtown.kormate.presentation.Adapter.GalleryAdapter
 import org.techtown.kormate.Model.BoardDetail
-import org.techtown.kormate.UI.ViewModel.BoardViewModel
-import org.techtown.kormate.UI.ViewModel.CommentViewModel
+import org.techtown.kormate.presentation.ViewModel.BoardViewModel
+import org.techtown.kormate.presentation.ViewModel.CommentViewModel
 import org.techtown.kormate.Util.BoardData
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat

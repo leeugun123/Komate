@@ -1,4 +1,4 @@
-package org.techtown.kormate.UI.Activity
+package org.techtown.kormate.presentation.Activity
 
 import android.content.Context
 import android.content.Intent
@@ -23,9 +23,9 @@ import org.techtown.kormate.Model.Comment
 import org.techtown.kormate.Model.Report
 import org.techtown.kormate.Model.UserKakaoIntel
 import org.techtown.kormate.R
-import org.techtown.kormate.UI.Adapter.CommentAdapter
-import org.techtown.kormate.UI.ViewModel.BoardViewModel
-import org.techtown.kormate.UI.ViewModel.CommentViewModel
+import org.techtown.kormate.presentation.Adapter.CommentAdapter
+import org.techtown.kormate.presentation.ViewModel.BoardViewModel
+import org.techtown.kormate.presentation.ViewModel.CommentViewModel
 import org.techtown.kormate.Util.BoardData
 import org.techtown.kormate.Util.CurrentDateTime
 import org.techtown.kormate.databinding.ActivityBoardBinding

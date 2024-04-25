@@ -1,14 +1,10 @@
-package org.techtown.kormate.UI.Adapter
+package org.techtown.kormate.presentation.Adapter
 
-import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.techtown.kormate.Model.BoardDetail
-import org.techtown.kormate.UI.Activity.BoardActivity
-import org.techtown.kormate.UI.Fragment.BoardFragment
-import org.techtown.kormate.UI.Fragment.HomeFragment
+import org.techtown.kormate.presentation.Fragment.BoardFragment
 import org.techtown.kormate.databinding.BoardpreviewBinding
 
 class PreviewAdapter(private val boardList : List<BoardDetail> , private val boardFragment : BoardFragment) : RecyclerView.Adapter<PreviewAdapter.ViewHolder>(){

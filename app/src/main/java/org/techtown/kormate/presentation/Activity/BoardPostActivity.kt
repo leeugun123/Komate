@@ -1,4 +1,4 @@
-package org.techtown.kormate.UI.Activity
+package org.techtown.kormate.presentation.Activity
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -29,12 +29,12 @@ import org.techtown.kormate.Constant.FirebasePathConstant.POSTS_PATH
 import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
 import org.techtown.kormate.CustomProgressDialog
 import org.techtown.kormate.Util.CurrentDateTime
-import org.techtown.kormate.UI.Adapter.GalleryAdapter
+import org.techtown.kormate.presentation.Adapter.GalleryAdapter
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.UserKakaoIntel.userId
 import org.techtown.kormate.Model.UserKakaoIntel.userNickName
 import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
-import org.techtown.kormate.UI.ViewModel.BoardViewModel
+import org.techtown.kormate.presentation.ViewModel.BoardViewModel
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat
 import java.util.*

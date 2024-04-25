@@ -1,11 +1,9 @@
-package org.techtown.kormate.UI.Activity
+package org.techtown.kormate.presentation.Activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
-import com.kakao.sdk.common.util.Utility
 import org.techtown.kormate.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {

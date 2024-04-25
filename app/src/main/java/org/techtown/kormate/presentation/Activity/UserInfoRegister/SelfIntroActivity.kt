@@ -1,11 +1,10 @@
-package org.techtown.kormate.UI.Activity.UserInfoRegister
+package org.techtown.kormate.presentation.Activity.UserInfoRegister
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import org.techtown.kormate.Model.UserIntel

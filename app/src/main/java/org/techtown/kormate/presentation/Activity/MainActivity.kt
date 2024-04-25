@@ -1,17 +1,13 @@
-package org.techtown.kormate.UI.Activity
+package org.techtown.kormate.presentation.Activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import org.techtown.kormate.UI.Fragment.BoardFragment
-import org.techtown.kormate.UI.Fragment.HomeFragment
-import org.techtown.kormate.UI.Fragment.MyFragment
+import org.techtown.kormate.presentation.Fragment.BoardFragment
+import org.techtown.kormate.presentation.Fragment.HomeFragment
+import org.techtown.kormate.presentation.Fragment.MyFragment
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivityMainBinding
 

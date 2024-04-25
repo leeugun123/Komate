@@ -1,4 +1,4 @@
-package org.techtown.kormate.UI.Activity.UserInfoRegister
+package org.techtown.kormate.presentation.Activity.UserInfoRegister
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
