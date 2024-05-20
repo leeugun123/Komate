@@ -13,23 +13,23 @@ import org.techtown.kormate.Repository.KakaoRepository
 class KakaoViewModel() : ViewModel() {
 
     private var _kakaoIntelDownloadSuccess = MutableLiveData<Boolean>()
-    val kakaoIntelDownloadSuccess : LiveData<Boolean>
+    val kakaoIntelDownloadSuccess: LiveData<Boolean>
         get() = _kakaoIntelDownloadSuccess
 
     private var _kakaoLogOutSuccess = MutableLiveData<Boolean>()
 
-    val kakaoLogOutSuccess : LiveData<Boolean>
+    val kakaoLogOutSuccess: LiveData<Boolean>
         get() = _kakaoLogOutSuccess
 
     private val kakaoRepository = KakaoRepository()
 
     fun loadUserData() {
 
-        viewModelScope.launch (Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
 
             val responseUploadUserSuccess = kakaoRepository.repoLoadUserData()
 
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 _kakaoIntelDownloadSuccess.value = responseUploadUserSuccess
             }
 
@@ -37,21 +37,19 @@ class KakaoViewModel() : ViewModel() {
 
     }
 
-    fun kakaoLogout(){
+    fun kakaoLogout() {
 
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
 
             val responseLogoutSuccess = kakaoRepository.repoKakaoLogout()
 
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 _kakaoLogOutSuccess.value = responseLogoutSuccess
             }
 
         }
 
     }
-
-
 
 
 }

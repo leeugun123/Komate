@@ -87,8 +87,8 @@
         <RadioGroup
             android:id="@+id/radioGroup"
             android:layout_width="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
 
             <RadioButton
                 android:id="@+id/maleButton"
@@ -96,15 +96,15 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text=" 남성 | Male"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/FemaleButton"
-                android:layout_margin="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:text=" 여성 | Female"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
 
         </RadioGroup>

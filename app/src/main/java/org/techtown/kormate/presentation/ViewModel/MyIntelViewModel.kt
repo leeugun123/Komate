@@ -12,7 +12,6 @@ import org.techtown.kormate.Repository.MyIntelRepository
 
 class MyIntelViewModel() : ViewModel(){
 
-
     private val _postSuccessLiveData = MutableLiveData<Boolean>()
 
     val postSuccessLiveData: LiveData<Boolean>
@@ -69,7 +68,6 @@ class MyIntelViewModel() : ViewModel(){
             }
 
         }
-
     }
 
 
