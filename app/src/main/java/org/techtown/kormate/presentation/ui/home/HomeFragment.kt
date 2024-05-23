@@ -1,13 +1,13 @@
-package org.techtown.kormate.presentation.ui
+package org.techtown.kormate.presentation.ui.home
 
 import android.os.Bundle
 import android.view.View
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentHomeBinding
 import org.techtown.kormate.presentation.BaseFragment
-import org.techtown.kormate.presentation.ui.board.BoardFragment
-import org.techtown.kormate.presentation.ui.myprofile.MyFragment
-import org.techtown.kormate.presentation.ui.preview.PreviewFragment
+import org.techtown.kormate.presentation.ui.home.board.BoardFragment
+import org.techtown.kormate.presentation.ui.home.myprofile.MyFragment
+import org.techtown.kormate.presentation.ui.home.preview.PreviewFragment
 
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {

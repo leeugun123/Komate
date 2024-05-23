@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation.activity
+package org.techtown.kormate.presentation.ui.home.board
 
 import android.Manifest
 import android.app.Activity
@@ -23,10 +23,7 @@ import org.techtown.kormate.Constant.BoardPostConstant.NO_CONTEXT_MESSAGE
 import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
 import org.techtown.kormate.CustomProgressDialog
-import org.techtown.kormate.presentation.ui.board.GalleryAdapter
 import org.techtown.kormate.Model.BoardDetail
-import org.techtown.kormate.presentation.ViewModel.BoardViewModel
-import org.techtown.kormate.presentation.ViewModel.CommentViewModel
 import org.techtown.kormate.Util.BoardData
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import java.text.SimpleDateFormat
@@ -297,7 +294,7 @@ class BoardEditActivity : AppCompatActivity() {
 
     private fun connectGalleryAdapter(imageUris: MutableList<String>, acBinding: ActivityBoardPostBinding ) {
 
-        binding.ImgRecyclerView.layoutManager = GridLayoutManager(this,IMAGE_LAYOUT_COUNT)
+        binding.ImgRecyclerView.layoutManager = GridLayoutManager(this, IMAGE_LAYOUT_COUNT)
         binding.ImgRecyclerView.adapter = GalleryAdapter(imageUris , acBinding)
 
     }

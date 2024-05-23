@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation.ui.board
+package org.techtown.kormate.presentation.ui.home.board
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

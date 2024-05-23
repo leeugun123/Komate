@@ -13,8 +13,8 @@ import org.techtown.kormate.databinding.FragmentLoginBinding
 import org.techtown.kormate.presentation.ui.home.MainActivity
 import org.techtown.kormate.presentation.ui.signup.NationActivity
 import org.techtown.kormate.presentation.BaseFragment
-import org.techtown.kormate.presentation.ViewModel.KakaoViewModel
-import org.techtown.kormate.presentation.ViewModel.MyIntelViewModel
+import org.techtown.kormate.presentation.ui.KakaoViewModel
+import org.techtown.kormate.presentation.ui.home.myprofile.MyIntelViewModel
 
 class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splash) {
 

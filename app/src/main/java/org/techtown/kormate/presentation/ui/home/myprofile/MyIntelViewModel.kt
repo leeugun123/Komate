@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation.ViewModel
+package org.techtown.kormate.presentation.ui.home.myprofile
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.R
 import org.techtown.kormate.presentation.ui.home.MainActivity
-import org.techtown.kormate.presentation.ViewModel.MyIntelViewModel
+import org.techtown.kormate.presentation.ui.home.myprofile.MyIntelViewModel
 import org.techtown.kormate.databinding.ActivityGenderBinding
 
 

@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation.activity
+package org.techtown.kormate.presentation.ui.home.board
 
 import android.content.Context
 import android.content.Intent
@@ -26,9 +26,6 @@ import org.techtown.kormate.R
 import org.techtown.kormate.Util.BoardData
 import org.techtown.kormate.Util.CurrentDateTime
 import org.techtown.kormate.databinding.ActivityBoardBinding
-import org.techtown.kormate.presentation.ViewModel.BoardViewModel
-import org.techtown.kormate.presentation.ViewModel.CommentViewModel
-import org.techtown.kormate.presentation.ui.board.CommentAdapter
 
 class BoardActivity : AppCompatActivity() {
 

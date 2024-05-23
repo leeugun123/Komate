@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/HomeFragment"
-        android:name="org.techtown.kormate.presentation.ui.HomeFragment"
+        android:name="org.techtown.kormate.presentation.ui.home.HomeFragment"
         android:label="HomeFragment"
         tools:layout="@layout/fragment_home"
         />

@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation.ui.preview
+package org.techtown.kormate.presentation.ui.home.preview
 
 import android.content.Intent
 import android.os.Bundle
@@ -16,9 +16,9 @@ import org.techtown.kormate.Constant.IntentCode
 import org.techtown.kormate.FragmentCallback
 import org.techtown.kormate.Model.BoardDetail
 import org.techtown.kormate.Model.UserKakaoIntel
-import org.techtown.kormate.presentation.activity.BoardActivity
-import org.techtown.kormate.presentation.ViewModel.BoardViewModel
-import org.techtown.kormate.presentation.ui.board.RecentAdapter
+import org.techtown.kormate.presentation.ui.home.board.BoardActivity
+import org.techtown.kormate.presentation.ui.home.board.BoardViewModel
+import org.techtown.kormate.presentation.ui.home.board.RecentAdapter
 
 class PreviewFragment : Fragment() , FragmentCallback {
 

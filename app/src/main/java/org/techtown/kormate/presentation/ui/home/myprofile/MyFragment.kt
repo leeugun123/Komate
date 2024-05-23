@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation.ui.myprofile
+package org.techtown.kormate.presentation.ui.home.myprofile
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
@@ -14,9 +14,7 @@ import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Model.UserKakaoIntel
-import org.techtown.kormate.presentation.activity.MyIntelReviseActivity
-import org.techtown.kormate.presentation.ViewModel.KakaoViewModel
-import org.techtown.kormate.presentation.ViewModel.MyIntelViewModel
+import org.techtown.kormate.presentation.ui.KakaoViewModel
 import org.techtown.kormate.databinding.FragmentMyBinding
 
 

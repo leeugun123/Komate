@@ -1,11 +1,11 @@
-package org.techtown.kormate.presentation.ui.board
+package org.techtown.kormate.presentation.ui.home.board
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.techtown.kormate.Model.BoardDetail
-import org.techtown.kormate.presentation.ui.HomeFragment
+import org.techtown.kormate.presentation.ui.home.HomeFragment
 import org.techtown.kormate.databinding.RecentpreviewBinding
 
 

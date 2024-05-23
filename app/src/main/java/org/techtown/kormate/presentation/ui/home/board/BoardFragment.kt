@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation.ui.board
+package org.techtown.kormate.presentation.ui.home.board
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,11 +14,8 @@ import org.techtown.kormate.Constant.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
 import org.techtown.kormate.FragmentCallback
 import org.techtown.kormate.Model.BoardDetail
-import org.techtown.kormate.presentation.activity.BoardActivity
-import org.techtown.kormate.presentation.activity.BoardPostActivity
-import org.techtown.kormate.presentation.ViewModel.BoardViewModel
 import org.techtown.kormate.databinding.FragmentBoardBinding
-import org.techtown.kormate.presentation.ui.preview.PreviewAdapter
+import org.techtown.kormate.presentation.ui.home.preview.PreviewAdapter
 
 
 class BoardFragment : Fragment() , FragmentCallback{

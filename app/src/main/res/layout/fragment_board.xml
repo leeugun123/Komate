@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentation.ui.board.BoardFragment">
+    tools:context=".presentation.ui.home.board.BoardFragment">
 
 
     <LinearLayout
