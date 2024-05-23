@@ -4,7 +4,6 @@ import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.User
 import kotlinx.coroutines.CompletableDeferred
 import org.techtown.kormate.Model.UserKakaoIntel
-import org.techtown.kormate.UI.Fragment.MyFragment
 
 class KakaoRepository() {
 
