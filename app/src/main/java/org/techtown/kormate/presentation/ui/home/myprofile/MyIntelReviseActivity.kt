@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
-import org.techtown.kormate.Model.UserIntel
-import org.techtown.kormate.Model.UserKakaoIntel
+import org.techtown.kormate.domain.model.UserIntel
+import org.techtown.kormate.domain.model.UserKakaoIntel
 import org.techtown.kormate.databinding.ActivityReviseBinding
 
 

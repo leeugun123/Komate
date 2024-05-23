@@ -7,9 +7,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import org.techtown.kormate.Model.UserIntel
-import org.techtown.kormate.Model.UserKakaoIntel.userNickName
-import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
+import org.techtown.kormate.domain.model.UserIntel
+import org.techtown.kormate.domain.model.UserKakaoIntel.userNickName
+import org.techtown.kormate.domain.model.UserKakaoIntel.userProfileImg
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivitySelfIntroBinding
 

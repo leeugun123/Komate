@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.techtown.kormate.Repository.KakaoRepository
+import org.techtown.kormate.data.repository.KakaoRepository
 
 class KakaoViewModel() : ViewModel() {
 

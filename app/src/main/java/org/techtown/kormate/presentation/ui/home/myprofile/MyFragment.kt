@@ -12,8 +12,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
-import org.techtown.kormate.Model.UserIntel
-import org.techtown.kormate.Model.UserKakaoIntel
+import org.techtown.kormate.domain.model.UserIntel
+import org.techtown.kormate.domain.model.UserKakaoIntel
 import org.techtown.kormate.presentation.ui.KakaoViewModel
 import org.techtown.kormate.databinding.FragmentMyBinding
 

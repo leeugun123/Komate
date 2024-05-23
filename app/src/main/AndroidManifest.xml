@@ -21,7 +21,7 @@
 
 
     <application
-        android:name=".Util.GlobalApplication"
+        android:name=".presentation.util.GlobalApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -58,23 +58,23 @@
             android:exported="false" />
 
         <activity
-            android:name=".presentation.ui.home.board.ImageDetailActivity"
+            android:name=".presentation.ui.home.board.detail.gallery.ImageDetailActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
-            android:name=".presentation.ui.home.board.BoardEditActivity"
+            android:name=".presentation.ui.home.board.detail.edit.BoardEditActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
-            android:name=".presentation.ui.home.board.BoardActivity"
+            android:name=".presentation.ui.home.board.detail.BoardActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".presentation.ui.home.board.BoardPostActivity"
+            android:name=".presentation.ui.home.board.detail.post.BoardPostActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
 

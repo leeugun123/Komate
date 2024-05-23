@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import org.techtown.kormate.Model.UserIntel
+import org.techtown.kormate.domain.model.UserIntel
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivityNationBinding
 

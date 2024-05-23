@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import org.techtown.kormate.Model.BoardDetail
+import org.techtown.kormate.domain.BoardDetail
 import org.techtown.kormate.presentation.ui.home.HomeFragment
 import org.techtown.kormate.databinding.RecentpreviewBinding
 
 
-class RecentAdapter(private val boardList : List<BoardDetail> , private val homeFragment: HomeFragment) : RecyclerView.Adapter<RecentAdapter.ViewHolder>() {
+class RecentAdapter(private val boardList : List<BoardDetail>, private val homeFragment: HomeFragment) : RecyclerView.Adapter<RecentAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding : RecentpreviewBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -22,7 +22,7 @@ class RecentAdapter(private val boardList : List<BoardDetail> , private val home
         syncAdapterUi(boardList[position] , holder)
     }
 
-    private fun syncAdapterUi(list : BoardDetail , holder : ViewHolder) {
+    private fun syncAdapterUi(list : BoardDetail, holder : ViewHolder) {
 
         holder.binding.apply {
 

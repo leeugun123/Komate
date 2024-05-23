@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.techtown.kormate.Model.UserIntel
-import org.techtown.kormate.Repository.MyIntelRepository
+import org.techtown.kormate.domain.model.UserIntel
+import org.techtown.kormate.data.repository.MyIntelRepository
 
 class MyIntelViewModel() : ViewModel(){
 

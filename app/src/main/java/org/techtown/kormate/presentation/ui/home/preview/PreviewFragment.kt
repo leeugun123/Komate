@@ -11,13 +11,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import org.techtown.kormate.Constant.FirebasePathConstant
-import org.techtown.kormate.Constant.IntentCode
-import org.techtown.kormate.FragmentCallback
-import org.techtown.kormate.Model.BoardDetail
-import org.techtown.kormate.Model.UserKakaoIntel
-import org.techtown.kormate.presentation.ui.home.board.BoardActivity
-import org.techtown.kormate.presentation.ui.home.board.BoardViewModel
+import org.techtown.kormate.presentation.constant.FirebasePathConstant
+import org.techtown.kormate.presentation.constant.IntentCode
+import org.techtown.kormate.presentation.FragmentCallback
+import org.techtown.kormate.domain.BoardDetail
+import org.techtown.kormate.domain.model.UserKakaoIntel
+import org.techtown.kormate.presentation.ui.home.board.detail.BoardActivity
+import org.techtown.kormate.presentation.ui.home.board.detail.BoardViewModel
 import org.techtown.kormate.presentation.ui.home.board.RecentAdapter
 
 class PreviewFragment : Fragment() , FragmentCallback {

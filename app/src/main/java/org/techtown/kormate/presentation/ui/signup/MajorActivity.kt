@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
-import org.techtown.kormate.Model.UserIntel
+import org.techtown.kormate.domain.model.UserIntel
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.ActivityMajorBinding
 
