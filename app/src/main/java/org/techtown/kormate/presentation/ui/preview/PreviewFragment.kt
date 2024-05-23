@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation.Fragment
+package org.techtown.kormate.presentation.ui.preview
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,20 +12,17 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import org.techtown.kormate.Constant.FirebasePathConstant
-import org.techtown.kormate.Constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
+import org.techtown.kormate.Constant.IntentCode
 import org.techtown.kormate.FragmentCallback
 import org.techtown.kormate.Model.BoardDetail
-import org.techtown.kormate.Model.UserKakaoIntel.userNickName
-import org.techtown.kormate.Model.UserKakaoIntel.userProfileImg
-import org.techtown.kormate.presentation.Activity.BoardActivity
-import org.techtown.kormate.presentation.Adapter.RecentAdapter
+import org.techtown.kormate.Model.UserKakaoIntel
+import org.techtown.kormate.presentation.activity.BoardActivity
 import org.techtown.kormate.presentation.ViewModel.BoardViewModel
-import org.techtown.kormate.databinding.FragmentHomeBinding
+import org.techtown.kormate.presentation.ui.board.RecentAdapter
 
+class PreviewFragment : Fragment() , FragmentCallback {
 
-class HomeFragment : Fragment() ,FragmentCallback {
-
-    private lateinit var binding : FragmentHomeBinding
+    private lateinit var binding : FragmentPreviewBinding
     private val boardViewModel : BoardViewModel by activityViewModels()
     private lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
 
@@ -54,7 +51,7 @@ class HomeFragment : Fragment() ,FragmentCallback {
     private fun activityResultLauncherInit() {
         activityResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == RESPONSE_CODE_BOARD_SYNC)
+                if (it.resultCode == IntentCode.RESPONSE_CODE_BOARD_SYNC)
                     getBoardList()
             }
     }
@@ -71,13 +68,13 @@ class HomeFragment : Fragment() ,FragmentCallback {
     }
 
     private fun nameBinding() {
-        binding.userName.text = userNickName
+        binding.userName.text = UserKakaoIntel.userNickName
     }
 
     private fun profileImgBinding() {
 
         Glide.with(requireActivity())
-            .load(userProfileImg)
+            .load(UserKakaoIntel.userProfileImg)
             .circleCrop()
             .into(binding.userProfile)
 
@@ -116,6 +113,3 @@ class HomeFragment : Fragment() ,FragmentCallback {
     companion object{
         private const val PAGE_LOAD_LIMIT = 4
     }
-
-
-}

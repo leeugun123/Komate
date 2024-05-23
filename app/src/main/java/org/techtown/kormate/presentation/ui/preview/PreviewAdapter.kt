@@ -1,19 +1,17 @@
-package org.techtown.kormate.presentation.Adapter
+package org.techtown.kormate.presentation.ui.preview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.techtown.kormate.Model.BoardDetail
-import org.techtown.kormate.presentation.Fragment.BoardFragment
 import org.techtown.kormate.databinding.BoardpreviewBinding
+import org.techtown.kormate.presentation.ui.board.BoardFragment
 
 class PreviewAdapter(private val boardList : List<BoardDetail> , private val boardFragment : BoardFragment) : RecyclerView.Adapter<PreviewAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
         val binding = BoardpreviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
-
     }
 
 

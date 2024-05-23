@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation.Activity
+package org.techtown.kormate.presentation.activity
 
 import android.app.DownloadManager
 import android.app.DownloadManager.Request

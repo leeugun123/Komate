@@ -44,7 +44,7 @@
             android:elevation="4dp"
             android:text="@string/kkanbu_korean"
             android:textColor="@color/white"
-            android:textSize="50sp"
+            android:textSize="50dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,8 +58,8 @@
             android:layout_marginTop="20dp"
             android:lineSpacingExtra="4sp"
             android:text="@string/foreigner_essential_app"
-            android:textAppearance="@style/some_id"
-            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,11 +68,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
-
-
-
-
-
-
-
 

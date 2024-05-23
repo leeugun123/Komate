@@ -1,0 +1,34 @@
+package org.techtown.kormate.presentation.ui.splash
+
+import android.os.Bundle
+import android.view.View
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.techtown.kormate.R
+import org.techtown.kormate.databinding.FragmentSplashBinding
+import org.techtown.kormate.presentation.BaseFragment
+
+
+class SplashFragment : BaseFragment<FragmentSplashBinding>(R.layout.fragment_splash) {
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        navigateToHomeLazily()
+    }
+
+    private fun navigateToHomeLazily() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            delay(SPLASH_DURATION)
+            moveToHomeFragment()
+        }
+    }
+
+    private fun moveToHomeFragment() {
+        // TODO("HomeFragment로 이동하는 로직 구현")
+    }
+
+    companion object {
+        private const val SPLASH_DURATION = 1500L // 1.5초
+    }
+}

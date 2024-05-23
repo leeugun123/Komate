@@ -34,47 +34,47 @@
         tools:ignore="MissingClass">
 
         <activity
-            android:name=".presentation.Activity.UserInfoRegister.GenderActivity"
+            android:name=".presentation.ui.signup.GenderActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
-            android:name=".presentation.Activity.UserInfoRegister.SelfIntroActivity"
+            android:name=".presentation.ui.signup.SelfIntroActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
-            android:name=".presentation.Activity.UserInfoRegister.MajorActivity"
+            android:name=".presentation.ui.signup.MajorActivity"
             android:exported="false" />
 
         <activity
-            android:name=".presentation.Activity.UserInfoRegister.NationActivity"
+            android:name=".presentation.ui.signup.NationActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
-            android:name=".presentation.Activity.MyIntelReviseActivity"
+            android:name=".presentation.activity.MyIntelReviseActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
-            android:name=".presentation.Activity.ImageDetailActivity"
+            android:name=".presentation.activity.ImageDetailActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
-            android:name=".presentation.Activity.BoardEditActivity"
+            android:name=".presentation.activity.BoardEditActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
-            android:name=".presentation.Activity.BoardActivity"
+            android:name=".presentation.activity.BoardActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".presentation.Activity.BoardPostActivity"
+            android:name=".presentation.activity.BoardPostActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
 
@@ -91,15 +91,8 @@
 
         </activity>
 
-
         <activity
-            android:name=".presentation.Activity.LoginActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-
-        <activity
-            android:name=".presentation.ui.splash.SplashActivity"
-            android:screenOrientation="portrait"
+            android:name=".presentation.ui.home.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -108,10 +101,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".presentation.Activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:exported="true" />
 
     </application>
 

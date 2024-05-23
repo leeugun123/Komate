@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation.Activity.UserInfoRegister
+package org.techtown.kormate.presentation.ui.signup
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.R
-import org.techtown.kormate.presentation.Activity.MainActivity
+import org.techtown.kormate.presentation.ui.home.MainActivity
 import org.techtown.kormate.presentation.ViewModel.MyIntelViewModel
 import org.techtown.kormate.databinding.ActivityGenderBinding
 

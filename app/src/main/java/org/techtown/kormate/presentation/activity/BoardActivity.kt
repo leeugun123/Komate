@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation.Activity
+package org.techtown.kormate.presentation.activity
 
 import android.content.Context
 import android.content.Intent
@@ -23,12 +23,12 @@ import org.techtown.kormate.Model.Comment
 import org.techtown.kormate.Model.Report
 import org.techtown.kormate.Model.UserKakaoIntel
 import org.techtown.kormate.R
-import org.techtown.kormate.presentation.Adapter.CommentAdapter
-import org.techtown.kormate.presentation.ViewModel.BoardViewModel
-import org.techtown.kormate.presentation.ViewModel.CommentViewModel
 import org.techtown.kormate.Util.BoardData
 import org.techtown.kormate.Util.CurrentDateTime
 import org.techtown.kormate.databinding.ActivityBoardBinding
+import org.techtown.kormate.presentation.ViewModel.BoardViewModel
+import org.techtown.kormate.presentation.ViewModel.CommentViewModel
+import org.techtown.kormate.presentation.ui.board.CommentAdapter
 
 class BoardActivity : AppCompatActivity() {
 
@@ -450,7 +450,6 @@ class BoardActivity : AppCompatActivity() {
 
     }
 
-
     companion object {
         private const val NO_POST_TRY_AGAIN = "글이 없습니다. 다시 작성해주세요."
         private const val REMOVE_POST_ASKING = "게시물을 삭제 하시겠습니까?"
@@ -469,6 +468,4 @@ class BoardActivity : AppCompatActivity() {
         var commentSize = 0
         var commentList = listOf<Comment>()
     }
-
-
 }

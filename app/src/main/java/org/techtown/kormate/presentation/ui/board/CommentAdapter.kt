@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation.Adapter
+package org.techtown.kormate.presentation.ui.board
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

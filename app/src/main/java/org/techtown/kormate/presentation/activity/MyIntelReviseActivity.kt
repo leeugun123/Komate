@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation.Activity
+package org.techtown.kormate.presentation.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import org.techtown.kormate.Model.UserIntel
 import org.techtown.kormate.Model.UserKakaoIntel
-import org.techtown.kormate.presentation.Fragment.MyFragment
+import org.techtown.kormate.presentation.ui.myprofile.MyFragment
 import org.techtown.kormate.presentation.ViewModel.MyIntelViewModel
 import org.techtown.kormate.databinding.ActivityReviseBinding
 
