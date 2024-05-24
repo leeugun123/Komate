@@ -36,10 +36,6 @@ class PreviewAdapter(private val boardList: List<BoardDetail>) :
 
             binding.post.text = concatPost
 
-            binding.root.setOnClickListener {
-                boardFragment.onNavigateToActivity(boardDetail)
-            }
-
         }
 
 

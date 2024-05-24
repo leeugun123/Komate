@@ -2,7 +2,6 @@ package org.techtown.kormate.presentation.ui.home
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentHomeBinding
@@ -15,11 +14,11 @@ import org.techtown.kormate.presentation.ui.home.preview.PreviewFragment
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
-    private val fa by lazy { PreviewFragment() }
-    private val fb by lazy { BoardFragment() }
-    private val fc by lazy { MyFragment() }
-    private val fragmentManager by lazy { childFragmentManager }
-    private val boardViewModel : BoardViewModel by viewModels()
+    private val previewFragment by lazy { PreviewFragment() }
+    private val boardFragment by lazy { BoardFragment() }
+    private val myProfileFragment by lazy { MyFragment() }
+    private val homeFragmentManager by lazy { childFragmentManager }
+    private val boardViewModel: BoardViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,26 +50,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun showFc() {
-        fragmentManager.beginTransaction().hide(fa).commit()
-        fragmentManager.beginTransaction().hide(fb).commit()
-        fragmentManager.beginTransaction().show(fc).commit()
+        homeFragmentManager.beginTransaction().hide(previewFragment).commit()
+        homeFragmentManager.beginTransaction().hide(boardFragment).commit()
+        homeFragmentManager.beginTransaction().show(myProfileFragment).commit()
     }
 
     private fun showFb() {
-        fragmentManager.beginTransaction().hide(fa).commit()
-        fragmentManager.beginTransaction().show(fb).commit()
-        fragmentManager.beginTransaction().hide(fc).commit()
+        homeFragmentManager.beginTransaction().hide(previewFragment).commit()
+        homeFragmentManager.beginTransaction().show(boardFragment).commit()
+        homeFragmentManager.beginTransaction().hide(myProfileFragment).commit()
     }
 
     private fun showFa() {
-        fragmentManager.beginTransaction().show(fa).commit()
-        fragmentManager.beginTransaction().hide(fb).commit()
-        fragmentManager.beginTransaction().hide(fc).commit()
+        homeFragmentManager.beginTransaction().show(previewFragment).commit()
+        homeFragmentManager.beginTransaction().hide(boardFragment).commit()
+        homeFragmentManager.beginTransaction().hide(myProfileFragment).commit()
     }
 
     private fun addFragment() {
-        fragmentManager.beginTransaction().add(R.id.main_frame, fa).commit()
-        fragmentManager.beginTransaction().add(R.id.main_frame, fb).commit()
-        fragmentManager.beginTransaction().add(R.id.main_frame, fc).commit()
+        homeFragmentManager.beginTransaction().add(R.id.main_frame, previewFragment).commit()
+        homeFragmentManager.beginTransaction().add(R.id.main_frame, boardFragment).commit()
+        homeFragmentManager.beginTransaction().add(R.id.main_frame, myProfileFragment).commit()
     }
 }

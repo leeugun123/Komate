@@ -3,6 +3,7 @@ package org.techtown.kormate.presentation.ui.splash
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -25,7 +26,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(R.layout.fragment_spl
     }
 
     private fun moveToHomeFragment() {
-        // TODO("HomeFragment로 이동하는 로직 구현")
+        findNavController().navigate(R.id.action_splashFragment_to_LoginFragment)
     }
 
     companion object {
