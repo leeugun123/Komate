@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.user.UserApiClient
@@ -112,8 +113,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
     private fun checkMyIntelData() {
         myIntelViewModel.checkDataExist()
         myIntelViewModel.dataExistLiveData.observe(viewLifecycleOwner) { exist ->
-            startActivity(decideIntent(exist))
-            // TODO("움직이는 메소드 구현")
+           decideIntent(exist)
         }
     }
 
@@ -133,10 +133,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
         kakaoViewModel.loadUserData()
     }
 
-    private fun decideIntent(exist: Boolean) = if (exist) {
-        Intent(requireContext(), MainActivity::class.java)
-    } else
-        Intent(requireContext(), NationActivity::class.java)
+    private fun decideIntent(exist: Boolean) {
+        if (exist) {
+            findNavController().navigate(R.id.action_LoginFragment_to_HomeFragment)
+        } else
+            // TODO("정보 입력 화면으로 입력")
+    }
 
     companion object {
         private const val KAKAO_LOGIN_FAILED = "카카오 로그인 실패"
