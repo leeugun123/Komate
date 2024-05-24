@@ -100,11 +100,8 @@ class MyIntelReviseActivity : AppCompatActivity() {
         myIntelViewModel.uploadUserIntel(UserIntel)
     }
 
-
     companion object{
         private const val REVISE_COMPLETE_MESSAGE = "수정 되었습니다."
     }
-
-
 
 }

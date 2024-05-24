@@ -2,10 +2,13 @@ package org.techtown.kormate.presentation.ui.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentHomeBinding
 import org.techtown.kormate.presentation.BaseFragment
 import org.techtown.kormate.presentation.ui.home.board.BoardFragment
+import org.techtown.kormate.presentation.ui.home.board.detail.BoardViewModel
 import org.techtown.kormate.presentation.ui.home.myprofile.MyFragment
 import org.techtown.kormate.presentation.ui.home.preview.PreviewFragment
 
@@ -16,11 +19,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val fb by lazy { BoardFragment() }
     private val fc by lazy { MyFragment() }
     private val fragmentManager by lazy { childFragmentManager }
+    private val boardViewModel : BoardViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         addFragment()
         initNavigationBar()
+        boardViewModel
     }
 
     private fun initNavigationBar() {

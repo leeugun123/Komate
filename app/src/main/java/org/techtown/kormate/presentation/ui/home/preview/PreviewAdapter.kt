@@ -3,17 +3,17 @@ package org.techtown.kormate.presentation.ui.home.preview
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.techtown.kormate.domain.BoardDetail
 import org.techtown.kormate.databinding.BoardpreviewBinding
-import org.techtown.kormate.presentation.ui.home.board.BoardFragment
+import org.techtown.kormate.domain.BoardDetail
 
-class PreviewAdapter(private val boardList : List<BoardDetail>, private val boardFragment : BoardFragment) : RecyclerView.Adapter<PreviewAdapter.ViewHolder>(){
+class PreviewAdapter(private val boardList: List<BoardDetail>) :
+    RecyclerView.Adapter<PreviewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = BoardpreviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            BoardpreviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
-
 
     override fun getItemCount() = boardList.size
 
@@ -21,16 +21,15 @@ class PreviewAdapter(private val boardList : List<BoardDetail>, private val boar
         holder.bind(boardList[position])
     }
 
+    inner class ViewHolder(val binding: BoardpreviewBinding) :
 
-    inner class ViewHolder(val binding : BoardpreviewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        RecyclerView.ViewHolder(binding.root){
-
-        fun bind(boardDetail : BoardDetail){
+        fun bind(boardDetail: BoardDetail) {
 
             binding.dateTime.text = boardDetail.dateTime
 
-            val concatPost = if(boardDetail.post.length > PREVIEW_TEXT_CUT_MAX_SIZE){
+            val concatPost = if (boardDetail.post.length > PREVIEW_TEXT_CUT_MAX_SIZE) {
                 boardDetail.post.substring(PREVIEW_TEXT_CUT_START, PREVIEW_TEXT_CUT_END) + "..."
             } else
                 boardDetail.post
@@ -44,11 +43,9 @@ class PreviewAdapter(private val boardList : List<BoardDetail>, private val boar
         }
 
 
-
-
     }
 
-    companion object{
+    companion object {
         private const val PREVIEW_TEXT_CUT_START = 0
         private const val PREVIEW_TEXT_CUT_END = 110
         private const val PREVIEW_TEXT_CUT_MAX_SIZE = 105

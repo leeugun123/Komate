@@ -4,32 +4,34 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import org.techtown.kormate.domain.BoardDetail
-import org.techtown.kormate.presentation.ui.home.HomeFragment
 import org.techtown.kormate.databinding.RecentpreviewBinding
+import org.techtown.kormate.domain.BoardDetail
 
 
-class RecentAdapter(private val boardList : List<BoardDetail>, private val homeFragment: HomeFragment) : RecyclerView.Adapter<RecentAdapter.ViewHolder>() {
+class RecentAdapter(
+    private val boardList: List<BoardDetail>,
+) : RecyclerView.Adapter<RecentAdapter.ViewHolder>() {
 
-    inner class ViewHolder(val binding : RecentpreviewBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: RecentpreviewBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(RecentpreviewBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+        ViewHolder(RecentpreviewBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
     override fun getItemCount() = boardList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        syncAdapterUi(boardList[position] , holder)
+        syncAdapterUi(boardList[position], holder)
     }
 
-    private fun syncAdapterUi(list : BoardDetail, holder : ViewHolder) {
+    private fun syncAdapterUi(list: BoardDetail, holder: ViewHolder) {
 
         holder.binding.apply {
 
             dateTime.text = list.dateTime
 
-            post.text = if(list.post.length > PREVIEW_POST_LIMIT - 1){
-                list.post.substring(PREVIEW_POST_START, PREVIEW_POST_LIMIT - 1)+"..."
+            post.text = if (list.post.length > PREVIEW_POST_LIMIT - 1) {
+                list.post.substring(PREVIEW_POST_START, PREVIEW_POST_LIMIT - 1) + "..."
             } else
                 list.post
 
@@ -47,14 +49,10 @@ class RecentAdapter(private val boardList : List<BoardDetail>, private val homeF
 
     }
 
-
-    companion object{
+    companion object {
         private const val PROFILE_WIDTH_SIZE = 100
         private const val PROFILE_HEIGHT_SIZE = 100
         private const val PREVIEW_POST_START = 0
         private const val PREVIEW_POST_LIMIT = 53
     }
-
-
-
 }
