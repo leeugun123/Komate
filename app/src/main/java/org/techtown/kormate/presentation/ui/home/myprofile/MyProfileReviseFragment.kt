@@ -2,7 +2,6 @@ package org.techtown.kormate.presentation.ui.home.myprofile
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import org.techtown.kormate.R
@@ -20,7 +19,7 @@ class MyProfileReviseFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initBinding()
-        bidningUserImgProfile()
+        bindUserImgProfile()
         observePostSuccess()
     }
 
@@ -42,7 +41,7 @@ class MyProfileReviseFragment :
         }
     }
 
-    private fun bidningUserImgProfile() {
+    private fun bindUserImgProfile() {
         Glide.with(requireContext())
             .load(UserKakaoIntel.userProfileImg)
             .circleCrop()
