@@ -18,7 +18,7 @@ import com.bumptech.glide.Glide
 import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import org.techtown.kormate.presentation.constant.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.presentation.constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
-import org.techtown.kormate.domain.BoardDetail
+import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.domain.model.Comment
 import org.techtown.kormate.domain.model.Report
 import org.techtown.kormate.domain.model.UserKakaoIntel

@@ -2,25 +2,29 @@ package org.techtown.kormate.presentation.ui.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentHomeBinding
 import org.techtown.kormate.presentation.BaseFragment
 import org.techtown.kormate.presentation.ui.home.board.BoardFragment
+import org.techtown.kormate.presentation.ui.home.board.detail.BoardViewModel
 import org.techtown.kormate.presentation.ui.home.myprofile.MyFragment
 import org.techtown.kormate.presentation.ui.home.preview.PreviewFragment
 
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
-    private val fa by lazy { PreviewFragment() }
-    private val fb by lazy { BoardFragment() }
-    private val fc by lazy { MyFragment() }
-    private val fragmentManager by lazy { childFragmentManager }
+    private val previewFragment by lazy { PreviewFragment() }
+    private val boardFragment by lazy { BoardFragment() }
+    private val myProfileFragment by lazy { MyFragment() }
+    private val homeFragmentManager by lazy { childFragmentManager }
+    private val boardViewModel: BoardViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        addFragment()
+        addAllFragment()
         initNavigationBar()
+        boardViewModel
     }
 
     private fun initNavigationBar() {
@@ -28,15 +32,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
             when (item.itemId) {
                 R.id.page_home -> {
-                    showFa()
+                    showPreViewFragment()
                 }
 
                 R.id.page_board -> {
-                    showFb()
+                    showBoardFragment()
                 }
 
                 R.id.page_my -> {
-                    showFc()
+                    showMyProfileFragment()
                 }
 
                 else -> throw IllegalArgumentException("유효하지 않습니다.")
@@ -45,27 +49,27 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
-    private fun showFc() {
-        fragmentManager.beginTransaction().hide(fa).commit()
-        fragmentManager.beginTransaction().hide(fb).commit()
-        fragmentManager.beginTransaction().show(fc).commit()
+    private fun showMyProfileFragment() {
+        homeFragmentManager.beginTransaction().hide(previewFragment).commit()
+        homeFragmentManager.beginTransaction().hide(boardFragment).commit()
+        homeFragmentManager.beginTransaction().show(myProfileFragment).commit()
     }
 
-    private fun showFb() {
-        fragmentManager.beginTransaction().hide(fa).commit()
-        fragmentManager.beginTransaction().show(fb).commit()
-        fragmentManager.beginTransaction().hide(fc).commit()
+    private fun showBoardFragment() {
+        homeFragmentManager.beginTransaction().hide(previewFragment).commit()
+        homeFragmentManager.beginTransaction().show(boardFragment).commit()
+        homeFragmentManager.beginTransaction().hide(myProfileFragment).commit()
     }
 
-    private fun showFa() {
-        fragmentManager.beginTransaction().show(fa).commit()
-        fragmentManager.beginTransaction().hide(fb).commit()
-        fragmentManager.beginTransaction().hide(fc).commit()
+    private fun showPreViewFragment() {
+        homeFragmentManager.beginTransaction().show(previewFragment).commit()
+        homeFragmentManager.beginTransaction().hide(boardFragment).commit()
+        homeFragmentManager.beginTransaction().hide(myProfileFragment).commit()
     }
 
-    private fun addFragment() {
-        fragmentManager.beginTransaction().add(R.id.main_frame, fa).commit()
-        fragmentManager.beginTransaction().add(R.id.main_frame, fb).commit()
-        fragmentManager.beginTransaction().add(R.id.main_frame, fc).commit()
+    private fun addAllFragment() {
+        homeFragmentManager.beginTransaction().add(R.id.main_frame, previewFragment).commit()
+        homeFragmentManager.beginTransaction().add(R.id.main_frame, boardFragment).commit()
+        homeFragmentManager.beginTransaction().add(R.id.main_frame, myProfileFragment).commit()
     }
 }

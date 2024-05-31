@@ -29,7 +29,7 @@ import org.techtown.kormate.presentation.constant.FirebasePathConstant.POSTS_PAT
 import org.techtown.kormate.presentation.constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
 import org.techtown.kormate.presentation.CustomProgressDialog
 import org.techtown.kormate.presentation.util.CurrentDateTime
-import org.techtown.kormate.domain.BoardDetail
+import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.domain.model.UserKakaoIntel.userId
 import org.techtown.kormate.domain.model.UserKakaoIntel.userNickName
 import org.techtown.kormate.domain.model.UserKakaoIntel.userProfileImg

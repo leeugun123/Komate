@@ -23,13 +23,22 @@
         <action
             android:id="@+id/action_LoginFragment_to_HomeFragment"
             app:destination="@id/HomeFragment" />
+        <action
+            android:id="@+id/action_LoginFragment_to_SignUpFragment"
+            app:destination="@id/SignUpFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/HomeFragment"
         android:name="org.techtown.kormate.presentation.ui.home.HomeFragment"
-        android:label="HomeFragment"
-        tools:layout="@layout/fragment_home"
-        />
+        android:label="Home
+        Fragment"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/SignUpFragment"
+        android:name="org.techtown.kormate.presentation.ui.signup.SignUpFragment"
+        android:label="SignUpFragment"
+        tools:layout="@layout/fragment_sign_up" />
 
 </navigation>

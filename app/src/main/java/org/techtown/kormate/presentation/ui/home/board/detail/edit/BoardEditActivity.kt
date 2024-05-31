@@ -23,7 +23,7 @@ import org.techtown.kormate.presentation.constant.BoardPostConstant.NO_CONTEXT_M
 import org.techtown.kormate.presentation.constant.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.presentation.constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
 import org.techtown.kormate.presentation.CustomProgressDialog
-import org.techtown.kormate.domain.BoardDetail
+import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.presentation.util.BoardData
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import org.techtown.kormate.presentation.ui.home.board.detail.BoardActivity

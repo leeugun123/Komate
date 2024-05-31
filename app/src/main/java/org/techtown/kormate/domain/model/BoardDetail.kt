@@ -1,4 +1,4 @@
-package org.techtown.kormate.domain
+package org.techtown.kormate.domain.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
