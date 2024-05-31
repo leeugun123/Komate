@@ -16,8 +16,6 @@ import org.techtown.kormate.presentation.BaseFragment
 import org.techtown.kormate.presentation.FragmentCallback
 import org.techtown.kormate.presentation.constant.FirebasePathConstant
 import org.techtown.kormate.presentation.constant.IntentCode
-import org.techtown.kormate.presentation.ui.home.HomeFragment
-import org.techtown.kormate.presentation.ui.home.board.RecentAdapter
 import org.techtown.kormate.presentation.ui.home.board.detail.BoardActivity
 import org.techtown.kormate.presentation.ui.home.board.detail.BoardViewModel
 

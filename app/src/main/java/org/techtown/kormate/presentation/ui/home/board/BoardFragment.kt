@@ -2,16 +2,15 @@ package org.techtown.kormate.presentation.ui.home.board
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentBoardBinding
 import org.techtown.kormate.domain.BoardDetail
+import org.techtown.kormate.presentation.BaseFragment
 import org.techtown.kormate.presentation.FragmentCallback
 import org.techtown.kormate.presentation.constant.FirebasePathConstant.POST_PATH_INTENT
 import org.techtown.kormate.presentation.constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
@@ -21,33 +20,17 @@ import org.techtown.kormate.presentation.ui.home.board.detail.post.BoardPostActi
 import org.techtown.kormate.presentation.ui.home.preview.PreviewAdapter
 
 
-class BoardFragment : Fragment(), FragmentCallback {
+class BoardFragment : BaseFragment<FragmentBoardBinding>(R.layout.fragment_board),
+    FragmentCallback {
 
-    private lateinit var binding: FragmentBoardBinding
-    private val boardViewModel: BoardViewModel by activityViewModels()
+    private val boardViewModel: BoardViewModel by viewModels({ requireParentFragment() })
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentBoardBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         bindingApply()
         dataUiBindingInit()
         activityResultLauncherInit()
-
     }
 
     private fun activityResultLauncherInit() {
@@ -61,15 +44,12 @@ class BoardFragment : Fragment(), FragmentCallback {
     private fun bindingApply() {
 
         binding.apply {
-
             movePost.setOnClickListener {
                 activityResultLauncher.launch(Intent(activity, BoardPostActivity::class.java))
             }
-
             boardSwipeRefresh.setOnRefreshListener {
                 getBoardList()
             }
-
         }
     }
 
@@ -83,11 +63,9 @@ class BoardFragment : Fragment(), FragmentCallback {
     private fun recentListObserve() {
 
         boardViewModel.boardDetailList.observe(requireActivity()) { recentList ->
-
             binding.boardRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-            binding.boardRecyclerview.adapter = PreviewAdapter(recentList, this)
+            binding.boardRecyclerview.adapter = PreviewAdapter(recentList)
             binding.boardSwipeRefresh.isRefreshing = false
-
         }
 
     }
@@ -101,7 +79,5 @@ class BoardFragment : Fragment(), FragmentCallback {
         intent.putExtra(POST_PATH_INTENT, boardDetail)
         activityResultLauncher.launch(intent)
     }
-
-
 }
 

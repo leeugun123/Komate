@@ -24,21 +24,16 @@ class PreviewAdapter(private val boardList: List<BoardDetail>) :
     inner class ViewHolder(val binding: BoardpreviewBinding) :
 
         RecyclerView.ViewHolder(binding.root) {
+            fun bind(boardDetail: BoardDetail) {
+                binding.dateTime.text = boardDetail.dateTime
 
-        fun bind(boardDetail: BoardDetail) {
+                val concatPost = if (boardDetail.post.length > PREVIEW_TEXT_CUT_MAX_SIZE) {
+                    boardDetail.post.substring(PREVIEW_TEXT_CUT_START, PREVIEW_TEXT_CUT_END) + "..."
+                } else
+                    boardDetail.post
 
-            binding.dateTime.text = boardDetail.dateTime
-
-            val concatPost = if (boardDetail.post.length > PREVIEW_TEXT_CUT_MAX_SIZE) {
-                boardDetail.post.substring(PREVIEW_TEXT_CUT_START, PREVIEW_TEXT_CUT_END) + "..."
-            } else
-                boardDetail.post
-
-            binding.post.text = concatPost
-
-        }
-
-
+                binding.post.text = concatPost
+            }
     }
 
     companion object {
@@ -46,6 +41,4 @@ class PreviewAdapter(private val boardList: List<BoardDetail>) :
         private const val PREVIEW_TEXT_CUT_END = 110
         private const val PREVIEW_TEXT_CUT_MAX_SIZE = 105
     }
-
-
 }

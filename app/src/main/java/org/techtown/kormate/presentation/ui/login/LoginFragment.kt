@@ -38,7 +38,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
             if (error != null)
                 errorMessageToast(KAKAO_LOGIN_FAILED)
             else if (tokenInfo != null)
-                kakaoLoginSuccess()
+                handleKakaoLogin()
         }
     }
 
@@ -93,7 +93,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
                 }
 
             } else if (token != null) {
-                kakaoLoginSuccess()
+                handleKakaoLogin()
             }
 
         }
@@ -104,7 +104,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
             UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = callback)
     }
 
-    private fun kakaoLoginSuccess() {
+    private fun handleKakaoLogin() {
         bindingKakaoInfo()
         errorMessageToast(KAKAO_ACCESS_SUCCESS)
         checkMyIntelData()
@@ -119,10 +119,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
 
     private fun bindingKakaoInfo() {
         loadKakaoIntel()
-        kakaoViewModelObserve()
+        observeKakaoViewModel()
     }
 
-    private fun kakaoViewModelObserve() {
+    private fun observeKakaoViewModel() {
         kakaoViewModel.kakaoIntelDownloadSuccess.observe(viewLifecycleOwner) { success ->
             if (!success)
                 errorMessageToast(KAKAO_DATA_BINDING_FAILED)
@@ -136,8 +136,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
     private fun decideIntent(exist: Boolean) {
         if (exist) {
             findNavController().navigate(R.id.action_LoginFragment_to_HomeFragment)
-        } else
+        } else{
             // TODO("정보 입력 화면으로 입력")
+        }
+
     }
 
     companion object {
