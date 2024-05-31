@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.techtown.kormate.domain.BoardDetail
+import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.domain.model.Report
 import org.techtown.kormate.data.BoardRepository
 

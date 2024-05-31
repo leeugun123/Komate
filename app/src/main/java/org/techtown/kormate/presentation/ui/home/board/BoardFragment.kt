@@ -1,17 +1,13 @@
 package org.techtown.kormate.presentation.ui.home.board
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.viewModels
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentBoardBinding
-import org.techtown.kormate.domain.BoardDetail
+import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.presentation.BaseFragment
 import org.techtown.kormate.presentation.FragmentCallback
-import org.techtown.kormate.presentation.constant.FirebasePathConstant.POST_PATH_INTENT
-import org.techtown.kormate.presentation.ui.home.board.detail.BoardActivity
 import org.techtown.kormate.presentation.ui.home.board.detail.BoardViewModel
 import org.techtown.kormate.presentation.ui.home.preview.PreviewAdapter
 

@@ -5,7 +5,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 import org.techtown.kormate.presentation.constant.FirebasePathConstant
 import org.techtown.kormate.presentation.constant.FirebasePathConstant.POSTS_PATH
-import org.techtown.kormate.domain.BoardDetail
+import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.domain.model.Report
 
 class BoardRepository() {

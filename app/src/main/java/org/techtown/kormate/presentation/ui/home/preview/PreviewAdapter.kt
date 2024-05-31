@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.techtown.kormate.databinding.BoardpreviewBinding
-import org.techtown.kormate.domain.BoardDetail
+import org.techtown.kormate.domain.model.BoardDetail
 
 class PreviewAdapter(private val boardList: List<BoardDetail>) :
     RecyclerView.Adapter<PreviewAdapter.ViewHolder>() {

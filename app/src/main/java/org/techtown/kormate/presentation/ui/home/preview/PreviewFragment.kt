@@ -1,22 +1,15 @@
 package org.techtown.kormate.presentation.ui.home.preview
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentPreviewBinding
-import org.techtown.kormate.domain.BoardDetail
+import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.domain.model.UserKakaoIntel
 import org.techtown.kormate.presentation.BaseFragment
 import org.techtown.kormate.presentation.FragmentCallback
-import org.techtown.kormate.presentation.constant.FirebasePathConstant
-import org.techtown.kormate.presentation.constant.IntentCode
-import org.techtown.kormate.presentation.ui.home.board.detail.BoardActivity
 import org.techtown.kormate.presentation.ui.home.board.detail.BoardViewModel
 
 class PreviewFragment : BaseFragment<FragmentPreviewBinding>(R.layout.fragment_preview),
