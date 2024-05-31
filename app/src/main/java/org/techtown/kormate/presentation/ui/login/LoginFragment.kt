@@ -3,6 +3,7 @@ package org.techtown.kormate.presentation.ui.login
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.kakao.sdk.auth.model.OAuthToken
@@ -16,7 +17,7 @@ import org.techtown.kormate.presentation.ui.home.myprofile.MyIntelViewModel
 
 class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splash) {
 
-    private val kakaoViewModel: KakaoViewModel by viewModels()
+    private val kakaoViewModel: KakaoViewModel by activityViewModels()
     private val myIntelViewModel: MyIntelViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -7,10 +7,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.techtown.kormate.domain.model.UserIntel
 import org.techtown.kormate.data.repository.MyIntelRepository
+import org.techtown.kormate.domain.model.UserIntel
 
-class MyIntelViewModel() : ViewModel(){
+class MyIntelViewModel() : ViewModel() {
 
     private val _postSuccessLiveData = MutableLiveData<Boolean>()
 
@@ -19,56 +19,40 @@ class MyIntelViewModel() : ViewModel(){
 
     private val _dataExistLiveData = MutableLiveData<Boolean>()
 
-    val dataExistLiveData : LiveData<Boolean>
+    val dataExistLiveData: LiveData<Boolean>
         get() = _dataExistLiveData
 
     private val _userIntelLiveData = MutableLiveData<UserIntel>()
 
-    val userIntelLiveData  : LiveData<UserIntel>
+    val userIntelLiveData: LiveData<UserIntel>
         get() = _userIntelLiveData
 
     private val myIntelRepository = MyIntelRepository()
 
-    fun getUserIntel(){
-
-        viewModelScope.launch(Dispatchers.IO){
-
+    fun getUserIntel() {
+        viewModelScope.launch(Dispatchers.IO) {
             val userIntelResponse = myIntelRepository.repoFetchUserIntel()
-
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 _userIntelLiveData.value = userIntelResponse
             }
-
         }
     }
 
-
-    fun uploadUserIntel(userIntel: UserIntel){
-
-        viewModelScope.launch (Dispatchers.IO){
-
+    fun uploadUserIntel(userIntel: UserIntel) {
+        viewModelScope.launch(Dispatchers.IO) {
             val responseUploadUserIntelSuccess = myIntelRepository.repoUploadUserIntel(userIntel)
-
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 _postSuccessLiveData.value = responseUploadUserIntelSuccess
             }
-
         }
-
     }
 
-    fun checkDataExist(){
-
+    fun checkDataExist() {
         viewModelScope.launch(Dispatchers.IO) {
-
             val responseDataExistSuccess = myIntelRepository.checkDataExistence()
-
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 _dataExistLiveData.value = responseDataExistSuccess
             }
-
         }
     }
-
-
 }
