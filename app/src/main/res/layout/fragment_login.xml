@@ -4,6 +4,10 @@
 
     <data>
 
+        <variable
+            name="onKakoLoginClick"
+            type="kotlin.jvm.functions.Function0" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -71,10 +75,12 @@
             android:layout_height="100dp"
             android:layout_marginTop="20dp"
             android:background="@android:color/transparent"
+            android:onClick="@{() -> onKakoLoginClick.invoke()}"
             android:src="@drawable/kakao_login_wide"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            android:importantForAccessibility="no" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

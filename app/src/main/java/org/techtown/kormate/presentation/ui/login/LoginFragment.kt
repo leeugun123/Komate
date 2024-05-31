@@ -1,6 +1,5 @@
 package org.techtown.kormate.presentation.ui.login
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -11,8 +10,6 @@ import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentLoginBinding
-import org.techtown.kormate.presentation.ui.home.MainActivity
-import org.techtown.kormate.presentation.ui.signup.NationActivity
 import org.techtown.kormate.presentation.BaseFragment
 import org.techtown.kormate.presentation.ui.KakaoViewModel
 import org.techtown.kormate.presentation.ui.home.myprofile.MyIntelViewModel
@@ -28,15 +25,13 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
     }
 
     private fun initBinding() {
-        binding.kakaoLogin.setOnClickListener {
-            checkUserApiClient()
-        }
+        binding.onKakoLoginClick = ::checkUserApiClient
     }
 
     private fun autoLoginKakao() {
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null)
-                errorMessageToast(KAKAO_LOGIN_FAILED)
+                errorMessageToast(requireContext().getString(R.string.kakao_login_failed))
             else if (tokenInfo != null)
                 handleKakaoLogin()
         }
@@ -55,47 +50,44 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
                 when (error.toString()) {
 
                     AuthErrorCause.AccessDenied.toString() -> {
-                        errorMessageToast(ACCESS_DENIED)
+                        errorMessageToast(requireContext().getString(R.string.access_denied))
                     }
 
                     AuthErrorCause.InvalidClient.toString() -> {
-                        errorMessageToast(INVALID_ERROR)
+                        errorMessageToast(requireContext().getString(R.string.invalid_error))
                     }
 
                     AuthErrorCause.InvalidGrant.toString() -> {
-                        errorMessageToast(CAN_NOT_AUTHENTICATION)
+                        errorMessageToast(requireContext().getString(R.string.can_not_authentication))
                     }
 
                     AuthErrorCause.InvalidRequest.toString() -> {
-                        errorMessageToast(REQUEST_PARAMETER_ERROR)
+                        errorMessageToast(requireContext().getString(R.string.request_parameter_error))
                     }
 
                     AuthErrorCause.InvalidScope.toString() -> {
-                        errorMessageToast(INVALID_SCOPE_ID)
+                        errorMessageToast(requireContext().getString(R.string.invalid_scope_id))
                     }
 
                     AuthErrorCause.Misconfigured.toString() -> {
-                        errorMessageToast(SETTING_NOT_RIGHT)
+                        errorMessageToast(requireContext().getString(R.string.setting_not_right))
                     }
 
                     AuthErrorCause.ServerError.toString() -> {
-                        errorMessageToast(SERVER_INTERNAL_ERROR)
+                        errorMessageToast(requireContext().getString(R.string.server_internal_error))
                     }
 
                     AuthErrorCause.Unauthorized.toString() -> {
-                        errorMessageToast(NOT_HAVE_REQUEST_PERMISSION)
+                        errorMessageToast(requireContext().getString(R.string.not_have_request_permission))
                     }
 
-                    else -> { // Unknown
-                        errorMessageToast(OTHER_ERROR)
+                    else -> {
+                        errorMessageToast(requireContext().getString(R.string.other_error))
                     }
-
                 }
-
             } else if (token != null) {
                 handleKakaoLogin()
             }
-
         }
 
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(requireContext()))
@@ -106,14 +98,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
 
     private fun handleKakaoLogin() {
         bindingKakaoInfo()
-        errorMessageToast(KAKAO_ACCESS_SUCCESS)
+        errorMessageToast(requireContext().getString(R.string.kakao_access_success))
         checkMyIntelData()
     }
 
     private fun checkMyIntelData() {
         myIntelViewModel.checkDataExist()
         myIntelViewModel.dataExistLiveData.observe(viewLifecycleOwner) { exist ->
-           decideIntent(exist)
+            decideIntent(exist)
         }
     }
 
@@ -125,7 +117,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
     private fun observeKakaoViewModel() {
         kakaoViewModel.kakaoIntelDownloadSuccess.observe(viewLifecycleOwner) { success ->
             if (!success)
-                errorMessageToast(KAKAO_DATA_BINDING_FAILED)
+                errorMessageToast(requireContext().getString(R.string.kakao_data_binding_failed))
         }
     }
 
@@ -136,24 +128,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
     private fun decideIntent(exist: Boolean) {
         if (exist) {
             findNavController().navigate(R.id.action_LoginFragment_to_HomeFragment)
-        } else{
+        } else {
             // TODO("정보 입력 화면으로 입력")
         }
-
-    }
-
-    companion object {
-        private const val KAKAO_LOGIN_FAILED = "카카오 로그인 실패"
-        private const val KAKAO_ACCESS_SUCCESS = "카카오 로그인"
-        private const val OTHER_ERROR = "기타 에러"
-        private const val INVALID_ERROR = "유효하지 않은 앱"
-        private const val ACCESS_DENIED = "접근이 거부 됨(동의 취소)"
-        private const val REQUEST_PARAMETER_ERROR = "요청 파라미터 오류"
-        private const val CAN_NOT_AUTHENTICATION = "인증 수단이 유효하지 않아 인증할 수 없는 상태"
-        private const val INVALID_SCOPE_ID = "유효 하지 않은 scope ID"
-        private const val SETTING_NOT_RIGHT = "설정이 올바르지 않음(android key hash)"
-        private const val SERVER_INTERNAL_ERROR = "서버 내부 에러"
-        private const val NOT_HAVE_REQUEST_PERMISSION = "앱이 요청 권한이 없음"
-        private const val KAKAO_DATA_BINDING_FAILED = "카카오 데이터 바인딩 실패"
     }
 }
