@@ -64,7 +64,7 @@ class PreviewFragment : BaseFragment<FragmentPreviewBinding>(R.layout.fragment_p
     private fun observeRecentLimitList() {
         boardViewModel.boardDetailList.observe(viewLifecycleOwner) { recentLimitList ->
             binding.recentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-            binding.recentRecyclerview.adapter = RecentAdapter(limitListSize(recentLimitList))
+            binding.recentRecyclerview.adapter = PreviewAdapter(limitListSize(recentLimitList))
             binding.homeSwipeRefresh.isRefreshing = false
         }
     }
