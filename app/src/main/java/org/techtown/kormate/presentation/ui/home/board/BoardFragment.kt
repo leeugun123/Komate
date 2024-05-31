@@ -62,7 +62,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(R.layout.fragment_board
 
     private fun recentListObserve() {
 
-        boardViewModel.boardDetailList.observe(requireActivity()) { recentList ->
+        boardViewModel.boardDetailList.observe(viewLifecycleOwner) { recentList ->
             binding.boardRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             binding.boardRecyclerview.adapter = PreviewAdapter(recentList)
             binding.boardSwipeRefresh.isRefreshing = false

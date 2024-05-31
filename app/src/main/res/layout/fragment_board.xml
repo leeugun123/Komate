@@ -81,11 +81,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView8" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
 
         <TextView
             android:id="@+id/textView8"
@@ -119,8 +114,8 @@
             android:id="@+id/movePost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/blue"
             android:layout_marginTop="20dp"
+            android:background="@color/blue"
             android:text="@string/post_board"
             android:textColor="@color/white"
             android:textSize="18dp"

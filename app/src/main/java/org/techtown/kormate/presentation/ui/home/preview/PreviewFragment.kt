@@ -23,39 +23,21 @@ class PreviewFragment : BaseFragment<FragmentPreviewBinding>(R.layout.fragment_p
     FragmentCallback {
 
     private val boardViewModel: BoardViewModel by viewModels({ requireParentFragment() })
-    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initBinding()
-        initActivityResultLauncher()
-
         observeRecentLimitList()
-
-        binding.homeSwipeRefresh.setOnRefreshListener {
-            getBoardList()
-        }
-    }
-
-    private fun initActivityResultLauncher() {
-        activityResultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == IntentCode.RESPONSE_CODE_BOARD_SYNC)
-                    getBoardList()
-            }
     }
 
     private fun initBinding() {
         bindingProfileImg()
-        bindingName()
-    }
-
-    private fun bindingName() {
-        binding.userName.text = UserKakaoIntel.userNickName
+        binding.userKakoIntel = UserKakaoIntel
+        binding.onRefreshClick = ::getBoardList
     }
 
     private fun bindingProfileImg() {
-        Glide.with(requireActivity())
+        Glide.with(requireContext())
             .load(UserKakaoIntel.userProfileImg)
             .circleCrop()
             .into(binding.userProfile)
@@ -63,28 +45,24 @@ class PreviewFragment : BaseFragment<FragmentPreviewBinding>(R.layout.fragment_p
 
     private fun observeRecentLimitList() {
         boardViewModel.boardDetailList.observe(viewLifecycleOwner) { recentLimitList ->
-            binding.recentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
             binding.recentRecyclerview.adapter = PreviewAdapter(limitListSize(recentLimitList))
             binding.homeSwipeRefresh.isRefreshing = false
         }
     }
 
-    private fun limitListSize(list: List<BoardDetail>): List<BoardDetail> {
-        return if (list.size > PAGE_LOAD_LIMIT) {
+    private fun limitListSize(list: List<BoardDetail>) =
+        if (list.size > PAGE_LOAD_LIMIT) {
             list.subList(0, PAGE_LOAD_LIMIT)
         } else {
             list
         }
-    }
 
     private fun getBoardList() {
         boardViewModel.getBoardList()
     }
 
-    override fun onNavigateToActivity(boardDetail: BoardDetail) {
-        val intent = Intent(requireActivity(), BoardActivity::class.java)
-        intent.putExtra(FirebasePathConstant.POST_PATH_INTENT, boardDetail)
-        activityResultLauncher.launch(intent)
+    override fun onNavigateToBoardFragment(boardDetail: BoardDetail) {
+        // 인자값 정해야 함.
     }
 
     companion object {

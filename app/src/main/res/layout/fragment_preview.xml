@@ -4,6 +4,14 @@
 
     <data>
 
+        <variable
+            name="userKakoIntel"
+            type="org.techtown.kormate.domain.model.UserKakaoIntel" />
+
+        <variable
+            name="onRefreshClick"
+            type="kotlin.jvm.functions.Function0" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,6 +59,7 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/seoultech_logo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/kkanbu" />
@@ -63,6 +72,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginTop="20dp"
+            android:importantForAccessibility="no"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
@@ -72,6 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/hi"
             app:layout_constraintStart_toEndOf="@+id/user_profile"
             app:layout_constraintTop_toTopOf="@+id/user_profile" />
@@ -82,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:text="@string/kkanbu_english"
+            android:text="@{userKakoIntel.userNickName}"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -95,6 +106,7 @@
             android:layout_height="30dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="50dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/newlogo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/user_profile" />
@@ -125,6 +137,7 @@
             android:layout_width="0dp"
             android:layout_height="300dp"
             android:layout_marginTop="30dp"
+            android:onClickListener="@{() -> onRefreshClick.invoke()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view">
@@ -132,7 +145,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recentRecyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
