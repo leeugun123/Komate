@@ -21,10 +21,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Board Fragment -->
-
     <string name="board">게시판</string>
     <string name="recent_order">최신순</string>
     <string name="korean_language">한국어</string>
     <string name="post_board">게시글 쓰기</string>
+    <string name="question">질문</string>
 
 </resources>
