@@ -26,7 +26,6 @@ import org.techtown.kormate.presentation.CustomProgressDialog
 import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.presentation.util.BoardData
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
-import org.techtown.kormate.presentation.ui.home.board.detail.BoardActivity
 import org.techtown.kormate.presentation.ui.home.board.detail.BoardViewModel
 import org.techtown.kormate.presentation.ui.home.board.detail.comment.CommentViewModel
 import org.techtown.kormate.presentation.ui.home.board.detail.gallery.GalleryAdapter
