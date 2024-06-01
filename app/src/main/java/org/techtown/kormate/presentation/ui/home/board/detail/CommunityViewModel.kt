@@ -11,7 +11,7 @@ import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.domain.model.Report
 import org.techtown.kormate.data.BoardRepository
 
-class BoardViewModel() : ViewModel() {
+class CommunityViewModel() : ViewModel() {
 
     private val _boardPostSuccess = MutableLiveData<Boolean>()
 

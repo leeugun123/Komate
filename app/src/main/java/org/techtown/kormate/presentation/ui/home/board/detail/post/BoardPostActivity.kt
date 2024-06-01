@@ -34,7 +34,7 @@ import org.techtown.kormate.domain.model.UserKakaoIntel.userId
 import org.techtown.kormate.domain.model.UserKakaoIntel.userNickName
 import org.techtown.kormate.domain.model.UserKakaoIntel.userProfileImg
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
-import org.techtown.kormate.presentation.ui.home.board.detail.BoardViewModel
+import org.techtown.kormate.presentation.ui.home.board.detail.CommunityViewModel
 import org.techtown.kormate.presentation.ui.home.board.detail.gallery.GalleryAdapter
 import java.text.SimpleDateFormat
 import java.util.*
@@ -45,7 +45,7 @@ class BoardPostActivity : AppCompatActivity() {
     private val postsRef by lazy { Firebase.database.reference.child(POSTS_PATH) }
     private val postId by lazy { postsRef.push().key }
 
-    private val boardViewModel : BoardViewModel by viewModels()
+    private val communityViewModel : CommunityViewModel by viewModels()
     private var goalImg = mutableListOf<String>()
 
     private lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
@@ -166,7 +166,7 @@ class BoardPostActivity : AppCompatActivity() {
 
     private fun boardPostSuccessObserve() {
 
-        boardViewModel.boardPostSuccess.observe(this) { success ->
+        communityViewModel.boardPostSuccess.observe(this) { success ->
             if (success)
                 postComplete()
 
@@ -179,7 +179,7 @@ class BoardPostActivity : AppCompatActivity() {
         val uploadBoardDetail = BoardDetail(postId.toString(), userId.toLong(), userNickName, userProfileImg
             , post, picUri, CurrentDateTime.getPostTime())
 
-        boardViewModel.uploadPost(uploadBoardDetail)
+        communityViewModel.uploadPost(uploadBoardDetail)
 
         dialog.dismiss()
     }

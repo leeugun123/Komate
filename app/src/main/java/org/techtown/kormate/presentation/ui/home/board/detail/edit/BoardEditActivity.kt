@@ -26,7 +26,7 @@ import org.techtown.kormate.presentation.CustomProgressDialog
 import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.presentation.util.BoardData
 import org.techtown.kormate.databinding.ActivityBoardPostBinding
-import org.techtown.kormate.presentation.ui.home.board.detail.BoardViewModel
+import org.techtown.kormate.presentation.ui.home.board.detail.CommunityViewModel
 import org.techtown.kormate.presentation.ui.home.board.detail.comment.CommentViewModel
 import org.techtown.kormate.presentation.ui.home.board.detail.gallery.GalleryAdapter
 import java.text.SimpleDateFormat
@@ -37,7 +37,7 @@ class BoardEditActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityBoardPostBinding.inflate(layoutInflater) }
 
-    private val boardViewModel : BoardViewModel by viewModels()
+    private val communityViewModel : CommunityViewModel by viewModels()
     private val commentViewModel : CommentViewModel by viewModels()
 
     private lateinit var receiveIntent : BoardDetail
@@ -135,7 +135,7 @@ class BoardEditActivity : AppCompatActivity() {
 
     private fun boardPostSuccessObserve() {
 
-        boardViewModel.boardPostSuccess.observe(this) { success ->
+        communityViewModel.boardPostSuccess.observe(this) { success ->
 
             if (success) {
                 restoreComment()
@@ -247,7 +247,7 @@ class BoardEditActivity : AppCompatActivity() {
                 receiveIntent.dateTime
             )
 
-            boardViewModel.uploadPost(reviseList)
+            communityViewModel.uploadPost(reviseList)
 
         }
 

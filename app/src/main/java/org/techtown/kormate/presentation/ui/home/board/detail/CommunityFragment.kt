@@ -23,7 +23,7 @@ import org.techtown.kormate.presentation.util.CurrentDateTime
 class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragment_community) {
 
     private val commentViewModel: CommentViewModel by viewModels()
-    private val boardViewModel: BoardViewModel by viewModels()
+    private val communityViewModel: CommunityViewModel by viewModels()
 
     private val commentRecyclerView by lazy { binding.commentRecyclerView }
 
@@ -35,7 +35,9 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
         syncBoardUi()
         syncBoardPostId()
         initBinding()
-        viewModelObserve()
+
+        observeBoardViewModel()
+        observeCommentViewModel()
     }
 
     private fun initBinding() {
@@ -49,19 +51,14 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
         binding.edit.setOnClickListener { showPopUpMenu(it) }
     }
 
-    private fun viewModelObserve() {
-        observeBoardViewModel()
-        commentViewModelObserve()
-    }
-
-    private fun commentViewModelObserve() {
+    private fun observeCommentViewModel() {
         observeCommentList()
         observePostCommentSuccess()
         observeDeleteCommentSuccess()
-        reportCommentSuccessObserve()
+        observeReportCommentSuccess()
     }
 
-    private fun reportCommentSuccessObserve() {
+    private fun observeReportCommentSuccess() {
         commentViewModel.reportCommentSuccess.observe(viewLifecycleOwner) { success ->
             if (success)
                 requireContext().showToast(REPORT_COMMENT_COMPLETE)
@@ -99,14 +96,14 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
     }
 
     private fun observeBoardReportSuccess() {
-        boardViewModel.boardReportSuccess.observe(viewLifecycleOwner) {
+        communityViewModel.boardReportSuccess.observe(viewLifecycleOwner) {
             if (it)
                 requireContext().showToast(REPORT_POST)
         }
     }
 
     private fun observeBoardRemoveSuccess() {
-        boardViewModel.boardRemoveSuccess.observe(viewLifecycleOwner) {
+        communityViewModel.boardRemoveSuccess.observe(viewLifecycleOwner) {
             if (it) {
                 requireContext().showToast(REMOVE_POST_COMPLETE)
             }
@@ -184,7 +181,7 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
     }
 
     private fun removeBoard() {
-        boardViewModel.removePost(receiveArgs.postId)
+        communityViewModel.removePost(receiveArgs.postId)
     }
 
     private fun syncCommentPosition() {
@@ -255,7 +252,7 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
             receiveArgs.userId.toString(),
             receiveArgs.postId
         )
-        boardViewModel.reportPost(reportContent)
+        communityViewModel.reportPost(reportContent)
     }
 
     private fun syncBoardUi() {
