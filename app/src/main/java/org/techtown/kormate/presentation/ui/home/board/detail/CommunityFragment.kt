@@ -45,7 +45,7 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
             if (binding.reply.text.isNotEmpty())
                 handleComment()
             else
-                requireContext().showToast(NO_POST_TRY_AGAIN)
+                requireContext().showToast("글이 없습니다. 다시 작성해주세요.")
         }
         binding.edit.setOnClickListener { showPopUpMenu(it) }
         binding.edit.setOnClickListener { showPopUpMenu(it) }
@@ -61,14 +61,14 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
     private fun observeReportCommentSuccess() {
         commentViewModel.reportCommentSuccess.observe(viewLifecycleOwner) { success ->
             if (success)
-                requireContext().showToast(REPORT_COMMENT_COMPLETE)
+                requireContext().showToast("댓글이 신고 되었습니다.")
         }
     }
 
     private fun observeDeleteCommentSuccess() {
         commentViewModel.deleteCommentSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
-                requireContext().showToast(DELETE_COMMENT_COMPLETE)
+                requireContext().showToast("댓글이 삭제 되었습니다.")
                 getCommentList()
             }
         }
@@ -83,9 +83,9 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
         commentViewModel.postCommentSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 getCommentList()
-                requireContext().showToast(POST_COMMENT_COMPLETE)
+                requireContext().showToast("댓글이 등록 되었습니다.")
             } else
-                requireContext().showToast(COMMENT_UPLOAD_FAIL)
+                requireContext().showToast("댓글 업로드 실패")
         }
     }
 
@@ -98,14 +98,14 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
     private fun observeBoardReportSuccess() {
         communityViewModel.boardReportSuccess.observe(viewLifecycleOwner) {
             if (it)
-                requireContext().showToast(REPORT_POST)
+                requireContext().showToast("게시물이 신고 되었습니다.")
         }
     }
 
     private fun observeBoardRemoveSuccess() {
         communityViewModel.boardRemoveSuccess.observe(viewLifecycleOwner) {
             if (it) {
-                requireContext().showToast(REMOVE_POST_COMPLETE)
+                requireContext().showToast("게시물이 삭제 되었습니다.")
             }
         }
     }
@@ -173,9 +173,9 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
 
     private fun showDeleteAlertDialog() {
         AlertDialog.Builder(requireContext())
-            .setTitle(REMOVE_POST_ASKING)
-            .setPositiveButton(YES) { _, _ -> removeBoard() }
-            .setNegativeButton(NO) { _, _ -> }
+            .setTitle("게시물을 삭제 하시겠습니까?")
+            .setPositiveButton("예") { _, _ -> removeBoard() }
+            .setNegativeButton("아니오") { _, _ -> }
             .create()
             .show()
     }
@@ -227,7 +227,7 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
             checkedReasons[which] = isChecked
         }
 
-        builder.setPositiveButton(CHECK) { _, _ ->
+        builder.setPositiveButton("확인") { _, _ ->
 
             val selectedReasons = mutableListOf<String>()
 
@@ -239,7 +239,7 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
             userReport(selectedReasons)
         }
 
-        builder.setNegativeButton(CANCEL) { dialog, _ -> dialog.dismiss() }
+        builder.setNegativeButton("취소") { dialog, _ -> dialog.dismiss() }
 
         val dialog = builder.create()
         dialog.show()
@@ -347,7 +347,6 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
     }
 
     private fun syncUserInfoUi() {
-
         Glide.with(requireContext())
             .load(receiveArgs.userImg)
             .circleCrop()
@@ -355,24 +354,9 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
 
         binding.userName.text = receiveArgs.userName
         binding.dateTime.text = receiveArgs.dateTime
-
     }
 
     companion object {
-        private const val NO_POST_TRY_AGAIN = "글이 없습니다. 다시 작성해주세요."
-        private const val REMOVE_POST_ASKING = "게시물을 삭제 하시겠습니까?"
-        private const val REMOVE_POST_COMPLETE = "게시물이 삭제 되었습니다."
-        private const val POST_COMMENT_COMPLETE = "댓글이 등록 되었습니다."
-        private const val DELETE_COMMENT_COMPLETE = "댓글이 삭제 되었습니다."
-        private const val REPORT_COMMENT_COMPLETE = "댓글이 신고 되었습니다."
-        private const val CANCEL = "취소"
-        private const val CHECK = "확인"
-        private const val REPORT_POST = "게시물이 신고 되었습니다."
-        private const val COMMENT_UPLOAD_FAIL = "댓글 업로드 실패"
-
-        private const val YES = "예"
-        private const val NO = "아니오"
-
         var commentSize = 0
         var commentList = listOf<Comment>()
     }
