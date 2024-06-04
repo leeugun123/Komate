@@ -9,7 +9,7 @@ import org.techtown.kormate.databinding.FragmentMyProfileReviseBinding
 import org.techtown.kormate.domain.model.UserIntel
 import org.techtown.kormate.domain.model.UserKakaoIntel
 import org.techtown.kormate.presentation.BaseFragment
-import org.techtown.kormate.presentation.ui.showToast
+import org.techtown.kormate.presentation.util.extension.showToast
 
 class MyProfileReviseFragment :
     BaseFragment<FragmentMyProfileReviseBinding>(R.layout.fragment_my_profile_revise) {

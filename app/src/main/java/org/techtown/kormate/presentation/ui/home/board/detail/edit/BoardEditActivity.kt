@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
-import org.techtown.kormate.presentation.constant.BoardPostConstant.MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE
 import org.techtown.kormate.presentation.constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_MESSAGE
 import org.techtown.kormate.presentation.constant.BoardPostConstant.NO_CONTEXT_MESSAGE
 import org.techtown.kormate.presentation.constant.FirebasePathConstant.POST_PATH_INTENT
@@ -25,7 +24,6 @@ import org.techtown.kormate.presentation.constant.IntentCode.RESPONSE_CODE_BOARD
 import org.techtown.kormate.presentation.CustomProgressDialog
 import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.presentation.util.BoardData
-import org.techtown.kormate.databinding.ActivityBoardPostBinding
 import org.techtown.kormate.presentation.ui.home.board.detail.CommunityViewModel
 import org.techtown.kormate.presentation.ui.home.board.detail.comment.CommentViewModel
 import org.techtown.kormate.presentation.ui.home.board.detail.gallery.GalleryAdapter
@@ -276,7 +274,7 @@ class BoardEditActivity : AppCompatActivity() {
             for (i in 0 until clipData.itemCount) {
 
                 if (goalImg.size == 3) {
-                    Toast.makeText(this, MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "사진은 최대 3장까지 업로드 가능 합니다.", Toast.LENGTH_SHORT).show()
                     break
                 }
 
