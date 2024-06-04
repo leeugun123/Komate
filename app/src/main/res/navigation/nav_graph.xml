@@ -31,14 +31,23 @@
     <fragment
         android:id="@+id/HomeFragment"
         android:name="org.techtown.kormate.presentation.ui.home.HomeFragment"
-        android:label="Home
-        Fragment"
-        tools:layout="@layout/fragment_home" />
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_HomeFragment_to_CommunityFragment"
+            app:destination="@id/CommunityFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/SignUpFragment"
         android:name="org.techtown.kormate.presentation.ui.signup.SignUpFragment"
         android:label="SignUpFragment"
         tools:layout="@layout/fragment_sign_up" />
+
+    <fragment
+        android:id="@+id/CommunityFragment"
+        android:name="org.techtown.kormate.presentation.ui.home.board.detail.CommunityFragment"
+        android:label="CommunityFragment"
+        tools:layout="@layout/fragment_community" />
 
 </navigation>

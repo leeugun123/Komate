@@ -8,14 +8,14 @@ import org.techtown.kormate.databinding.FragmentBoardBinding
 import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.presentation.BaseFragment
 import org.techtown.kormate.presentation.FragmentCallback
-import org.techtown.kormate.presentation.ui.home.board.detail.BoardViewModel
+import org.techtown.kormate.presentation.ui.home.board.detail.CommunityViewModel
 import org.techtown.kormate.presentation.ui.home.preview.PreviewAdapter
 
 
 class BoardFragment : BaseFragment<FragmentBoardBinding>(R.layout.fragment_board),
     FragmentCallback {
 
-    private val boardViewModel: BoardViewModel by viewModels({ requireParentFragment() })
+    private val communityViewModel: CommunityViewModel by viewModels({ requireParentFragment() })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,14 +30,14 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(R.layout.fragment_board
     }
 
     private fun getBoardList() {
-        boardViewModel.getBoardList()
+        communityViewModel.getBoardList()
     }
     private fun moveToPostFragment(){
         // TODO("BoardFragment로 이동하는 로직 구현")
     }
 
     private fun observeRecentList() {
-        boardViewModel.boardDetailList.observe(viewLifecycleOwner) { recentList ->
+        communityViewModel.boardDetailList.observe(viewLifecycleOwner) { recentList ->
             binding.boardRecyclerview.adapter = PreviewAdapter(recentList)
             binding.boardSwipeRefresh.isRefreshing = false
         }

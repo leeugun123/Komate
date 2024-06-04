@@ -10,12 +10,12 @@ import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.domain.model.UserKakaoIntel
 import org.techtown.kormate.presentation.BaseFragment
 import org.techtown.kormate.presentation.FragmentCallback
-import org.techtown.kormate.presentation.ui.home.board.detail.BoardViewModel
+import org.techtown.kormate.presentation.ui.home.board.detail.CommunityViewModel
 
 class PreviewFragment : BaseFragment<FragmentPreviewBinding>(R.layout.fragment_preview),
     FragmentCallback {
 
-    private val boardViewModel: BoardViewModel by viewModels({ requireParentFragment() })
+    private val communityViewModel: CommunityViewModel by viewModels({ requireParentFragment() })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,7 +37,7 @@ class PreviewFragment : BaseFragment<FragmentPreviewBinding>(R.layout.fragment_p
     }
 
     private fun observeRecentLimitList() {
-        boardViewModel.boardDetailList.observe(viewLifecycleOwner) { recentLimitList ->
+        communityViewModel.boardDetailList.observe(viewLifecycleOwner) { recentLimitList ->
             binding.recentRecyclerview.adapter = PreviewAdapter(limitListSize(recentLimitList))
             binding.homeSwipeRefresh.isRefreshing = false
         }
@@ -51,7 +51,7 @@ class PreviewFragment : BaseFragment<FragmentPreviewBinding>(R.layout.fragment_p
         }
 
     private fun getBoardList() {
-        boardViewModel.getBoardList()
+        communityViewModel.getBoardList()
     }
 
     override fun onNavigateToBoardFragment(boardDetail: BoardDetail) {

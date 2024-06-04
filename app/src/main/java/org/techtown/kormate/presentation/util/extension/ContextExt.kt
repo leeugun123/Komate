@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation.ui
+package org.techtown.kormate.presentation.util.extension
 
 import android.content.Context
 import android.widget.Toast

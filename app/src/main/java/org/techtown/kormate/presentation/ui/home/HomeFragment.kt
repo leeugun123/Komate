@@ -7,7 +7,7 @@ import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentHomeBinding
 import org.techtown.kormate.presentation.BaseFragment
 import org.techtown.kormate.presentation.ui.home.board.BoardFragment
-import org.techtown.kormate.presentation.ui.home.board.detail.BoardViewModel
+import org.techtown.kormate.presentation.ui.home.board.detail.CommunityViewModel
 import org.techtown.kormate.presentation.ui.home.myprofile.MyProfileFragment
 import org.techtown.kormate.presentation.ui.home.preview.PreviewFragment
 
@@ -18,13 +18,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val boardFragment by lazy { BoardFragment() }
     private val myProfileFragment by lazy { MyProfileFragment() }
     private val homeFragmentManager by lazy { childFragmentManager }
-    private val boardViewModel: BoardViewModel by viewModels()
+    private val communityViewModel: CommunityViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         addAllFragment()
         initNavigationBar()
-        boardViewModel
+        communityViewModel
     }
 
     private fun initNavigationBar() {

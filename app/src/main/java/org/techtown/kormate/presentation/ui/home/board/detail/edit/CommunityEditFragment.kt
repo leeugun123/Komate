@@ -5,50 +5,47 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.widget.Toast
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.core.net.toUri
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.storage.FirebaseStorage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
-import org.techtown.kormate.presentation.constant.BoardPostConstant.MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE
-import org.techtown.kormate.presentation.constant.BoardPostConstant.NO_CONTENT_INPUT_CONTENT_MESSAGE
-import org.techtown.kormate.presentation.constant.BoardPostConstant.NO_CONTEXT_MESSAGE
-import org.techtown.kormate.presentation.constant.FirebasePathConstant.POST_PATH_INTENT
-import org.techtown.kormate.presentation.constant.IntentCode.RESPONSE_CODE_BOARD_SYNC
-import org.techtown.kormate.presentation.CustomProgressDialog
+import org.techtown.kormate.R
+import org.techtown.kormate.databinding.FragmentCommunityPostBinding
 import org.techtown.kormate.domain.model.BoardDetail
-import org.techtown.kormate.presentation.util.BoardData
-import org.techtown.kormate.databinding.ActivityBoardPostBinding
-import org.techtown.kormate.presentation.ui.home.board.detail.BoardActivity
-import org.techtown.kormate.presentation.ui.home.board.detail.BoardViewModel
+import org.techtown.kormate.presentation.BaseFragment
+import org.techtown.kormate.presentation.CustomProgressDialog
+import org.techtown.kormate.presentation.ui.home.board.detail.CommunityFragment
+import org.techtown.kormate.presentation.ui.home.board.detail.CommunityViewModel
 import org.techtown.kormate.presentation.ui.home.board.detail.comment.CommentViewModel
 import org.techtown.kormate.presentation.ui.home.board.detail.gallery.GalleryAdapter
+import org.techtown.kormate.presentation.util.BoardData
+import org.techtown.kormate.presentation.util.extension.showToast
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
+import java.util.UUID
+
+class CommunityEditFragment :
+    BaseFragment<FragmentCommunityPostBinding>(R.layout.fragment_community_post) {
 
 
-class BoardEditActivity : AppCompatActivity() {
+    private val communityViewModel: CommunityViewModel by viewModels()
+    private val commentViewModel: CommentViewModel by viewModels()
 
-    private val binding by lazy { ActivityBoardPostBinding.inflate(layoutInflater) }
+    private lateinit var receiveIntent: BoardDetail
+    private lateinit var goalImg: MutableList<String>
 
-    private val boardViewModel : BoardViewModel by viewModels()
-    private val commentViewModel : CommentViewModel by viewModels()
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
-    private lateinit var receiveIntent : BoardDetail
-    private lateinit var goalImg : MutableList<String>
-
-    private lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         syncTitleUi()
         getIntentHandling()
@@ -62,7 +59,7 @@ class BoardEditActivity : AppCompatActivity() {
 
         activityResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == Activity.RESULT_OK){
+                if (it.resultCode == Activity.RESULT_OK) {
                     addUriImg(it.data)
                     handleSelectedImages(goalImg, binding)
                 }
@@ -74,7 +71,9 @@ class BoardEditActivity : AppCompatActivity() {
 
         binding.apply {
 
-            backBtn.setOnClickListener { finish() }
+            backBtn.setOnClickListener {
+                TODO("뒤로가기")
+            }
 
             getImgButton.setOnClickListener { requestCameraPermission { moveToGallery() } }
 
@@ -86,16 +85,16 @@ class BoardEditActivity : AppCompatActivity() {
     private fun imageAndTextProcessing() {
         val post = binding.post.text.toString()
 
-        if(checkPostEmpty(post))
+        if (checkPostEmpty(post))
             return
 
-        val customProgressDialog = CustomProgressDialog(this)
+        val customProgressDialog = CustomProgressDialog(requireContext())
         customProgressDialog.show()
 
         val storageRef = FirebaseStorage.getInstance().reference
         val imageFileNames = mutableListOf<String>()
 
-        fun uploadImage(uri : Uri) {
+        fun uploadImage(uri: Uri) {
 
             val imageFileName = "IMG_${getCurrentTimestamp()}_${UUID.randomUUID()}"
             val imageRef = storageRef.child("images/$imageFileName")
@@ -105,20 +104,26 @@ class BoardEditActivity : AppCompatActivity() {
                     imageRef.downloadUrl
                         .addOnSuccessListener { uri ->
                             imageFileNames.add(uri.toString())
-                            checkUploadCompletion(imageFileNames.size, goalImg.size, post, imageFileNames, customProgressDialog)
+                            checkUploadCompletion(
+                                imageFileNames.size,
+                                goalImg.size,
+                                post,
+                                imageFileNames,
+                                customProgressDialog
+                            )
                         }
                 }
                 .addOnFailureListener { e ->
-                    showToast(e.message.toString())
+                    requireContext().showToast(e.message.toString())
                     customProgressDialog.dismiss()
                 }
 
         }
 
-        if(goalImg.size == 0){
+        if (goalImg.size == 0) {
             postUpload(post, imageFileNames)
         }//글만 있는 경우
-        else{
+        else {
 
             goalImg.forEach { imageUrl ->
 
@@ -126,7 +131,13 @@ class BoardEditActivity : AppCompatActivity() {
                     uploadImage(imageUrl.toUri()) //upload 되지 않는 사진인 경우 파이어베이스를 거침
                 else {
                     imageFileNames.add(imageUrl)
-                    checkUploadCompletion(imageFileNames.size, goalImg.size, post, imageFileNames, customProgressDialog)
+                    checkUploadCompletion(
+                        imageFileNames.size,
+                        goalImg.size,
+                        post,
+                        imageFileNames,
+                        customProgressDialog
+                    )
                 }
 
             }
@@ -135,32 +146,25 @@ class BoardEditActivity : AppCompatActivity() {
     }
 
     private fun boardPostSuccessObserve() {
-
-        boardViewModel.boardPostSuccess.observe(this) { success ->
-
+        communityViewModel.boardPostSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 restoreComment()
-                reviseComplete()
+                requireContext().showToast(REVISE_POST_COMPLETE_MESSAGE)
             }
-
         }
     }
 
-    private fun checkPostEmpty(post : String) : Boolean {
+    private fun checkPostEmpty(post: String): Boolean {
 
         return if (post.isEmpty() && goalImg.isEmpty()) {
-            showToast(NO_CONTENT_INPUT_CONTENT_MESSAGE)
+            requireContext().showToast("내용이 없습니다. 내용을 입력 해주세요")
             true
         } else if (post.isEmpty()) {
-            showToast(NO_CONTEXT_MESSAGE)
+            requireContext().showToast("글이 없습니다.")
             true
         } else
             false
 
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun moveToGallery() {
@@ -174,20 +178,22 @@ class BoardEditActivity : AppCompatActivity() {
         }
 
         activityResultLauncher.launch(Intent.createChooser(galleryIntent, "Select images"))
-
     }
 
+    private fun getCurrentTimestamp() =
+        SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
 
-
-    private fun getCurrentTimestamp() = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-
-    private fun checkUploadCompletion(currentSize: Int, totalSize: Int, post: String, imageFileNames: MutableList<String>, dialog : Dialog) {
-
+    private fun checkUploadCompletion(
+        currentSize: Int,
+        totalSize: Int,
+        post: String,
+        imageFileNames: MutableList<String>,
+        dialog: Dialog
+    ) {
         if (currentSize == totalSize) {
             postUpload(post, imageFileNames)
             dialog.dismiss()
         }
-
     }
 
     private fun getIntentHandling() {
@@ -196,20 +202,16 @@ class BoardEditActivity : AppCompatActivity() {
     }
 
     private fun receiveUiBinding() {
-
         receiveIntent.let { boardDetail ->
-
             binding.post.setText(boardDetail.post)
-
             if (boardDetail.img.isNotEmpty())
-                handleSelectedImages(boardDetail.img , binding)
+                handleSelectedImages(boardDetail.img, binding)
             //원래 있던 이미지 갤러리 adapter에 띄우기
         }
-
     }
 
     private fun receiveIntentInit() {
-        receiveIntent = intent.getParcelableExtra(POST_PATH_INTENT)!!
+       // receiveIntent = intent.getParcelableExtra(FirebasePathConstant.POST_PATH_INTENT)!!
         goalImg = receiveIntent.img
     }
 
@@ -218,23 +220,13 @@ class BoardEditActivity : AppCompatActivity() {
         binding.updateButton.text = REVISE_BUTTON_TEXT
     }
 
-    private fun reviseComplete() {
-
-        setResult(RESPONSE_CODE_BOARD_SYNC,  Intent())
-        finish()
-        showToast(REVISE_POST_COMPLETE_MESSAGE)
-
-    }
-
-    private fun restoreComment(){
-
-        BoardActivity.commentList.forEach { comment ->
-            commentViewModel.uploadComment(comment , BoardData.boardPostId)
+    private fun restoreComment() {
+        CommunityFragment.commentList.forEach { comment ->
+            commentViewModel.uploadComment(comment, BoardData.boardPostId)
         }
-
     }
 
-    private fun postUpload(post : String, imageFileNames : MutableList<String>){
+    private fun postUpload(post: String, imageFileNames: MutableList<String>) {
 
         receiveIntent.let {
 
@@ -247,26 +239,26 @@ class BoardEditActivity : AppCompatActivity() {
                 imageFileNames,
                 receiveIntent.dateTime
             )
-
-            boardViewModel.uploadPost(reviseList)
-
+            communityViewModel.uploadPost(reviseList)
         }
-
     }
 
-    private fun requestCameraPermission(logic : () -> Unit){
+    private fun requestCameraPermission(logic: () -> Unit) {
 
         TedPermission.create()
             .setPermissionListener(object : PermissionListener {
                 override fun onPermissionGranted() {
                     logic()
                 }
+
                 override fun onPermissionDenied(deniedPermissions: List<String>) {}
 
             })
             .setDeniedMessage(PERMISSION_ALLOW_MESSAGE)
-            .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.READ_CALENDAR )
+            .setPermissions(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_CALENDAR
+            )
             .check()
 
     }
@@ -277,7 +269,7 @@ class BoardEditActivity : AppCompatActivity() {
             for (i in 0 until clipData.itemCount) {
 
                 if (goalImg.size == 3) {
-                    Toast.makeText(this, MAXIMUM_PIC_THREE_POSSIBLE_MESSAGE, Toast.LENGTH_SHORT).show()
+                    requireContext().showToast("사진은 최대 3장까지 업로드 가능 합니다.")
                     break
                 }
 
@@ -289,34 +281,33 @@ class BoardEditActivity : AppCompatActivity() {
     }
 
 
-    private fun handleSelectedImages(imageUris: MutableList<String>, acBinding: ActivityBoardPostBinding) {
+    private fun handleSelectedImages(
+        imageUris: MutableList<String>,
+        acBinding: FragmentCommunityPostBinding
+    ) {
 
-        connectGalleryAdapter(imageUris , acBinding)
+        connectGalleryAdapter(imageUris, acBinding)
         uploadImgTextSync(imageUris)
 
     }
 
-    private fun connectGalleryAdapter(imageUris: MutableList<String>, acBinding: ActivityBoardPostBinding ) {
-
-        binding.ImgRecyclerView.layoutManager = GridLayoutManager(this, IMAGE_LAYOUT_COUNT)
-        binding.ImgRecyclerView.adapter = GalleryAdapter(imageUris , acBinding)
-
+    private fun connectGalleryAdapter(
+        imageUris: MutableList<String>,
+        acBinding: FragmentCommunityPostBinding
+    ) {
+        binding.ImgRecyclerView.layoutManager = GridLayoutManager(requireContext(), IMAGE_LAYOUT_COUNT)
+        binding.ImgRecyclerView.adapter = GalleryAdapter(imageUris, acBinding)
     }
 
-    private fun uploadImgTextSync(imageUris: MutableList<String>,) {
+    private fun uploadImgTextSync(imageUris: MutableList<String>) {
         binding.getImgButton.text = "사진 올리기(${imageUris.size}/3)"
     }
 
-
-    companion object{
+    companion object {
         private const val REVISE_POST_COMPLETE_MESSAGE = "게시글이 수정 되었습니다."
-        private const val REVISE_DOING_MESSAGE = "업로드 중"
         private const val PERMISSION_ALLOW_MESSAGE = "권한을 허용 해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]"
         private const val BOARD_REVISE_TEXT = "게시물 수정"
         private const val REVISE_BUTTON_TEXT = "수정 하기"
-
         private const val IMAGE_LAYOUT_COUNT = 3
     }
-
-
 }
