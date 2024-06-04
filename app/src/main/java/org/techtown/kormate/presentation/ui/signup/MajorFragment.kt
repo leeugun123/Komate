@@ -1,26 +1,21 @@
 package org.techtown.kormate.presentation.ui.signup
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Toast
-import org.techtown.kormate.domain.model.UserIntel
+import android.view.View
 import org.techtown.kormate.R
-import org.techtown.kormate.databinding.ActivityMajorBinding
+import org.techtown.kormate.databinding.FragmentMajorBinding
+import org.techtown.kormate.presentation.BaseFragment
+import org.techtown.kormate.presentation.util.extension.showToast
 
 
-class MajorActivity : AppCompatActivity() {
+class MajorFragment : BaseFragment<FragmentMajorBinding>(R.layout.fragment_major) {
 
-    private val binding by lazy { ActivityMajorBinding.inflate(layoutInflater) }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.editMajor.addTextChangedListener(object : TextWatcher {
-
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -34,33 +29,23 @@ class MajorActivity : AppCompatActivity() {
                     binding.checkButton.setBackgroundResource(R.color.blue) // 입력한 글자가 1글자 이상인 경우 버튼의 색상 변경
                 else
                     binding.checkButton.setBackgroundResource(R.color.gray) // 입력한 글자가 없는 경우 버튼의 색상 초기화
-
             }
-
         })
 
         binding.checkButton.setOnClickListener {
             checkMajorText()
         }
-
     }
 
     private fun checkMajorText() {
-        if(binding.editMajor.text.toString().isNotEmpty())
-            moveToSelfIntroActivity()
+        if (binding.editMajor.text.toString().isNotEmpty())
+            moveToSelfIntroFragment()
         else
-            Toast.makeText(this, INPUT_MAJOR_GUIDE, Toast.LENGTH_SHORT).show()
+            requireContext().showToast("전공을 입력해주세요.")
     }
 
-    private fun moveToSelfIntroActivity() {
-        UserIntel.major = binding.editMajor.text.toString()
-        startActivity(Intent(this, SelfIntroActivity::class.java))
-        finish()
+    private fun moveToSelfIntroFragment() {
+        //TOOD("SelfIntroFragment로 이동하는 로직 구현")
     }
-
-    companion object{
-        private const val INPUT_MAJOR_GUIDE = "전공을 입력해주세요."
-    }
-
 
 }

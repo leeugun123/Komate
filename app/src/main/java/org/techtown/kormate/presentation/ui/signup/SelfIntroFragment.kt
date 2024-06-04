@@ -1,39 +1,33 @@
 package org.techtown.kormate.presentation.ui.signup
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Toast
+import android.view.View
 import com.bumptech.glide.Glide
+import org.techtown.kormate.R
+import org.techtown.kormate.databinding.FragmentSelfIntroBinding
 import org.techtown.kormate.domain.model.UserIntel
 import org.techtown.kormate.domain.model.UserKakaoIntel.userNickName
 import org.techtown.kormate.domain.model.UserKakaoIntel.userProfileImg
-import org.techtown.kormate.R
-import org.techtown.kormate.databinding.ActivitySelfIntroBinding
+import org.techtown.kormate.presentation.BaseFragment
+import org.techtown.kormate.presentation.util.extension.showToast
 
-class SelfIntroActivity : AppCompatActivity() {
+class SelfIntroFragment : BaseFragment<FragmentSelfIntroBinding>(R.layout.fragment_self_intro) {
 
-    private val binding by lazy { ActivitySelfIntroBinding.inflate(layoutInflater) }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         uiBinding()
 
         binding.selfEdittext.addTextChangedListener(object : TextWatcher {
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.checkButton.setBackgroundResource(R.color.blue)
             }
 
             override fun afterTextChanged(s: Editable?) {
-
                 val userInput = s?.toString()?.trim()
 
                 if ((userInput?.length ?: 0) >= 1)
@@ -41,13 +35,11 @@ class SelfIntroActivity : AppCompatActivity() {
                 else
                     binding.checkButton.setBackgroundResource(R.color.gray) // 입력한 글자가 없는 경우 버튼의 색상 초기화
             }
-
         })
 
         binding.checkButton.setOnClickListener {
             checkSelfEditText()
         }
-
     }
 
     private fun uiBinding() {
@@ -60,33 +52,25 @@ class SelfIntroActivity : AppCompatActivity() {
     }
 
     private fun profileImgBinding() {
-        Glide.with(this)
+        Glide.with(requireContext())
             .load(userProfileImg)
             .circleCrop()
             .into(binding.userpic)
     }
 
     private fun checkSelfEditText() {
-
-        if(binding.selfEdittext.text.toString().isNotEmpty()){
+        if (binding.selfEdittext.text.toString().isNotEmpty()) {
             selfIntroBinding()
-            moveToGenderActivity()
-        }
-        else
-            Toast.makeText(this, SELF_INTRO_GUIDE, Toast.LENGTH_SHORT).show()
+            moveToGenderFragment()
+        } else
+            requireContext().showToast("자기소개를 작성해주세요.")
     }
 
     private fun selfIntroBinding() {
         UserIntel.selfIntro = binding.selfEdittext.text.toString()
     }
 
-    private fun moveToGenderActivity() {
-        startActivity(Intent(this, GenderActivity::class.java))
-        finish()
+    private fun moveToGenderFragment() {
+        //TODO("GenderFragment로 이동하는 로직 구현")
     }
-
-    companion object{
-        private const val SELF_INTRO_GUIDE = "자기소개를 작성해주세요."
-    }
-
 }

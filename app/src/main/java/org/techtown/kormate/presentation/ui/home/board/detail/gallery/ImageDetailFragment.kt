@@ -10,14 +10,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
 import com.bumptech.glide.Glide
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentImageDetailBinding
@@ -25,7 +20,6 @@ import org.techtown.kormate.presentation.BaseFragment
 
 class ImageDetailFragment :
     BaseFragment<FragmentImageDetailBinding>(R.layout.fragment_image_detail) {
-
 
     private val receiveUrl by lazy { /*"intent.getStringExtra("imgUrl")"*/ "" }
     private val entirePage by lazy { /* intent.getIntExtra("entirePage", ENTIRE_PAGE_NUM)*/ "" }
@@ -72,7 +66,8 @@ class ImageDetailFragment :
         request.setDestinationUri(Uri.parse("file://$filePath"))
 
         // DownloadManager를 통해 이미지를 다운로드합니다.
-        val downloadManager = requireActivity().getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+        val downloadManager =
+            requireActivity().getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         val downloadId = downloadManager.enqueue(request)
 
         // 이미지 다운로드가 완료되었을 때 브로드캐스트 리시버에서 처리합니다.
@@ -86,8 +81,10 @@ class ImageDetailFragment :
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requireActivity().registerReceiver(onComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
-                Context.RECEIVER_NOT_EXPORTED)
+            requireActivity().registerReceiver(
+                onComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
+                Context.RECEIVER_NOT_EXPORTED
+            )
         }
     }
 

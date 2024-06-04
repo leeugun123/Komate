@@ -5,17 +5,16 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.gun0912.tedpermission.provider.TedPermissionProvider.context
-import org.techtown.kormate.domain.model.Comment
-import org.techtown.kormate.domain.model.Report
 import org.techtown.kormate.R.drawable.ic_baseline_report_24
 import org.techtown.kormate.databinding.CommentimgBinding
+import org.techtown.kormate.domain.model.Comment
+import org.techtown.kormate.domain.model.Report
 
 
 class CommentAdapter(
-    private val comments : List<Comment>,
-    private val userId : String,
-    private val commentViewModel : CommentViewModel
+    private val comments: List<Comment>,
+    private val userId: String,
+    private val commentViewModel: CommentViewModel
 ) : RecyclerView.Adapter<CommentAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -42,7 +41,7 @@ class CommentAdapter(
 
         }
 
-        private fun commentTitleUiBinding(comment : Comment) {
+        private fun commentTitleUiBinding(comment: Comment) {
 
             Glide.with(itemView)
                 .load(comment.userImg)
@@ -52,7 +51,7 @@ class CommentAdapter(
             binding.apply {
                 commentUserName.text = comment.userName
                 commentTime.text = comment.createdTime
-                commentText.text= comment.text
+                commentText.text = comment.text
             }
 
         }
@@ -75,7 +74,7 @@ class CommentAdapter(
 
             binding.Button.apply {
                 setImageResource(ic_baseline_report_24)
-                setOnClickListener { showReportDialog(comment)}
+                setOnClickListener { showReportDialog(comment) }
             }
 
         }
@@ -101,7 +100,11 @@ class CommentAdapter(
 
         }
 
-        private fun handleReport(comment: Comment, reasons: Array<String>, checkedReasons: BooleanArray) {
+        private fun handleReport(
+            comment: Comment,
+            reasons: Array<String>,
+            checkedReasons: BooleanArray
+        ) {
 
             val selectedReasons = mutableListOf<String>()
 
