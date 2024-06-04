@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/signup_nav"
+    app:startDestination="@id/NationFragment">
+
+    <fragment
+        android:id="@+id/NationFragment"
+        android:name="org.techtown.kormate.presentation.ui.signup.NationFragment"
+        android:label="NationFragment"
+        tools:layout="@layout/fragment_nation">
+        <action
+            android:id="@+id/action_NationFragment_to_MajorFragment"
+            app:destination="@id/MajorFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/MajorFragment"
+        android:name="org.techtown.kormate.presentation.ui.signup.MajorFragment"
+        android:label="MajorFragment"
+        tools:layout="@layout/fragment_major">
+        <action
+            android:id="@+id/action_MajorFragment_to_SelfIntroFragment"
+            app:destination="@id/SelfIntroFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/SelfIntroFragment"
+        android:name="org.techtown.kormate.presentation.ui.signup.SelfIntroFragment"
+        android:label="SelfIntroFragment"
+        tools:layout="@layout/fragment_self_intro">
+        <action
+            android:id="@+id/action_SelfIntroFragment_to_GenderFragment"
+            app:destination="@id/GenderFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/GenderFragment"
+        android:name="org.techtown.kormate.presentation.ui.signup.GenderFragment"
+        android:label="GenderFragment"
+        tools:layout="@layout/fragment_gender" />
+
+</navigation>

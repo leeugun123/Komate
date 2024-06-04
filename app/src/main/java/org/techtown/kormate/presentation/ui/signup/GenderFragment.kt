@@ -1,15 +1,13 @@
 package org.techtown.kormate.presentation.ui.signup
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentGenderBinding
 import org.techtown.kormate.domain.model.UserIntel
 import org.techtown.kormate.presentation.BaseFragment
-import org.techtown.kormate.presentation.ui.home.MainActivity
 import org.techtown.kormate.presentation.ui.home.myprofile.MyIntelViewModel
 import org.techtown.kormate.presentation.util.extension.showToast
 
@@ -52,6 +50,6 @@ class GenderFragment : BaseFragment<FragmentGenderBinding>(R.layout.fragment_gen
     }
 
     private fun moveHomeFragment() {
-        //TODO("HomeFragment로 이동하는 로직 구현")
+        findNavController().navigate(R.id.action_SignUpFragment_to_HomeFragment)
     }
 }
