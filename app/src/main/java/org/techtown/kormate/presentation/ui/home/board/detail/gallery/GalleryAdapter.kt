@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import org.techtown.kormate.databinding.ActivityBoardPostBinding
+import org.techtown.kormate.databinding.FragmentCommunityPostBinding
+
 import org.techtown.kormate.databinding.GalaryimgBinding
 
-class GalleryAdapter(private val imageUris: MutableList<String>, private var acBinding : ActivityBoardPostBinding) :
+class GalleryAdapter(private val imageUris: MutableList<String>, private var acBinding : FragmentCommunityPostBinding) :
     RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
 
 
