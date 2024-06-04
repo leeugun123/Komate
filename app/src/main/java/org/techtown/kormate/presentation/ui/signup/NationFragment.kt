@@ -1,20 +1,19 @@
 package org.techtown.kormate.presentation.ui.signup
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
 import org.techtown.kormate.domain.model.UserIntel
 import org.techtown.kormate.R
-import org.techtown.kormate.databinding.ActivityNationBinding
+import org.techtown.kormate.databinding.FragmentNationBinding
+import org.techtown.kormate.presentation.BaseFragment
+import org.techtown.kormate.presentation.util.extension.showToast
 
 
-class NationActivity : AppCompatActivity() {
+class NationFragment : BaseFragment<FragmentNationBinding>(R.layout.fragment_nation) {
 
-    private val binding by lazy { ActivityNationBinding.inflate(layoutInflater)}
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.radioGroup.setOnCheckedChangeListener { _, checkId ->
             radioCheck(checkId)
@@ -23,20 +22,17 @@ class NationActivity : AppCompatActivity() {
         binding.checkButton.setOnClickListener {
             nationCheck()
         }
-
-
     }
 
     private fun nationCheck() {
         if(UserIntel.nation.isBlank())
-            Toast.makeText(this, CHECK_NATION_GUIDE,Toast.LENGTH_SHORT).show()
+            requireContext().showToast("국가를 체크 해주세요")
         else
-            moveToMajorActivity()
+            moveToMajorFragment()
     }
 
-    private fun moveToMajorActivity() {
-        startActivity(Intent(this, MajorActivity::class.java))
-        finish()
+    private fun moveToMajorFragment() {
+        //TODO("MajorFragment로 이동하는 로직 구현")
     }
 
     private fun radioCheck(checkId : Int) {
@@ -67,13 +63,6 @@ class NationActivity : AppCompatActivity() {
                 binding.checkButton.setBackgroundResource(R.color.blue)
                 UserIntel.nation = "우즈베키스탄"
             }
-
         }
-
     }
-
-    companion object{
-        private const val CHECK_NATION_GUIDE = "국가를 체크 해주세요"
-    }
-
 }

@@ -34,21 +34,21 @@
         tools:ignore="MissingClass">
 
         <activity
-            android:name=".presentation.ui.signup.GenderActivity"
+            android:name=".presentation.ui.signup.GenderFragment"
             android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
-            android:name=".presentation.ui.signup.SelfIntroActivity"
+            android:name=".presentation.ui.signup.SelfIntroFragment"
             android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
-            android:name=".presentation.ui.signup.MajorActivity"
+            android:name=".presentation.ui.signup.MajorFragment"
             android:exported="false" />
 
         <activity
-            android:name=".presentation.ui.signup.NationActivity"
+            android:name=".presentation.ui.signup.NationFragment"
             android:screenOrientation="portrait"
             android:exported="false" />
 
