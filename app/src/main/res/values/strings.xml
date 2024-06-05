@@ -30,6 +30,9 @@
     <string name="male_with_korean"> 남성 | Male</string>
     <string name="female_with_korean"> 여성 | Female</string>
     <string name="confirm">확인</string>
+    <string name="campus_major">학교 전공</string>
+    <string name="write_campus_major">학과 전공을 입력해주세요</string>
+    <string name="write_major">전공을 입력해주세요</string>
 
     <string name="write_self_introduce">자기소개 작성</string>
 
