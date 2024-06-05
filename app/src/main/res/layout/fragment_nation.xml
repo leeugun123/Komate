@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <variable
+            name="signUpViewModel"
+            type="org.techtown.kormate.presentation.ui.signup.SignUpViewModel" />
+
+        <variable
+            name="onSelectNationButtonClick"
+            type="kotlin.jvm.functions.Function0" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".presentation.ui.signup.NationFragment">
-
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/title"
@@ -22,7 +26,7 @@
             android:layout_marginTop="15dp"
             android:text="@string/nation"
             android:textColor="@color/blue_01"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -47,7 +51,7 @@
             android:layout_marginTop="20dp"
             android:text="@string/nation"
             android:textColor="@color/black"
-            android:textSize="25sp"
+            android:textSize="25dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:text="@string/select_nation"
-            android:textSize="20sp"
+            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView26" />
@@ -73,45 +77,45 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView27">
 
-            <RadioButton
-                android:id="@+id/radio1"
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/korea_radio_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="@string/korea_with_korean"
-                android:textSize="20sp" />
+                android:textSize="20dp" />
 
-            <RadioButton
-                android:id="@+id/radio2"
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/china_radio_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="@string/china_with_korean"
-                android:textSize="20sp" />
+                android:textSize="20dp" />
 
-            <RadioButton
-                android:id="@+id/radio3"
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/vietnam_radio_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="@string/vietnam_with_korean"
-                android:textSize="20sp" />
+                android:textSize="20dp" />
 
-            <RadioButton
-                android:id="@+id/radio4"
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/mongolia_radio_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="@string/mongolia_with_korean"
-                android:textSize="20sp" />
+                android:textSize="20dp" />
 
-            <RadioButton
-                android:id="@+id/radio5"
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/uzbekistan_radio_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="@string/uzbekistan_with_korean"
-                android:textSize="20sp" />
+                android:textSize="20dp" />
 
         </RadioGroup>
 
@@ -171,16 +175,18 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView15" />
 
         <Button
-            android:id="@+id/check_button"
+            android:id="@+id/check_btn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/bg_signup_gender_check_btn"
+            android:background="@{signUpViewModel.selectNation.empty ? @drawable/bg_unchecked_btn : @drawable/bg_checked_btn}"
+            android:enabled="@{signUpViewModel.selectNation.length() > 0}"
+            android:onClick="@{() -> onSelectNationButtonClick.invoke()}"
             android:text="@string/confirm"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

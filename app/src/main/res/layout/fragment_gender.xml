@@ -106,7 +106,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/bg_signup_gender_check_btn"
+            android:background="@drawable/bg_checked_btn"
             android:text="@string/confirm"
             android:textColor="@color/white"
             android:textSize="18sp"
