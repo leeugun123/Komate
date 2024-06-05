@@ -123,10 +123,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
     }
 
     private fun decideIntent(exist: Boolean) {
-        if (exist) {
+        if (exist)
             findNavController().navigate(R.id.action_LoginFragment_to_HomeFragment)
-        } else {
-            // TODO("정보 입력 화면으로 입력")
-        }
+        else
+            findNavController().navigate(R.id.action_LoginFragment_to_SignUpFragment)
     }
 }
