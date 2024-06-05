@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 
 class SignUpViewModel : ViewModel() {
 
-    var selectNation : String = ""
-    var major : String = ""
+    var selectNation = ""
+    var major = ""
+    var selfIntro = ""
 
 }
