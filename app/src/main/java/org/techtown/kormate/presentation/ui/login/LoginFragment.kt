@@ -11,7 +11,7 @@ import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentLoginBinding
-import org.techtown.kormate.presentation.BaseFragment
+import org.techtown.kormate.presentation.util.base.BaseFragment
 import org.techtown.kormate.presentation.ui.KakaoViewModel
 import org.techtown.kormate.presentation.ui.home.myprofile.MyIntelViewModel
 

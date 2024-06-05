@@ -22,8 +22,8 @@ import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentCommunityPostBinding
 import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.domain.model.UserKakaoIntel
-import org.techtown.kormate.presentation.BaseFragment
-import org.techtown.kormate.presentation.CustomProgressDialog
+import org.techtown.kormate.presentation.util.base.BaseFragment
+import org.techtown.kormate.presentation.util.CustomProgressDialog
 import org.techtown.kormate.presentation.constant.FirebasePathConstant
 import org.techtown.kormate.presentation.ui.home.board.detail.CommunityViewModel
 import org.techtown.kormate.presentation.ui.home.board.detail.gallery.GalleryAdapter

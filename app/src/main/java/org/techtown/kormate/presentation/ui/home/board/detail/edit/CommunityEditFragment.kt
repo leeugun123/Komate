@@ -19,8 +19,8 @@ import com.gun0912.tedpermission.normal.TedPermission
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentCommunityPostBinding
 import org.techtown.kormate.domain.model.BoardDetail
-import org.techtown.kormate.presentation.BaseFragment
-import org.techtown.kormate.presentation.CustomProgressDialog
+import org.techtown.kormate.presentation.util.base.BaseFragment
+import org.techtown.kormate.presentation.util.CustomProgressDialog
 import org.techtown.kormate.presentation.ui.home.board.detail.CommunityFragment
 import org.techtown.kormate.presentation.ui.home.board.detail.CommunityViewModel
 import org.techtown.kormate.presentation.ui.home.board.detail.comment.CommentViewModel

@@ -7,7 +7,7 @@ import androidx.navigation.fragment.findNavController
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentGenderBinding
 import org.techtown.kormate.domain.model.UserIntel
-import org.techtown.kormate.presentation.BaseFragment
+import org.techtown.kormate.presentation.util.base.BaseFragment
 import org.techtown.kormate.presentation.ui.home.myprofile.MyIntelViewModel
 import org.techtown.kormate.presentation.util.extension.showToast
 

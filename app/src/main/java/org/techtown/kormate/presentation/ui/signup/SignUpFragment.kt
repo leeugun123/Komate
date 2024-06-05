@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentSplashBinding
-import org.techtown.kormate.presentation.BaseFragment
+import org.techtown.kormate.presentation.util.base.BaseFragment
 
 class SignUpFragment : BaseFragment<FragmentSplashBinding>(R.layout.fragment_sign_up) {
 

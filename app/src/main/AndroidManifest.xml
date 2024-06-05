@@ -23,7 +23,7 @@
 
 
     <application
-        android:name=".presentation.util.GlobalApplication"
+        android:name=".GlobalApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

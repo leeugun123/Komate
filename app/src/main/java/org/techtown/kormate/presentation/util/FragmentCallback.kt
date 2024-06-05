@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation
+package org.techtown.kormate.presentation.util
 
 import org.techtown.kormate.domain.model.BoardDetail
 

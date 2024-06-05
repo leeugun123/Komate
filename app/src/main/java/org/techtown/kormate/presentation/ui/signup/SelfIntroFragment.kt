@@ -10,7 +10,7 @@ import org.techtown.kormate.databinding.FragmentSelfIntroBinding
 import org.techtown.kormate.domain.model.UserIntel
 import org.techtown.kormate.domain.model.UserKakaoIntel.userNickName
 import org.techtown.kormate.domain.model.UserKakaoIntel.userProfileImg
-import org.techtown.kormate.presentation.BaseFragment
+import org.techtown.kormate.presentation.util.base.BaseFragment
 import org.techtown.kormate.presentation.util.extension.showToast
 
 class SelfIntroFragment : BaseFragment<FragmentSelfIntroBinding>(R.layout.fragment_self_intro) {
