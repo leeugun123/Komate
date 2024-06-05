@@ -12,7 +12,7 @@ import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentMyProfileBinding
 import org.techtown.kormate.domain.model.UserIntel
 import org.techtown.kormate.domain.model.UserKakaoIntel
-import org.techtown.kormate.presentation.BaseFragment
+import org.techtown.kormate.presentation.util.base.BaseFragment
 import org.techtown.kormate.presentation.ui.KakaoViewModel
 
 

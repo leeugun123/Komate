@@ -2,7 +2,6 @@ package org.techtown.kormate.presentation.ui.login
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -11,9 +10,10 @@ import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.user.UserApiClient
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentLoginBinding
-import org.techtown.kormate.presentation.BaseFragment
 import org.techtown.kormate.presentation.ui.KakaoViewModel
 import org.techtown.kormate.presentation.ui.home.myprofile.MyIntelViewModel
+import org.techtown.kormate.presentation.util.base.BaseFragment
+import org.techtown.kormate.presentation.util.extension.showToast
 
 class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splash) {
 
@@ -32,14 +32,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
     private fun autoLoginKakao() {
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null)
-                errorMessageToast(requireContext().getString(R.string.kakao_login_failed))
+                requireContext().showToast(R.string.kakao_login_failed)
             else if (tokenInfo != null)
                 handleKakaoLogin()
         }
-    }
-
-    private fun errorMessageToast(errorCause: String) {
-        Toast.makeText(requireContext(), errorCause, Toast.LENGTH_SHORT).show()
     }
 
     private fun checkUserApiClient() {
@@ -51,39 +47,39 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
                 when (error.toString()) {
 
                     AuthErrorCause.AccessDenied.toString() -> {
-                        errorMessageToast(requireContext().getString(R.string.access_denied))
+                        requireContext().showToast(R.string.access_denied)
                     }
 
                     AuthErrorCause.InvalidClient.toString() -> {
-                        errorMessageToast(requireContext().getString(R.string.invalid_error))
+                        requireContext().showToast(R.string.invalid_error)
                     }
 
                     AuthErrorCause.InvalidGrant.toString() -> {
-                        errorMessageToast(requireContext().getString(R.string.can_not_authentication))
+                        requireContext().showToast(R.string.can_not_authentication)
                     }
 
                     AuthErrorCause.InvalidRequest.toString() -> {
-                        errorMessageToast(requireContext().getString(R.string.request_parameter_error))
+                        requireContext().showToast(R.string.request_parameter_error)
                     }
 
                     AuthErrorCause.InvalidScope.toString() -> {
-                        errorMessageToast(requireContext().getString(R.string.invalid_scope_id))
+                        requireContext().showToast(R.string.invalid_scope_id)
                     }
 
                     AuthErrorCause.Misconfigured.toString() -> {
-                        errorMessageToast(requireContext().getString(R.string.setting_not_right))
+                        requireContext().showToast(R.string.setting_not_right)
                     }
 
                     AuthErrorCause.ServerError.toString() -> {
-                        errorMessageToast(requireContext().getString(R.string.server_internal_error))
+                        requireContext().showToast(R.string.server_internal_error)
                     }
 
                     AuthErrorCause.Unauthorized.toString() -> {
-                        errorMessageToast(requireContext().getString(R.string.not_have_request_permission))
+                        requireContext().showToast(R.string.not_have_request_permission)
                     }
 
                     else -> {
-                        errorMessageToast(requireContext().getString(R.string.other_error))
+                        requireContext().showToast(R.string.other_error)
                     }
                 }
             } else if (token != null) {
@@ -99,7 +95,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
 
     private fun handleKakaoLogin() {
         bindingKakaoInfo()
-        errorMessageToast(requireContext().getString(R.string.kakao_access_success))
+        requireContext().showToast(R.string.kakao_access_success)
         checkMyIntelData()
     }
 
@@ -118,7 +114,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
     private fun observeKakaoViewModel() {
         kakaoViewModel.kakaoIntelDownloadSuccess.observe(viewLifecycleOwner) { success ->
             if (!success)
-                errorMessageToast(requireContext().getString(R.string.kakao_data_binding_failed))
+                requireContext().showToast(R.string.kakao_data_binding_failed)
         }
     }
 
@@ -127,10 +123,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_splas
     }
 
     private fun decideIntent(exist: Boolean) {
-        if (exist) {
+        if (exist)
             findNavController().navigate(R.id.action_LoginFragment_to_HomeFragment)
-        } else {
-            // TODO("정보 입력 화면으로 입력")
-        }
+        else
+            findNavController().navigate(R.id.action_LoginFragment_to_SignUpFragment)
     }
 }

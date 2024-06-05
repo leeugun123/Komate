@@ -8,8 +8,8 @@ import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentPreviewBinding
 import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.domain.model.UserKakaoIntel
-import org.techtown.kormate.presentation.BaseFragment
-import org.techtown.kormate.presentation.FragmentCallback
+import org.techtown.kormate.presentation.util.base.BaseFragment
+import org.techtown.kormate.presentation.util.FragmentCallback
 import org.techtown.kormate.presentation.ui.home.board.detail.CommunityViewModel
 
 class PreviewFragment : BaseFragment<FragmentPreviewBinding>(R.layout.fragment_preview),

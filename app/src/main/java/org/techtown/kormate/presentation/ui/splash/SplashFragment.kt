@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentSplashBinding
-import org.techtown.kormate.presentation.BaseFragment
+import org.techtown.kormate.presentation.util.base.BaseFragment
 
 
 class SplashFragment : BaseFragment<FragmentSplashBinding>(R.layout.fragment_splash) {

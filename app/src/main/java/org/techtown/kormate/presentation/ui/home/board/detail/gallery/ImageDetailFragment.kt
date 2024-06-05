@@ -16,7 +16,7 @@ import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentImageDetailBinding
-import org.techtown.kormate.presentation.BaseFragment
+import org.techtown.kormate.presentation.util.base.BaseFragment
 
 class ImageDetailFragment :
     BaseFragment<FragmentImageDetailBinding>(R.layout.fragment_image_detail) {

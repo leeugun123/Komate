@@ -6,7 +6,7 @@ import android.text.TextWatcher
 import android.view.View
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentMajorBinding
-import org.techtown.kormate.presentation.BaseFragment
+import org.techtown.kormate.presentation.util.base.BaseFragment
 import org.techtown.kormate.presentation.util.extension.showToast
 
 

@@ -1,4 +1,4 @@
-package org.techtown.kormate.presentation
+package org.techtown.kormate.presentation.util
 
 import android.app.Dialog
 import android.content.Context

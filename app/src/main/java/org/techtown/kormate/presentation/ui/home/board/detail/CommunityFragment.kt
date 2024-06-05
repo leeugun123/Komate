@@ -13,7 +13,7 @@ import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.domain.model.Comment
 import org.techtown.kormate.domain.model.Report
 import org.techtown.kormate.domain.model.UserKakaoIntel
-import org.techtown.kormate.presentation.BaseFragment
+import org.techtown.kormate.presentation.util.base.BaseFragment
 import org.techtown.kormate.presentation.ui.home.board.detail.comment.CommentAdapter
 import org.techtown.kormate.presentation.ui.home.board.detail.comment.CommentViewModel
 import org.techtown.kormate.presentation.util.extension.showToast
