@@ -20,7 +20,7 @@ class GenderFragment : BaseFragment<FragmentGenderBinding>(R.layout.fragment_gen
 
     private fun initBinding() {
         binding.signUpViewModel = signUpViewModel
-        binding.onSelectGenderBtnClick = ::moveHomeFragment
+        binding.onSelectGenderBtnClick = ::moveToHomeFragment
         binding.radioGroup.setOnCheckedChangeListener { _, checkId ->
             when (checkId) {
                 binding.maleButton.id -> signUpViewModel.gender = "남성"
@@ -29,8 +29,8 @@ class GenderFragment : BaseFragment<FragmentGenderBinding>(R.layout.fragment_gen
         }
     }
 
-    private fun moveHomeFragment() {
+    private fun moveToHomeFragment() {
         signUpViewModel.join()
-        findNavController().navigate(R.id.action_SignUpFragment_to_HomeFragment)
+        requireParentFragment().findNavController().navigate(R.id.action_SignUpFragment_to_HomeFragment)
     }
 }
