@@ -4,6 +4,14 @@
 
     <data>
 
+        <variable
+            name="signUpViewModel"
+            type="org.techtown.kormate.presentation.ui.signup.SignUpViewModel" />
+
+        <variable
+            name="onSelectGenderBtnClick"
+            type="kotlin.jvm.functions.Function0" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -100,16 +108,18 @@
         </RadioGroup>
 
         <Button
-            android:id="@+id/check_button"
+            android:id="@+id/check_gender_btn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/bg_checked_btn"
+            android:background="@{signUpViewModel.gender.empty ? @drawable/bg_unchecked_btn : @drawable/bg_checked_btn}"
+            android:enabled="@{signUpViewModel.gender.length() > 0}"
+            android:onClick="@{() -> onSelectGenderBtnClick.invoke()}"
             android:text="@string/confirm"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
