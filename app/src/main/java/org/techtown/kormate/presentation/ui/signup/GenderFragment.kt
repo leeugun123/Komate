@@ -6,50 +6,31 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentGenderBinding
-import org.techtown.kormate.domain.model.UserIntel
 import org.techtown.kormate.presentation.util.base.BaseFragment
-import org.techtown.kormate.presentation.ui.home.myprofile.MyIntelViewModel
-import org.techtown.kormate.presentation.util.extension.showToast
 
 
 class GenderFragment : BaseFragment<FragmentGenderBinding>(R.layout.fragment_gender) {
 
-    private val myIntelViewModel: MyIntelViewModel by viewModels()
-
+    private val signUpViewModel: SignUpViewModel by viewModels({ requireParentFragment() })
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initBinding()
+    }
+
+    private fun initBinding() {
+        binding.signUpViewModel = signUpViewModel
+        binding.onSelectGenderBtnClick = ::moveToHomeFragment
         binding.radioGroup.setOnCheckedChangeListener { _, checkId ->
             when (checkId) {
-                binding.maleButton.id -> syncCheckButton("남성")
-                binding.FemaleButton.id -> syncCheckButton("여성")
+                binding.maleButton.id -> signUpViewModel.gender = "남성"
+                binding.FemaleButton.id -> signUpViewModel.gender = "여성"
             }
         }
-
-        binding.checkButton.setOnClickListener {
-            if (UserIntel.gender.isBlank())
-                requireContext().showToast("성별을 체크 해주세요")
-            else {
-                uploadUserInfo()
-                moveHomeFragment()
-            }
-        }
-
-        myIntelViewModel.postSuccessLiveData.observe(viewLifecycleOwner) {
-            requireContext().showToast("정보가 입력 되었습니다.")
-        }
     }
 
-    private fun syncCheckButton(gender: String) {
-        binding.checkButton.setBackgroundResource(R.color.blue)
-        UserIntel.gender = gender
-    }
-
-    private fun uploadUserInfo() {
-        myIntelViewModel.uploadUserIntel(UserIntel)
-    }
-
-    private fun moveHomeFragment() {
-        findNavController().navigate(R.id.action_SignUpFragment_to_HomeFragment)
+    private fun moveToHomeFragment() {
+        signUpViewModel.join()
+        requireParentFragment().findNavController().navigate(R.id.action_SignUpFragment_to_HomeFragment)
     }
 }
