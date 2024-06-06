@@ -17,6 +17,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val previewFragment by lazy { PreviewFragment() }
     private val boardFragment by lazy { BoardFragment() }
     private val myProfileFragment by lazy { MyProfileFragment() }
+
     private val homeFragmentManager by lazy { childFragmentManager }
     private val communityViewModel: CommunityViewModel by viewModels()
 
