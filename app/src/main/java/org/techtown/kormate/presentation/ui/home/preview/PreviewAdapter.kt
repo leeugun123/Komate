@@ -6,12 +6,16 @@ import androidx.recyclerview.widget.RecyclerView
 import org.techtown.kormate.databinding.BoardpreviewBinding
 import org.techtown.kormate.domain.model.BoardDetail
 
-class PreviewAdapter(private val boardList: List<BoardDetail>) :
+class PreviewAdapter(
+    private val boardList: List<BoardDetail>,
+    private val boardDetailInfoClick: (boardDetail: BoardDetail) -> Unit
+) :
     RecyclerView.Adapter<PreviewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
             BoardpreviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
         return ViewHolder(binding)
     }
 
@@ -24,16 +28,22 @@ class PreviewAdapter(private val boardList: List<BoardDetail>) :
     inner class ViewHolder(val binding: BoardpreviewBinding) :
 
         RecyclerView.ViewHolder(binding.root) {
-            fun bind(boardDetail: BoardDetail) {
-                binding.dateTime.text = boardDetail.dateTime
+        fun bind(boardDetail: BoardDetail) {
 
-                val concatPost = if (boardDetail.post.length > PREVIEW_TEXT_CUT_MAX_SIZE) {
-                    boardDetail.post.substring(PREVIEW_TEXT_CUT_START, PREVIEW_TEXT_CUT_END) + "..."
-                } else
-                    boardDetail.post
-
-                binding.post.text = concatPost
+            binding.root.setOnClickListener {
+                boardDetailInfoClick(boardDetail)
             }
+
+            binding.dateTime.text = boardDetail.dateTime
+
+            val concatPost = if (boardDetail.post.length > PREVIEW_TEXT_CUT_MAX_SIZE) {
+                boardDetail.post.substring(PREVIEW_TEXT_CUT_START, PREVIEW_TEXT_CUT_END) + "..."
+            } else
+                boardDetail.post
+
+            binding.post.text = concatPost
+        }
+
     }
 
     companion object {

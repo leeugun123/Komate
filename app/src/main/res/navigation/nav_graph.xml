@@ -36,13 +36,16 @@
         <action
             android:id="@+id/action_HomeFragment_to_CommunityFragment"
             app:destination="@id/CommunityFragment" />
+        <action
+            android:id="@+id/action_HomeFragment_to_CommunityPostFragment"
+            app:destination="@id/CommunityPostFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/SignUpFragment"
         android:name="org.techtown.kormate.presentation.ui.signup.SignUpFragment"
         android:label="SignUpFragment"
-        tools:layout="@layout/fragment_sign_up" >
+        tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/action_SignUpFragment_to_HomeFragment"
             app:destination="@id/HomeFragment" />
@@ -53,5 +56,12 @@
         android:name="org.techtown.kormate.presentation.ui.home.board.detail.CommunityFragment"
         android:label="CommunityFragment"
         tools:layout="@layout/fragment_community" />
+
+    <fragment
+        android:id="@+id/CommunityPostFragment"
+        android:name="org.techtown.kormate.presentation.ui.home.board.detail.post.CommunityPostFragment"
+        android:label="CommunityPostFragment"
+        tools:layout="@layout/fragment_community_post" />
+
 
 </navigation>

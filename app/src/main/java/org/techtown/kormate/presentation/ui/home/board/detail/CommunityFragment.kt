@@ -13,12 +13,13 @@ import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.domain.model.Comment
 import org.techtown.kormate.domain.model.Report
 import org.techtown.kormate.domain.model.UserKakaoIntel
-import org.techtown.kormate.presentation.util.base.BaseFragment
 import org.techtown.kormate.presentation.ui.home.board.detail.comment.CommentAdapter
 import org.techtown.kormate.presentation.ui.home.board.detail.comment.CommentViewModel
-import org.techtown.kormate.presentation.util.extension.showToast
 import org.techtown.kormate.presentation.util.BoardData
 import org.techtown.kormate.presentation.util.CurrentDateTime
+import org.techtown.kormate.presentation.util.base.BaseFragment
+import org.techtown.kormate.presentation.util.extension.showToast
+
 
 class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragment_community) {
 
@@ -27,7 +28,7 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
 
     private val commentRecyclerView by lazy { binding.commentRecyclerView }
 
-    private val receiveArgs by lazy { BoardDetail("dd", 0, "dd") }
+    private val receiveArgs: BoardDetail by lazy { requireArguments().getParcelable("boardDetail")!! }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,6 +39,13 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
 
         observeBoardViewModel()
         observeCommentViewModel()
+    }
+
+    private fun syncBoardUi() {
+        syncUserInfoUi()
+        postUiSync()
+        bindCommentProfileImg()
+        getCommentList()
     }
 
     private fun initBinding() {
@@ -253,13 +261,6 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
             receiveArgs.postId
         )
         communityViewModel.reportPost(reportContent)
-    }
-
-    private fun syncBoardUi() {
-        syncUserInfoUi()
-        postUiSync()
-        bindCommentProfileImg()
-        getCommentList()
     }
 
     private fun bindCommentProfileImg() {

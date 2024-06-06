@@ -2,18 +2,18 @@ package org.techtown.kormate.presentation.ui.home.preview
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentPreviewBinding
 import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.domain.model.UserKakaoIntel
-import org.techtown.kormate.presentation.util.base.BaseFragment
-import org.techtown.kormate.presentation.util.FragmentCallback
 import org.techtown.kormate.presentation.ui.home.board.detail.CommunityViewModel
+import org.techtown.kormate.presentation.util.base.BaseFragment
 
-class PreviewFragment : BaseFragment<FragmentPreviewBinding>(R.layout.fragment_preview),
-    FragmentCallback {
+class PreviewFragment : BaseFragment<FragmentPreviewBinding>(R.layout.fragment_preview) {
 
     private val communityViewModel: CommunityViewModel by viewModels({ requireParentFragment() })
 
@@ -25,8 +25,9 @@ class PreviewFragment : BaseFragment<FragmentPreviewBinding>(R.layout.fragment_p
 
     private fun initBinding() {
         bindingProfileImg()
+        getBoardContentList()
         binding.userKakoIntel = UserKakaoIntel
-        binding.onRefreshClick = ::getBoardList
+        binding.onRefreshClick = ::getBoardContentList
     }
 
     private fun bindingProfileImg() {
@@ -38,24 +39,26 @@ class PreviewFragment : BaseFragment<FragmentPreviewBinding>(R.layout.fragment_p
 
     private fun observeRecentLimitList() {
         communityViewModel.boardDetailList.observe(viewLifecycleOwner) { recentLimitList ->
-            binding.recentRecyclerview.adapter = PreviewAdapter(limitListSize(recentLimitList))
+            binding.recentRecyclerview.adapter = PreviewAdapter(adjustListSize(recentLimitList) , ::navigateToCommunityFragment)
             binding.homeSwipeRefresh.isRefreshing = false
         }
     }
 
-    private fun limitListSize(list: List<BoardDetail>) =
-        if (list.size > PAGE_LOAD_LIMIT) {
+    private fun adjustListSize(list: List<BoardDetail>) =
+        if (list.size > PAGE_LOAD_LIMIT)
             list.subList(0, PAGE_LOAD_LIMIT)
-        } else {
+        else
             list
-        }
 
-    private fun getBoardList() {
+    private fun getBoardContentList() {
         communityViewModel.getBoardList()
     }
 
-    override fun onNavigateToBoardFragment(boardDetail: BoardDetail) {
-        // 인자값 정해야 함.
+    private fun navigateToCommunityFragment(boardDetail: BoardDetail) {
+        val bundle = bundleOf("boardDetail" to boardDetail)
+
+        requireParentFragment().findNavController()
+            .navigate(R.id.action_HomeFragment_to_CommunityFragment, bundle)
     }
 
     companion object {
