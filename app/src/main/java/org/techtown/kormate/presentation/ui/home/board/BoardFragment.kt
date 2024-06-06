@@ -2,12 +2,12 @@ package org.techtown.kormate.presentation.ui.home.board
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentBoardBinding
 import org.techtown.kormate.domain.model.BoardDetail
+import org.techtown.kormate.presentation.ui.home.HomeFragmentDirections
 import org.techtown.kormate.presentation.ui.home.board.detail.CommunityViewModel
 import org.techtown.kormate.presentation.ui.home.preview.PreviewAdapter
 import org.techtown.kormate.presentation.util.base.BaseFragment
@@ -35,7 +35,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(R.layout.fragment_board
 
     private fun moveToPostFragment() {
         requireParentFragment().findNavController()
-            .navigate(R.id.action_HomeFragment_to_CommunityPostFragment)
+            .navigate(R.id.action_HomeFragment_to_CommunityFragment)
     }
 
     private fun observeRecentList() {
@@ -47,10 +47,9 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(R.layout.fragment_board
     }
 
     private fun navigateToCommunityFragment(boardDetail: BoardDetail) {
-        val bundle = bundleOf("boardDetail" to boardDetail)
+        val action = HomeFragmentDirections.actionHomeFragmentToCommunityFragment(boardDetail)
         requireParentFragment().findNavController()
-            .navigate(R.id.action_HomeFragment_to_CommunityFragment, bundle)
+            .navigate(action)
     }
-
 }
 

@@ -35,10 +35,11 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_HomeFragment_to_CommunityFragment"
-            app:destination="@id/CommunityFragment" />
-        <action
-            android:id="@+id/action_HomeFragment_to_CommunityPostFragment"
-            app:destination="@id/CommunityPostFragment" />
+            app:destination="@id/CommunityFragment">
+            <argument
+                android:name="boardDetail"
+                app:argType="org.techtown.kormate.domain.model.BoardDetail" />
+        </action>
     </fragment>
 
     <fragment
@@ -55,7 +56,11 @@
         android:id="@+id/CommunityFragment"
         android:name="org.techtown.kormate.presentation.ui.home.board.detail.CommunityFragment"
         android:label="CommunityFragment"
-        tools:layout="@layout/fragment_community" />
+        tools:layout="@layout/fragment_community">
+        <argument
+            android:name="boardDetail"
+            app:argType="org.techtown.kormate.domain.model.BoardDetail" />
+    </fragment>
 
     <fragment
         android:id="@+id/CommunityPostFragment"

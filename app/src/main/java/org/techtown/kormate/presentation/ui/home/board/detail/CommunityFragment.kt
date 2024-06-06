@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentCommunityBinding
@@ -28,7 +29,8 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
 
     private val commentRecyclerView by lazy { binding.commentRecyclerView }
 
-    private val receiveArgs: BoardDetail by lazy { requireArguments().getParcelable("boardDetail")!! }
+    private val receiveArgs: CommunityFragmentArgs by navArgs()
+    private val receiveBoardDetail: BoardDetail by lazy { receiveArgs.boardDetail }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -119,7 +121,7 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
     }
 
     private fun syncBoardPostId() {
-        BoardData.boardPostId = receiveArgs.postId
+        BoardData.boardPostId = receiveArgs.boardDetail.postId
     }
 
     private fun handleComment() {
@@ -165,7 +167,7 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
     }
 
     private fun selectPopupMenu(popupMenu: PopupMenu) {
-        if (UserKakaoIntel.userId != receiveArgs.userId.toString())
+        if (UserKakaoIntel.userId != receiveBoardDetail.userId.toString())
             popupMenu.menuInflater.inflate(R.menu.post_report, popupMenu.menu)
         else
             popupMenu.menuInflater.inflate(R.menu.post_menu, popupMenu.menu)
@@ -189,7 +191,7 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
     }
 
     private fun removeBoard() {
-        communityViewModel.removePost(receiveArgs.postId)
+        communityViewModel.removePost(receiveBoardDetail.postId)
     }
 
     private fun syncCommentPosition() {
@@ -211,7 +213,7 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
             CurrentDateTime.getCommentTime()
         )
 
-        commentViewModel.uploadComment(uploadComment, receiveArgs.postId)
+        commentViewModel.uploadComment(uploadComment, receiveBoardDetail.postId)
     }
 
     private fun tossIntent(entirePage: Int, curPage: Int, imgUri: String) {
@@ -257,8 +259,8 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
         val reportContent = Report(
             UserKakaoIntel.userId,
             selectedReasons,
-            receiveArgs.userId.toString(),
-            receiveArgs.postId
+            receiveBoardDetail.userId.toString(),
+            receiveBoardDetail.postId
         )
         communityViewModel.reportPost(reportContent)
     }
@@ -279,12 +281,12 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
     }
 
     private fun postUiSync() {
-        binding.postText.text = receiveArgs.post
+        binding.postText.text = receiveBoardDetail.post
         syncImgUi()
     }
 
     private fun syncImgUi() {
-        if (receiveArgs.img.size == 0)
+        if (receiveBoardDetail.img.size == 0)
             removeImgView()
         else {
             syncImgData()
@@ -297,16 +299,16 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
         val imageViewList =
             listOf(binding.uploadImageView1, binding.uploadImageView2, binding.uploadImageView3)
 
-        for (i in receiveArgs.img.indices) {
+        for (i in receiveBoardDetail.img.indices) {
             Glide.with(requireContext())
-                .load(receiveArgs.img[i])
+                .load(receiveBoardDetail.img[i])
                 .override(1100, 1000)
                 .into(imageViewList[i])
 
             imageViewList[i].visibility = View.VISIBLE
         }//사용 하는 imageView 보여 주기
 
-        for (i in receiveArgs.img.size until imageViewList.size) {
+        for (i in receiveBoardDetail.img.size until imageViewList.size) {
             imageViewList[i].visibility = View.GONE
         }//사용 하지 않는 imageView 제거
     }
@@ -314,15 +316,15 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
     private fun clickImageView() {
         binding.apply {
             uploadImageView1.setOnClickListener {
-                tossIntent(receiveArgs.img.size, 1, receiveArgs.img[0])
+                tossIntent(receiveBoardDetail.img.size, 1, receiveBoardDetail.img[0])
             }
 
             uploadImageView2.setOnClickListener {
-                tossIntent(receiveArgs.img.size, 2, receiveArgs.img[1])
+                tossIntent(receiveBoardDetail.img.size, 2, receiveBoardDetail.img[1])
             }
 
             uploadImageView3.setOnClickListener {
-                tossIntent(receiveArgs.img.size, 3, receiveArgs.img[2])
+                tossIntent(receiveBoardDetail.img.size, 3, receiveBoardDetail.img[2])
             }
         }
     }
@@ -349,12 +351,12 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
 
     private fun syncUserInfoUi() {
         Glide.with(requireContext())
-            .load(receiveArgs.userImg)
+            .load(receiveBoardDetail.userImg)
             .circleCrop()
             .into(binding.userImg)
 
-        binding.userName.text = receiveArgs.userName
-        binding.dateTime.text = receiveArgs.dateTime
+        binding.userName.text = receiveBoardDetail.userName
+        binding.dateTime.text = receiveBoardDetail.dateTime
     }
 
     companion object {

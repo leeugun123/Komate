@@ -10,6 +10,7 @@ import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentPreviewBinding
 import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.domain.model.UserKakaoIntel
+import org.techtown.kormate.presentation.ui.home.HomeFragmentDirections
 import org.techtown.kormate.presentation.ui.home.board.detail.CommunityViewModel
 import org.techtown.kormate.presentation.util.base.BaseFragment
 
@@ -55,10 +56,9 @@ class PreviewFragment : BaseFragment<FragmentPreviewBinding>(R.layout.fragment_p
     }
 
     private fun navigateToCommunityFragment(boardDetail: BoardDetail) {
-        val bundle = bundleOf("boardDetail" to boardDetail)
-
+        val action = HomeFragmentDirections.actionHomeFragmentToCommunityFragment(boardDetail)
         requireParentFragment().findNavController()
-            .navigate(R.id.action_HomeFragment_to_CommunityFragment, bundle)
+            .navigate(action)
     }
 
     companion object {
