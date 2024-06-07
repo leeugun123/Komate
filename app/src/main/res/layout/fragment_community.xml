@@ -5,6 +5,22 @@
 
     <data>
 
+        <variable
+            name="onPostBtnClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onCommentBtnClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onImageViewBtnClick"
+            type="kotlin.jvm.functions.Function3" />
+
+        <variable
+            name="boardContent"
+            type="org.techtown.kormate.domain.model.BoardDetail" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,6 +62,7 @@
             android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
+            android:onClick="@{() -> onPostBtnClick.invoke()}"
             android:src="@drawable/ic_baseline_more_vert_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -65,6 +82,7 @@
             android:layout_width="59dp"
             android:layout_height="30dp"
             android:layout_marginStart="10dp"
+            android:text="@{boardContent.userName}"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -76,6 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:text="@{boardContent.dateTime}"
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="@+id/user_img"
             app:layout_constraintStart_toEndOf="@+id/user_img" />
@@ -98,19 +117,22 @@
                     android:id="@+id/upload_imageView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:importantForAccessibility="no" />
+                    android:importantForAccessibility="no"
+                    android:onClick="@{() -> onImageViewBtnClick.invoke(boardContent.img.size,1,boardContent.img[0])}" />
 
                 <ImageView
                     android:id="@+id/upload_imageView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:importantForAccessibility="no" />
+                    android:importantForAccessibility="no"
+                    android:onClick="@{() -> onImageViewBtnClick.invoke(boardContent.img.size,2,boardContent.img[1])}" />
 
                 <ImageView
                     android:id="@+id/upload_imageView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:importantForAccessibility="no" />
+                    android:importantForAccessibility="no"
+                    android:onClick="@{() -> onImageViewBtnClick.invoke(boardContent.img.size,3,boardContent.img[2])}" />
 
             </LinearLayout>
 
@@ -122,6 +144,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="5dp"
             android:lineSpacingExtra="4dp"
+            android:text="@{boardContent.post}"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -156,6 +179,7 @@
             android:layout_height="50dp"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
+            android:onClick="@{() -> onCommentBtnClick.invoke()}"
             android:src="@drawable/ic_baseline_send_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/reply"

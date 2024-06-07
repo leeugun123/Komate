@@ -27,7 +27,7 @@ import org.techtown.kormate.presentation.util.CustomProgressDialog
 import org.techtown.kormate.presentation.constant.FirebasePathConstant
 import org.techtown.kormate.presentation.ui.home.board.detail.CommunityViewModel
 import org.techtown.kormate.presentation.ui.home.board.detail.gallery.GalleryAdapter
-import org.techtown.kormate.presentation.util.CurrentDateTime
+import org.techtown.kormate.presentation.util.extension.getPostTime
 import org.techtown.kormate.presentation.util.extension.showToast
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -166,7 +166,7 @@ class CommunityPostFragment :
             UserKakaoIntel.userProfileImg,
             post,
             picUri,
-            CurrentDateTime.getPostTime()
+            requireContext().getPostTime()
         )
 
         communityViewModel.uploadPost(uploadBoardDetail)
