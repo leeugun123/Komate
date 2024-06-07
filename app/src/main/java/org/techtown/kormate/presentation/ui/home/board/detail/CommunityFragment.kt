@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -21,6 +20,8 @@ import org.techtown.kormate.presentation.ui.home.board.detail.gallery.ImgDetail
 import org.techtown.kormate.presentation.util.BoardData
 import org.techtown.kormate.presentation.util.base.BaseFragment
 import org.techtown.kormate.presentation.util.extension.getCurrentTime
+import org.techtown.kormate.presentation.util.extension.showAlertDialog
+import org.techtown.kormate.presentation.util.extension.showMultiChoiceDialog
 import org.techtown.kormate.presentation.util.extension.showToast
 
 
@@ -183,12 +184,12 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
     }
 
     private fun showDeleteAlertDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("게시물을 삭제 하시겠습니까?")
-            .setPositiveButton("예") { _, _ -> removeBoard() }
-            .setNegativeButton("아니오") { _, _ -> }
-            .create()
-            .show()
+        requireContext().showAlertDialog(
+            title = "게시물을 삭제 하시겠습니까?",
+            positiveButtonText = "예",
+            positiveButtonAction = { removeBoard() },
+            negativeButtonText = "아니오"
+        )
     }
 
     private fun removeBoard() {
@@ -227,30 +228,21 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
     private fun showReportDialog() {
 
         val reasons = arrayOf("욕설", "도배", "인종 혐오 표현", "성적인 만남 유도")
-        val checkedReasons = booleanArrayOf(false, false, false, false, false)
-        val builder = AlertDialog.Builder(requireContext())
+        val checkedReasons = BooleanArray(reasons.size)
 
-        builder.apply {
-            setTitle("신고 사유를 선택하세요")
-            setMultiChoiceItems(reasons, checkedReasons) { _, which, isChecked ->
-                checkedReasons[which] = isChecked
-            }
-            setPositiveButton("확인") { _, _ ->
-
-                val selectedReasons = mutableListOf<String>()
-
-                reasons.indices.forEach { idx ->
-                    if (checkedReasons[idx])
-                        selectedReasons.add(reasons[idx])
-                }
-
+        requireContext().showMultiChoiceDialog(
+            title = "신고 사유를 선택하세요",
+            items = reasons,
+            checkedItems = checkedReasons,
+            positiveButtonText = "확인",
+            positiveButtonAction = { selectedReasons ->
                 userReport(selectedReasons)
-            }
-            setNegativeButton("취소") { dialog, _ -> dialog.dismiss() }
-        }.create().show()
+            },
+            negativeButtonText = "취소"
+        )
     }
 
-    private fun userReport(selectedReasons: MutableList<String>) {
+    private fun userReport(selectedReasons: List<String>) {
         val reportContent = Report(
             UserKakaoIntel.userId,
             selectedReasons,
@@ -311,14 +303,6 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
 
         val parentView3 = binding.uploadImageView3.parent as ViewGroup
         parentView3.removeView(binding.uploadImageView3)
-
-        /*
-        binding.commentLinear.setPadding(
-            binding.commentLinear.paddingLeft,
-            900, binding.commentLinear.paddingRight,
-            binding.commentLinear.paddingBottom
-        )
-         */
     }
 
     private fun bindUserImg() {
