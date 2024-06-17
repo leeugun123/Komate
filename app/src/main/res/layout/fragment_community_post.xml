@@ -13,10 +13,6 @@
             type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="onGetImageBtnClick"
-            type="kotlin.jvm.functions.Function0" />
-
-        <variable
             name="onPostImageBtnClick"
             type="kotlin.jvm.functions.Function0" />
 
