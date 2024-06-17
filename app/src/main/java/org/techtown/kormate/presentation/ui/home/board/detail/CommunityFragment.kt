@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import org.techtown.kormate.R
@@ -16,9 +16,12 @@ import org.techtown.kormate.domain.model.Report
 import org.techtown.kormate.domain.model.UserKakaoIntel
 import org.techtown.kormate.presentation.ui.home.board.detail.comment.CommentAdapter
 import org.techtown.kormate.presentation.ui.home.board.detail.comment.CommentViewModel
+import org.techtown.kormate.presentation.ui.home.board.detail.gallery.ImgDetail
 import org.techtown.kormate.presentation.util.BoardData
-import org.techtown.kormate.presentation.util.CurrentDateTime
 import org.techtown.kormate.presentation.util.base.BaseFragment
+import org.techtown.kormate.presentation.util.extension.getCurrentTime
+import org.techtown.kormate.presentation.util.extension.showAlertDialog
+import org.techtown.kormate.presentation.util.extension.showMultiChoiceDialog
 import org.techtown.kormate.presentation.util.extension.showToast
 
 
@@ -30,35 +33,39 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
     private val commentRecyclerView by lazy { binding.commentRecyclerView }
 
     private val receiveArgs: CommunityFragmentArgs by navArgs()
-    private val receiveBoardDetail: BoardDetail by lazy { receiveArgs.boardDetail }
+    private val boardContent: BoardDetail by lazy { receiveArgs.boardDetail }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initBinding()
+
         syncBoardUi()
         syncBoardPostId()
-        initBinding()
 
         observeBoardViewModel()
         observeCommentViewModel()
     }
 
+    private fun initBinding() {
+        binding.onCommentBtnClick = ::checkCommentEmpty
+        binding.onPostBtnClick = ::showPopUpMenu
+        binding.boardContent = boardContent
+        binding.onImageViewBtnClick = ::navigateToImageDetailFragment
+    }
+
     private fun syncBoardUi() {
-        syncUserInfoUi()
-        postUiSync()
+        bindUserImg()
+        syncImgUi()
         bindCommentProfileImg()
         getCommentList()
     }
 
-    private fun initBinding() {
-        binding.commentPost.setOnClickListener {
-            if (binding.reply.text.isNotEmpty())
-                handleComment()
-            else
-                requireContext().showToast("글이 없습니다. 다시 작성해주세요.")
-        }
-        binding.edit.setOnClickListener { showPopUpMenu(it) }
-        binding.edit.setOnClickListener { showPopUpMenu(it) }
+    private fun checkCommentEmpty() {
+        if (binding.reply.text.isNotEmpty())
+            postComment()
+        else
+            requireContext().showToast("글이 없습니다. 다시 작성해주세요.")
     }
 
     private fun observeCommentViewModel() {
@@ -124,18 +131,13 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
         BoardData.boardPostId = receiveArgs.boardDetail.postId
     }
 
-    private fun handleComment() {
+    private fun postComment() {
         uploadComment()
         binding.reply.text.clear()
         syncCommentPosition()
-
-        /*
-        val imm = getSystemService(re.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(binding.reply.windowToken, 0)
-        */
     }
 
-    private fun showPopUpMenu(view: View) {
+    private fun showPopUpMenu() {
         val popUpMenu = PopupMenu(requireContext(), view)
         selectPopupMenu(popUpMenu)
         clickPopUpItem(popUpMenu)
@@ -167,7 +169,7 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
     }
 
     private fun selectPopupMenu(popupMenu: PopupMenu) {
-        if (UserKakaoIntel.userId != receiveBoardDetail.userId.toString())
+        if (UserKakaoIntel.userId != boardContent.userId.toString())
             popupMenu.menuInflater.inflate(R.menu.post_report, popupMenu.menu)
         else
             popupMenu.menuInflater.inflate(R.menu.post_menu, popupMenu.menu)
@@ -182,16 +184,16 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
     }
 
     private fun showDeleteAlertDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("게시물을 삭제 하시겠습니까?")
-            .setPositiveButton("예") { _, _ -> removeBoard() }
-            .setNegativeButton("아니오") { _, _ -> }
-            .create()
-            .show()
+        requireContext().showAlertDialog(
+            title = "게시물을 삭제 하시겠습니까?",
+            positiveButtonText = "예",
+            positiveButtonAction = { removeBoard() },
+            negativeButtonText = "아니오"
+        )
     }
 
     private fun removeBoard() {
-        communityViewModel.removePost(receiveBoardDetail.postId)
+        communityViewModel.removePost(boardContent.postId)
     }
 
     private fun syncCommentPosition() {
@@ -210,57 +212,42 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
             UserKakaoIntel.userNickName,
             UserKakaoIntel.userProfileImg,
             binding.reply.text.toString(),
-            CurrentDateTime.getCommentTime()
+            requireContext().getCurrentTime()
         )
 
-        commentViewModel.uploadComment(uploadComment, receiveBoardDetail.postId)
+        commentViewModel.uploadComment(uploadComment, boardContent.postId)
     }
 
-    private fun tossIntent(entirePage: Int, curPage: Int, imgUri: String) {
-        /*
-        val intent = Intent(this, ImageDetailActivity::class.java)
-        intent.putExtra("entirePage", entirePage)
-        intent.putExtra("currentPage", curPage)
-        intent.putExtra("imgUrl", imgUri)
-        startActivity(intent)
-         */
+    private fun navigateToImageDetailFragment(entirePage: Int, curPage: Int, imgUri: String) {
+        val imgDetail = ImgDetail(entirePage, curPage, imgUri)
+        val action =
+            CommunityFragmentDirections.actionCommunityFragmentToImageDetailFragment(imgDetail)
+        findNavController().navigate(action)
     }
 
     private fun showReportDialog() {
 
         val reasons = arrayOf("욕설", "도배", "인종 혐오 표현", "성적인 만남 유도")
-        val checkedReasons = booleanArrayOf(false, false, false, false, false)
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("신고 사유를 선택하세요")
+        val checkedReasons = BooleanArray(reasons.size)
 
-        builder.setMultiChoiceItems(reasons, checkedReasons) { _, which, isChecked ->
-            checkedReasons[which] = isChecked
-        }
-
-        builder.setPositiveButton("확인") { _, _ ->
-
-            val selectedReasons = mutableListOf<String>()
-
-            reasons.indices.forEach { idx ->
-                if (checkedReasons[idx])
-                    selectedReasons.add(reasons[idx])
-            }
-
-            userReport(selectedReasons)
-        }
-
-        builder.setNegativeButton("취소") { dialog, _ -> dialog.dismiss() }
-
-        val dialog = builder.create()
-        dialog.show()
+        requireContext().showMultiChoiceDialog(
+            title = "신고 사유를 선택하세요",
+            items = reasons,
+            checkedItems = checkedReasons,
+            positiveButtonText = "확인",
+            positiveButtonAction = { selectedReasons ->
+                userReport(selectedReasons)
+            },
+            negativeButtonText = "취소"
+        )
     }
 
-    private fun userReport(selectedReasons: MutableList<String>) {
+    private fun userReport(selectedReasons: List<String>) {
         val reportContent = Report(
             UserKakaoIntel.userId,
             selectedReasons,
-            receiveBoardDetail.userId.toString(),
-            receiveBoardDetail.postId
+            boardContent.userId.toString(),
+            boardContent.postId
         )
         communityViewModel.reportPost(reportContent)
     }
@@ -280,18 +267,11 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
         commentRecyclerView.scrollToPosition(commentList.size - 1)
     }
 
-    private fun postUiSync() {
-        binding.postText.text = receiveBoardDetail.post
-        syncImgUi()
-    }
-
     private fun syncImgUi() {
-        if (receiveBoardDetail.img.size == 0)
+        if (boardContent.img.size == 0)
             removeImgView()
-        else {
+        else
             syncImgData()
-            clickImageView()
-        }
     }
 
     private fun syncImgData() {
@@ -299,34 +279,18 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
         val imageViewList =
             listOf(binding.uploadImageView1, binding.uploadImageView2, binding.uploadImageView3)
 
-        for (i in receiveBoardDetail.img.indices) {
+        for (i in boardContent.img.indices) {
             Glide.with(requireContext())
-                .load(receiveBoardDetail.img[i])
+                .load(boardContent.img[i])
                 .override(1100, 1000)
                 .into(imageViewList[i])
 
             imageViewList[i].visibility = View.VISIBLE
         }//사용 하는 imageView 보여 주기
 
-        for (i in receiveBoardDetail.img.size until imageViewList.size) {
+        for (i in boardContent.img.size until imageViewList.size) {
             imageViewList[i].visibility = View.GONE
         }//사용 하지 않는 imageView 제거
-    }
-
-    private fun clickImageView() {
-        binding.apply {
-            uploadImageView1.setOnClickListener {
-                tossIntent(receiveBoardDetail.img.size, 1, receiveBoardDetail.img[0])
-            }
-
-            uploadImageView2.setOnClickListener {
-                tossIntent(receiveBoardDetail.img.size, 2, receiveBoardDetail.img[1])
-            }
-
-            uploadImageView3.setOnClickListener {
-                tossIntent(receiveBoardDetail.img.size, 3, receiveBoardDetail.img[2])
-            }
-        }
     }
 
     private fun removeImgView() {
@@ -339,24 +303,13 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
 
         val parentView3 = binding.uploadImageView3.parent as ViewGroup
         parentView3.removeView(binding.uploadImageView3)
-
-        /*
-        binding.commentLinear.setPadding(
-            binding.commentLinear.paddingLeft,
-            900, binding.commentLinear.paddingRight,
-            binding.commentLinear.paddingBottom
-        )
-         */
     }
 
-    private fun syncUserInfoUi() {
+    private fun bindUserImg() {
         Glide.with(requireContext())
-            .load(receiveBoardDetail.userImg)
+            .load(boardContent.userImg)
             .circleCrop()
             .into(binding.userImg)
-
-        binding.userName.text = receiveBoardDetail.userName
-        binding.dateTime.text = receiveBoardDetail.dateTime
     }
 
     companion object {

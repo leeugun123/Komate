@@ -60,6 +60,13 @@
         <argument
             android:name="boardDetail"
             app:argType="org.techtown.kormate.domain.model.BoardDetail" />
+        <action
+            android:id="@+id/action_CommunityFragment_to_ImageDetailFragment"
+            app:destination="@id/ImageDetailFragment" >
+            <argument
+                android:name="ImgDetail"
+                app:argType="org.techtown.kormate.presentation.ui.home.board.detail.gallery.ImgDetail" />
+        </action>
     </fragment>
 
     <fragment
@@ -67,6 +74,16 @@
         android:name="org.techtown.kormate.presentation.ui.home.board.detail.post.CommunityPostFragment"
         android:label="CommunityPostFragment"
         tools:layout="@layout/fragment_community_post" />
+
+    <fragment
+        android:id="@+id/ImageDetailFragment"
+        android:name="org.techtown.kormate.presentation.ui.home.board.detail.gallery.ImageDetailFragment"
+        android:label="ImageDetailFragment"
+        tools:layout="@layout/fragment_image_detail" >
+        <argument
+            android:name="ImgDetail"
+            app:argType="org.techtown.kormate.presentation.ui.home.board.detail.gallery.ImgDetail" />
+    </fragment>
 
 
 </navigation>

@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -22,12 +23,12 @@ import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentCommunityPostBinding
 import org.techtown.kormate.domain.model.BoardDetail
 import org.techtown.kormate.domain.model.UserKakaoIntel
-import org.techtown.kormate.presentation.util.base.BaseFragment
-import org.techtown.kormate.presentation.util.CustomProgressDialog
 import org.techtown.kormate.presentation.constant.FirebasePathConstant
 import org.techtown.kormate.presentation.ui.home.board.detail.CommunityViewModel
 import org.techtown.kormate.presentation.ui.home.board.detail.gallery.GalleryAdapter
-import org.techtown.kormate.presentation.util.CurrentDateTime
+import org.techtown.kormate.presentation.util.CustomProgressDialog
+import org.techtown.kormate.presentation.util.base.BaseFragment
+import org.techtown.kormate.presentation.util.extension.getPostTime
 import org.techtown.kormate.presentation.util.extension.showToast
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -48,12 +49,12 @@ class CommunityPostFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bindingApply()
-        boardPostSuccessObserve()
-        activityResultLauncherInit()
+        initBinding()
+        observeBoardPostSuccess()
+        initActivityResultLauncher()
     }
 
-    private fun activityResultLauncherInit() {
+    private fun initActivityResultLauncher() {
         activityResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK) {
@@ -63,27 +64,21 @@ class CommunityPostFragment :
             }
     }
 
-    private fun bindingApply() {
-
-        binding.apply {
-
-            backBtn.setOnClickListener {
-                //TODO("뒤로가기 구현")
-            }
-
-            getImgButton.setOnClickListener {
-                requestCameraPermission { moveToGallery() }
-            }
-
-            updateButton.setOnClickListener {
-                imageAndTextProcessing()
-            }
-
-        }
-
+    private fun initBinding() {
+        binding.onBackBtnClick = ::navigateCommunityFragment
+        binding.onGetImageBtnClick = ::navigateGalleryActivity
+        binding.onPostImageBtnClick = ::processImageAndText
     }
 
-    private fun imageAndTextProcessing() {
+    private fun navigateCommunityFragment() {
+        findNavController().popBackStack()
+    }
+
+    private fun navigateGalleryActivity() {
+        requestCameraPermission { moveToGallery() }
+    }
+
+    private fun processImageAndText() {
 
         val post = binding.post.text.toString()
 
@@ -150,7 +145,7 @@ class CommunityPostFragment :
             false
     }
 
-    private fun boardPostSuccessObserve() {
+    private fun observeBoardPostSuccess() {
         communityViewModel.boardPostSuccess.observe(viewLifecycleOwner) { success ->
             if (success)
                 requireContext().showToast("게시글이 등록 되었습니다.")
@@ -166,7 +161,7 @@ class CommunityPostFragment :
             UserKakaoIntel.userProfileImg,
             post,
             picUri,
-            CurrentDateTime.getPostTime()
+            requireContext().getPostTime()
         )
 
         communityViewModel.uploadPost(uploadBoardDetail)
@@ -218,12 +213,12 @@ class CommunityPostFragment :
     ) {
 
         connectGalleryAdapter(imageUris, acBinding)
-        uploadImgButtonTextSync()
+        syncUploadImgButtonText()
 
     }// 선택한 이미지들을 처리하는 코드를 작성
 
     @SuppressLint("SetTextI18n")
-    private fun uploadImgButtonTextSync() {
+    private fun syncUploadImgButtonText() {
         binding.getImgButton.text = "사진 올리기(" + goalImg.size.toString() + "/3)"
     }
 
@@ -236,8 +231,6 @@ class CommunityPostFragment :
     }
 
     companion object {
-        private const val POST_UPLOAD_COMPLETE_MESSAGE = "게시글이 등록 되었습니다."
-        private const val UPLOAD_DOING_MESSAGE = "업로드 중"
         private const val PERMISSION_ALLOW_MESSAGE = "권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]"
     }
 }

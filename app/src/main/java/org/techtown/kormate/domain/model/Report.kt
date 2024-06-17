@@ -4,7 +4,7 @@ data class Report(
 
     var user : String = "",
     //신고한 유저
-    var reason : MutableList<String> = mutableListOf(),
+    var reason : List<String> = mutableListOf(),
     //신고 사유
     var reportUser : String = "",
     //신고 당한 유저
