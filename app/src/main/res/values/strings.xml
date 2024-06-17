@@ -98,5 +98,9 @@
     <!-- Community Fragment -->
     <string name="post_comment">댓글 작성하기</string>
 
+    <!-- Community Edit Fragment -->
+    <string name="post_revise">게시물 수정</string>
+    <string name="revise">수정하기</string>
+
 
 </resources>
