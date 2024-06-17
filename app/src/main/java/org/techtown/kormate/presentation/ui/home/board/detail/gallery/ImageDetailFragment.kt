@@ -13,6 +13,7 @@ import android.os.Environment
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import org.techtown.kormate.R
 import org.techtown.kormate.databinding.FragmentImageDetailBinding
@@ -27,26 +28,25 @@ class ImageDetailFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        uiSync()
+        syncUi()
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            bindingApply()
+            initBinding()
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun bindingApply() {
-        binding.apply {
-            finishButton.setOnClickListener {
-                //TODO("끝내기")
-            }
-            downButton.setOnClickListener {
-                imgDownload()
-            }
-        }
+    private fun initBinding() {
+        binding.onNavigateCommunityFragmentBtnClick = ::navigateCommunityFragment
+        binding.onImageDownBtnClick = ::downloadImg
+    }
+
+    private fun navigateCommunityFragment(){
+        findNavController().popBackStack()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun imgDownload() {
+    private fun downloadImg() {
 
         // 이미지 다운로드 URL
         val request = DownloadManager.Request(Uri.parse(receiveUrl))
@@ -88,7 +88,7 @@ class ImageDetailFragment :
         }
     }
 
-    private fun uiSync() {
+    private fun syncUi() {
         binding.cur.text = curPage
         binding.entire.text = entirePage
 
