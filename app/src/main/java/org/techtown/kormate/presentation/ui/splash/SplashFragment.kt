@@ -19,14 +19,15 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(R.layout.fragment_spl
     }
 
     private fun navigateToHomeLazily() {
-        lifecycleScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch {
             delay(SPLASH_DURATION)
             moveToHomeFragment()
         }
     }
 
     private fun moveToHomeFragment() {
-        findNavController().navigate(R.id.action_splashFragment_to_LoginFragment)
+        val action = SplashFragmentDirections.actionSplashFragmentToLoginFragment()
+        findNavController().navigate(action)
     }
 
     companion object {
